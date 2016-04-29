@@ -15,16 +15,31 @@ public class ConcreteBuilder {
 		product.addNode(new RegularNode(id));
 	}
 	
-	public void buildEdge(Node sourceNode, Node targetNode){
-		if(product.validateNode(sourceNode) && product.validateNode(targetNode)){
+	public void buildEdge (int sourceId, int targetId){
+		if(product.validateNodeFromid(sourceId) && product.validateNodeFromid(targetId)){
+			try{
+				product.addEdge(new Edge(product.getNode(sourceId), product.getNode(targetId)));
 			
-			product.addEdge(new Edge(sourceNode, targetNode));
-			
-			sourceNode.addReachable(targetNode);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
-		else{
-			System.out.println("impossibile aggiungere arco");
-		}
+	}
+	
+//	public void buildEdge(Node sourceNode, Node targetNode){
+//		if(product.validateNode(sourceNode) && product.validateNode(targetNode)){
+//			
+//			product.addEdge(new Edge(sourceNode, targetNode));
+//			
+//			sourceNode.addReachable(targetNode);
+//		}
+//		else{
+//			System.out.println("impossibile aggiungere arco");
+//		}
+//	}
+	
+	public Graph getProduct(){
+		return this.product;
 	}
 	
 }

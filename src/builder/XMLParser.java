@@ -26,10 +26,36 @@ public class XMLParser {
 		
 		Element root = jdomDocument.getRootElement();
 		
+		builder.buildGraph();
+		
+		parseTree(root, builder);
+		return builder.getProduct();
+		
+	}
+	
+	public void parseTree(Element node, ConcreteBuilder builder){
 		
 		
+		List<Element> children = node.getChildren();
 		
-		return new Graph();
+		if(!children.get(0).getChildren().isEmpty()){
+			for(Element son: children){
+				parseTree(son, builder);
+			}
+		}
+		else{
+			if(node.getName().contentEquals("node")){
+				List<Element> figli = node.getChildren();
+//				if(figli.get(0).getText().startsWith("N")){
+//					builder.buildRegularNode( Integer.parseInt(figli.get(1).getText()));
+//				}
+				builder.buildRegularNode( Integer.parseInt(figli.get(1).getText()));
+			}
+			else if(node.getName().contentEquals("edge")){
+				List<Element> figli = node.getChildren();
+				builder.buildEdge(Integer.parseInt(figli.get(0).getText()), Integer.parseInt(figli.get(1).getText()));
+			}
+		}
 		
 	}
 	
