@@ -1,14 +1,15 @@
 package grafo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class RegularNode implements Node {
+public class EntryPoint {
 
 	private ArrayList<Node> reachables;
 	private int id;
 	private int capacity;
 	
-	public RegularNode(int id){
+	public EntryPoint(int id){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 	}
@@ -28,6 +29,11 @@ public class RegularNode implements Node {
 	public void changeReachable(Node old, Node neW){
 		reachables.remove(old);
 		reachables.add(neW);
+		
+	}
+	
+	public void generateActor(){
+		//genera attori
 	}
 	
 	public int getCapacity(){

@@ -31,6 +31,14 @@ public class Graph {
 
 	}
 	
+	public ArrayList<Node> getNodes(){
+		return this.nodes;
+	}
+	
+	public ArrayList<Edge> getEdges(){
+		return this.edges;
+	}
+	
 	public boolean validateNode(Node n){
 		
 		if(nodes.contains(n)){
