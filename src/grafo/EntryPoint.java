@@ -3,15 +3,22 @@ package grafo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntryPoint {
+public class EntryPoint implements Node {
 
 	private ArrayList<Node> reachables;
 	private int id;
+	private int x, y;
 	private int capacity;
 	
-	public EntryPoint(int id){
+	public EntryPoint(int id, int x, int y){
 		reachables = new ArrayList<Node>();
 		this.id = id;
+		this.x = x;
+		this.y = y;
+	}
+	
+	public String getType(){
+		return "entry";
 	}
 	
 	public void addReachable(Node n){
@@ -21,6 +28,15 @@ public class EntryPoint {
 	public List<Node> getReachableNodes(){
 		return reachables;
 	}
+	
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	
 	public int getId(){
 		return this.id;

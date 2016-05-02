@@ -36,26 +36,42 @@ public class XMLParser {
 	public void parseTree(Element node, ConcreteBuilder builder){
 		
 		
-		List<Element> children = node.getChildren();
+		List<Element> nodes = node.getChild("nodes").getChildren("node");
 		
-		if(!children.get(0).getChildren().isEmpty()){
-			for(Element son: children){
-				parseTree(son, builder);
+		List<Element> edges = node.getChild("edges").getChildren("edge");
+				
+		
+		for(Element n : nodes){
+			String type = n.getChild("type").getText();
+			
+			int x = Integer.parseInt(n.getChild("x").getText());
+			int y = Integer.parseInt(n.getChild("y").getText());
+			if(type.equalsIgnoreCase("N")){
+				builder.buildRegularNode(x, y);
 			}
+			if(type.equalsIgnoreCase("EX")){
+				builder.buildExitPoint(x, y);
+			}
+			if(type.equalsIgnoreCase("EN")){
+				builder.buildEntryPoint(x, y);
+			}
+				
+//			else {
+//				throw new RuntimeException("not able to identify node type");
+//			}
+			
 		}
-		else{
-			if(node.getName().contentEquals("node")){
-				List<Element> figli = node.getChildren();
-//				if(figli.get(0).getText().startsWith("N")){
-//					builder.buildRegularNode( Integer.parseInt(figli.get(1).getText()));
-//				}
-				builder.buildRegularNode( Integer.parseInt(figli.get(1).getText()));
-			}
-			else if(node.getName().contentEquals("edge")){
-				List<Element> figli = node.getChildren();
-				builder.buildEdge(Integer.parseInt(figli.get(0).getText()), Integer.parseInt(figli.get(1).getText()));
-			}
+		
+		for(Element n : edges){
+			int srcX = Integer.parseInt(n.getChild("src").getChild("x").getText());
+			int srcY = Integer.parseInt(n.getChild("src").getChild("y").getText());
+			int dstX = Integer.parseInt(n.getChild("dst").getChild("x").getText());
+			int dstY = Integer.parseInt(n.getChild("dst").getChild("y").getText());
+
+			builder.buildEdge(srcX, srcY, dstX, dstY);
+			
 		}
+		
 		
 	}
 	

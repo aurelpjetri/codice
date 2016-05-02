@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args){
 		XMLParser parser = new XMLParser();
 		try{
-			Graph graph = parser.parseDocumentForGraph("/home/aurel/Scrivania/example2.txt");
+			Graph graph = parser.parseDocumentForGraph("/home/aurel/Scrivania/example3");
 			graph.printGraph();
 		}
 		catch(IOException e){

@@ -20,17 +20,25 @@ public class Graph {
 		edges.add(e);
 	}
 	
-	public Node getNode(int id) throws Exception{
+	public Node getNode(int id){
 	
 		for(Node node : nodes){
 			if(node.getId() == id){
 				return node;
 			}
 		}
-		throw new Exception();
+		throw new RuntimeException("node doesent exist");
 
 	}
 	
+	public Node getNode(int x, int y){
+		for(Node node: nodes){
+			if(node.getX() == x && node.getY() == y)
+				return node;
+		}
+		throw new RuntimeException("node x, y, doesent exist");
+	}
+
 	public ArrayList<Node> getNodes(){
 		return this.nodes;
 	}
@@ -68,7 +76,7 @@ public class Graph {
 	public void printGraph(){
 		
 		for(Node node:nodes){
-			System.out.println(node.getId());
+			System.out.println(node.getId()+" "+node.getType());
 		}
 		
 		for(Edge edge: edges){

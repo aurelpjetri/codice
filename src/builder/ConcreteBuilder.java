@@ -2,41 +2,44 @@ package builder;
 
 import grafo.*;
 import grafo.Edge;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ConcreteBuilder {
 
 	private Graph product;
+	private List<Integer> ids;
 	
 	public void buildGraph(){
 		product = new Graph();
+		ids = new ArrayList<Integer>();
 	}
 	
-	public void buildRegularNode(int id){
-		product.addNode(new RegularNode(id));
+	public void buildRegularNode(int x, int y){
+		ids.add(1);
+		int id = ids.size();
+		product.addNode(new RegularNode(id, x, y));
 	}
 	
-	public void buildEdge (int sourceId, int targetId){
-		if(product.validateNodeFromid(sourceId) && product.validateNodeFromid(targetId)){
-			try{
-				product.addEdge(new Edge(product.getNode(sourceId), product.getNode(targetId)));
-			
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
+	public void buildExitPoint(int x , int y){
+		ids.add(1);
+		int id = ids.size();
+		product.addNode( new ExitPoint(id, x, y));
 	}
 	
-//	public void buildEdge(Node sourceNode, Node targetNode){
-//		if(product.validateNode(sourceNode) && product.validateNode(targetNode)){
-//			
-//			product.addEdge(new Edge(sourceNode, targetNode));
-//			
-//			sourceNode.addReachable(targetNode);
-//		}
-//		else{
-//			System.out.println("impossibile aggiungere arco");
-//		}
-//	}
+	public void buildEntryPoint(int x , int y){
+		ids.add(1);
+		int id = ids.size();
+		product.addNode( new EntryPoint(id, x, y));
+	}
+	
+	
+	public void buildEdge (int sourceX, int sourceY, int targetX, int targetY){
+		Edge edge = new Edge(product.getNode(sourceX, sourceY),product.getNode(targetX, targetY));
+		product.addEdge(edge);
+		
+	}
+	
 	
 	public Graph getProduct(){
 		return this.product;
