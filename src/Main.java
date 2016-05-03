@@ -4,11 +4,12 @@ import org.jdom2.JDOMException;
 
 import builder.*;
 import grafo.*;
+
 public class Main {
 	public static void main(String[] args){
 		XMLParser parser = new XMLParser();
 		try{
-			Graph graph = parser.parseDocumentForGraph("/home/aurel/Scrivania/example3");
+			Graph graph = parser.parseDocumentForGraph("/home/aurel/Scrivania/Tesi/example2");
 			graph.printGraph();
 		}
 		catch(IOException e){

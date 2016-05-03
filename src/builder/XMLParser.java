@@ -63,15 +63,19 @@ public class XMLParser {
 		}
 		
 		for(Element n : edges){
+			String type = n.getChild("type").getText();
 			int srcX = Integer.parseInt(n.getChild("src").getChild("x").getText());
 			int srcY = Integer.parseInt(n.getChild("src").getChild("y").getText());
 			int dstX = Integer.parseInt(n.getChild("dst").getChild("x").getText());
 			int dstY = Integer.parseInt(n.getChild("dst").getChild("y").getText());
-
-			builder.buildEdge(srcX, srcY, dstX, dstY);
 			
+			if(type.startsWith("d")){
+				builder.buildDirectedEdge(srcX, srcY, dstX, dstY);
+			}
+			else{
+				builder.buildUndirectedEdge(srcX, srcY, dstX, dstY);
+			}
 		}
-		
 		
 	}
 	

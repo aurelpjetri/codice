@@ -16,9 +16,9 @@ public interface Node {
 	
 	public String getType();
 //	
-//	public void changeReachable(Node old, Node neW);
+	public void changeReachable(Node old, Node neW);
 //
-//	public void addReachable(Node n);
+	public void addReachable(Node n);
 	
 	
 }

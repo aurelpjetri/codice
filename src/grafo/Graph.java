@@ -17,7 +17,12 @@ public class Graph {
 	}
 	
 	public void addEdge(Edge e){
-		edges.add(e);
+		if(!edges.contains(e)){
+			edges.add(e);
+		}
+		else{
+			throw new RuntimeException("edge already existing");
+		}
 	}
 	
 	public Node getNode(int id){
@@ -77,10 +82,20 @@ public class Graph {
 		
 		for(Node node:nodes){
 			System.out.println(node.getId()+" "+node.getType());
+			for(Node r : node.getReachableNodes()){
+				System.out.println("	"+r.getId());
+			}
 		}
 		
 		for(Edge edge: edges){
-			System.out.println(edge.getSource().getId()+"--->"+edge.getDest().getId());
+			if(edge instanceof DirectedEdge){
+				System.out.println(edge.getSource().getId()+"--->"
+						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
+			}
+			else{
+				System.out.println(edge.getSource().getId()+"----"
+						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
+			}
 		}
 	}
 

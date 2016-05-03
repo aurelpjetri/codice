@@ -84,8 +84,8 @@ public class DijkstraShortestPath {
 	
 	public int getDistance(Node source, Node target){
 		for(Edge edge : edges){
-			if(edge.getSource().equals(source) && edge.getDest().equals(target)){
-				return edge.getWeight();
+			if(edge.getSource().equals(source) && edge.getTarget().equals(target)){
+				return edge.getDistance();
 			}
 		}
 		throw new RuntimeException("edge does not exist");

@@ -41,19 +41,16 @@ public class ExitPoint implements Node{
 		return this.capacity;
 	}
 	
-//	public void addReachable(Node n){
-//		System.out.println("Can't add reachables to an Exit Point");
-//	}
-//	
+	public void addReachable(Node n){
+	}
+	
 	public List<Node> getReachableNodes(){
 		return reachables;
 	}
-//	
-//	
-//	public void changeReachable(Node old, Node neW){
-//		//do nothing
-//		
-//	}
+	
+	public void changeReachable(Node old, Node neW){
+		
+	}
 	
 
 	

@@ -24,7 +24,7 @@
 	</nodes>
 	<edges>
 	    <edge>
-	        <type>directed</type>
+	        <type>undirected</type>
     		<src>
     		    <x>0</x>
     		    <y>0</y>
@@ -35,18 +35,7 @@
     		</dst>
 	    </edge>
 	    <edge>
-	        <type>directed</type>
-    		<src>
-    		    <x>0</x>
-    		    <y>10</y>
-    		</src>
-    		<dst>
-    		    <x>0</x>
-                    <y>0</y>
-    		</dst>
-	    </edge>
-	    <edge>
-	        <type>directed</type>
+	        <type>undirected</type>
     		<src>
     		    <x>0</x>
                     <y>10</y>
@@ -57,18 +46,7 @@
     		</dst>
 	    </edge>
 	    <edge>
-	        <type>directed</type>
-    		<src>
-    		    <x>10</x>
-                    <y>10</y>
-    		</src>
-    		<dst>
-    		    <x>0</x>
-                    <y>10</y>
-    		</dst>
-	    </edge>
-	    <edge>
-	        <type>directed</type>
+	        <type>undirected</type>
     		<src>
     		    <x>10</x>
                     <y>10</y>
@@ -79,18 +57,7 @@
     		</dst>
 	    </edge>
 	    <edge>
-	        <type>directed</type>
-    		<src>
-    		    <x>20</x>
-                    <y>0</y>
-    		</src>
-    		<dst>
-    		    <x>10</x>
-                    <y>10</y>
-    		</dst>
-	    </edge>
-	    <edge>
-	        <type>directed</type>
+	        <type>undirected</type>
     		<src>
     		    <x>0</x>
              	    <y>0</y>
@@ -100,16 +67,6 @@
                     <y>0</y>
     		</dst>
 	    </edge>
-	    <edge>
-	        <type>directed</type>
-    		<src>
-    		    <x>20</x>
-                    <y>0</y>
-    		</src>
-    		<dst>
-    		    <x>0</x>
-                    <y>0</y>
-    		</dst>
-	    </edge>
+
 	</edges>
 </graph>
