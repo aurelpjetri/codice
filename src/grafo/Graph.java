@@ -16,12 +16,31 @@ public class Graph {
 		nodes.add(n);
 	}
 	
+	
+	//checks fist the existence of the edge in the list of edges 
+	//then checks if a link between the nodes already exists
 	public void addEdge(Edge e){
-		if(!edges.contains(e)){
-			edges.add(e);
+		boolean exists = false;
+		if(e instanceof DirectedEdge){
+			if(!validateEdge(e) && !validateEdge(e.getSource(), e.getTarget())){
+				exists = false;
+			}
 		}
 		else{
+			if(!validateEdge(e) 
+					&& !validateEdge(e.getSource(), e.getTarget()) 
+					&& validateEdge(e.getTarget(), e.getSource())){
+				
+				exists = false;
+			
+			}
+		}
+		
+		if(exists){
 			throw new RuntimeException("edge already existing");
+		}
+		else{ 
+			edges.add(e); 
 		}
 	}
 	
@@ -69,6 +88,18 @@ public class Graph {
 		return false;
 	}
 	
+	public boolean validateEdge(Node s, Node t){
+		for(Edge e : edges){
+			if(e.getSource().equals(s) && e.getTarget().equals(t)){
+				return true;
+			}
+			if(e.getSource().equals(t) && e.getTarget().equals(s)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean validateNodeFromid(int id){
 		for(Node node: nodes){
 			if(node.getId() == id){
@@ -78,25 +109,29 @@ public class Graph {
 		return false;
 	}
 	
-	public void printGraph(){
+	public String toString(){
+		
+		String output = "";
 		
 		for(Node node:nodes){
-			System.out.println(node.getId()+" "+node.getType());
+			output += "node: "+node.toString()+ " reachables:";
 			for(Node r : node.getReachableNodes()){
-				System.out.println("	"+r.getId());
+				output +=+ r.getId()+" ";
 			}
 		}
 		
-		for(Edge edge: edges){
-			if(edge instanceof DirectedEdge){
-				System.out.println(edge.getSource().getId()+"--->"
-						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
-			}
-			else{
-				System.out.println(edge.getSource().getId()+"----"
-						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
-			}
-		}
+//		for(Edge edge: edges){
+//			if(edge instanceof DirectedEdge){
+//				System.out.println(edge.getSource().getId()+"--->"
+//						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
+//			}
+//			else{
+//				System.out.println(edge.getSource().getId()+"----"
+//						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
+//			}
+//		}
+		
+		return output;
 	}
 
 }

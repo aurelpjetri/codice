@@ -52,6 +52,10 @@ public class ExitPoint implements Node{
 		
 	}
 	
-
+	public String toString(){
+		String output = "";
+		output += getId() + " exit";
+		return output;
+	}
 	
 }

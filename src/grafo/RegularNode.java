@@ -47,4 +47,10 @@ public class RegularNode implements Node {
 	public int getCapacity(){
 		return this.capacity;
 	}
+	
+	public String toString(){
+		String output = "";
+		output += getId() + " normal";
+		return output;
+	}
 }

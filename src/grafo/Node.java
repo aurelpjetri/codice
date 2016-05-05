@@ -20,5 +20,7 @@ public interface Node {
 //
 	public void addReachable(Node n);
 	
+	public String toString();
+	
 	
 }

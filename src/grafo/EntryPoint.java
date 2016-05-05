@@ -55,4 +55,10 @@ public class EntryPoint implements Node {
 	public int getCapacity(){
 		return this.capacity;
 	}
+	
+	public String toString(){
+		String output = "";
+		output += getId() + " entry";
+		return output;
+	}
 }
