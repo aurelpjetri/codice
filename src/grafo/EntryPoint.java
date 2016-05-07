@@ -9,12 +9,17 @@ public class EntryPoint implements Node {
 	private int id;
 	private int x, y;
 	private int capacity;
+	private int width, height;
 	
-	public EntryPoint(int id, int x, int y){
+	public EntryPoint(int id, int x, int y, int w, int h){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
 		this.y = y;
+		width = w;
+		height = h;
+		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
+		capacity = (width * height * 5); 
 	}
 	
 	public String getType(){
@@ -40,6 +45,14 @@ public class EntryPoint implements Node {
 	
 	public int getId(){
 		return this.id;
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
 	}
 	
 	public void changeReachable(Node old, Node neW){

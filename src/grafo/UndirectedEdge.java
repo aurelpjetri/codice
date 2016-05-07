@@ -5,12 +5,14 @@ public class UndirectedEdge implements Edge{
 	private Node source;
 	private Node target;
 	private int distance;
+	private int width;
 	
-	public UndirectedEdge(Node s, Node d){
+	public UndirectedEdge(Node s, Node d, int w){
 		this.source = s;
 		this.target = d;
 		distance = (int) Math.sqrt((s.getX()-d.getX())*(s.getX()-d.getX()) 
 				+ (s.getY() - d.getY())*(s.getY() - d.getY()));
+		width = w;
 	}
 
 	public Node getSource() {
@@ -37,4 +39,7 @@ public class UndirectedEdge implements Edge{
 		return distance;
 	}
 	
+	public int getWidth(){
+		return width;
+	}
 }

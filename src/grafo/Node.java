@@ -14,10 +14,14 @@ public interface Node {
 	
 	public int getY();
 	
+	public int getWidth();
+	
+	public int getHeight();
+	
 	public String getType();
-//	
+
 	public void changeReachable(Node old, Node neW);
-//
+
 	public void addReachable(Node n);
 	
 	public String toString();

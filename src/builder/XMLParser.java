@@ -46,14 +46,18 @@ public class XMLParser {
 			
 			int x = Integer.parseInt(n.getChild("x").getText());
 			int y = Integer.parseInt(n.getChild("y").getText());
+			int w = Integer.parseInt(n.getChild("width").getText());
+			int h = Integer.parseInt(n.getChild("height").getText());
+			
+			
 			if(type.equalsIgnoreCase("N")){
-				builder.buildRegularNode(x, y);
+				builder.buildRegularNode(x, y, w, h);
 			}
 			if(type.equalsIgnoreCase("EX")){
-				builder.buildExitPoint(x, y);
+				builder.buildExitPoint(x, y, w, h);
 			}
 			if(type.equalsIgnoreCase("EN")){
-				builder.buildEntryPoint(x, y);
+				builder.buildEntryPoint(x, y, w, h);
 			}
 				
 //			else {
@@ -68,12 +72,13 @@ public class XMLParser {
 			int srcY = Integer.parseInt(n.getChild("src").getChild("y").getText());
 			int dstX = Integer.parseInt(n.getChild("dst").getChild("x").getText());
 			int dstY = Integer.parseInt(n.getChild("dst").getChild("y").getText());
+			int w = Integer.parseInt(n.getChild("width").getText());
 			
 			if(type.startsWith("d")){
-				builder.buildDirectedEdge(srcX, srcY, dstX, dstY);
+				builder.buildDirectedEdge(srcX, srcY, dstX, dstY, w);
 			}
 			else{
-				builder.buildUndirectedEdge(srcX, srcY, dstX, dstY);
+				builder.buildUndirectedEdge(srcX, srcY, dstX, dstY, w);
 			}
 		}
 		

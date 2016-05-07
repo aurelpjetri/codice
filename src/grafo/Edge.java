@@ -12,5 +12,6 @@ public interface Edge {
 	
 	public int getDistance();
 	
+	public int getWidth();
 	
 }
