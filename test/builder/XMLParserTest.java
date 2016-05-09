@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.jdom2.JDOMException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import grafo.*;
@@ -25,14 +26,19 @@ public class XMLParserTest {
 		
 	}
 	
-
+	@Ignore
+	@Test
+	public void testProduct() throws IOException, JDOMException{
+		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/example.xml");
+	}
+	
 	@Test
 	public void testEdgesBuilt(){
 		
-		Node n0 = graph.getNode(0, 0);
-		Node n1 = graph.getNode(0, 10);
-		Node n2 = graph.getNode(10, 10);
-		Node n3 = graph.getNode(20, 0);
+		Node n0 = graph.getNodeFromCoordinates(0, 0);
+		Node n1 = graph.getNodeFromCoordinates(0, 10);
+		Node n2 = graph.getNodeFromCoordinates(10, 10);
+		Node n3 = graph.getNodeFromCoordinates(20, 0);
 	
 		boolean result1 = graph.validateEdge(n0, n1);
 		boolean result2 = graph.validateEdge(n0, n3);
@@ -61,10 +67,10 @@ public class XMLParserTest {
 	
 	@Test
 	public void testNodesType(){
-		Node n0 = graph.getNode(0, 0);
-		Node n1 = graph.getNode(0, 10);
-		Node n2 = graph.getNode(10, 10);
-		Node n3 = graph.getNode(20, 0);
+		Node n0 = graph.getNodeFromCoordinates(0, 0);
+		Node n1 = graph.getNodeFromCoordinates(0, 10);
+		Node n2 = graph.getNodeFromCoordinates(10, 10);
+		Node n3 = graph.getNodeFromCoordinates(20, 0);
 		
 		boolean result0 = n0 instanceof RegularNode;
 		boolean result1 = n1 instanceof EntryPoint;
@@ -91,5 +97,7 @@ public class XMLParserTest {
 			assertEquals(5, e.getWidth());
 		}
 	}
+	
+
 	
 }

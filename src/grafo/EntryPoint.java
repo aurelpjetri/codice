@@ -70,8 +70,6 @@ public class EntryPoint implements Node {
 	}
 	
 	public String toString(){
-		String output = "";
-		output += getId() + " entry";
-		return output;
+		return getId()+": entry";
 	}
 }

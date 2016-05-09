@@ -34,22 +34,23 @@ public class ConcreteBuilder {
 		product.addNode( new EntryPoint(id, x, y, w, h));
 	}
 		
-	public void buildDirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int w){
-		DirectedEdge edge = new DirectedEdge(product.getNode(sourceX, sourceY),product.getNode(targetX, targetY), w);
-		product.addEdge(edge);
-		
-		product.getNode(sourceX, sourceY).addReachable(product.getNode(targetX, targetY));
-		
+	public void buildDirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int width, int weight) throws RuntimeException{
+		DirectedEdge edge = new DirectedEdge(product.getNodeFromCoordinates(sourceX, sourceY),product.getNodeFromCoordinates(targetX, targetY), width, weight);
+		product.addEdge(edge);		
 	}
 	
-	public void buildUndirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int w){
-		UndirectedEdge edge = new UndirectedEdge(product.getNode(sourceX, sourceY),product.getNode(targetX, targetY), w);
+	public void buildUndirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int width, int weight) throws RuntimeException{
+		UndirectedEdge edge = new UndirectedEdge(product.getNodeFromCoordinates(sourceX, sourceY),product.getNodeFromCoordinates(targetX, targetY), width, weight);
 		product.addEdge(edge);
-		product.getNode(sourceX, sourceY).addReachable(product.getNode(targetX, targetY));
 	}
 	
-	public Graph getProduct(){
-		return this.product;
+	public Graph getProduct() throws RuntimeException{
+		if(product.validateConnectedNodes())	{ //controlla che il grafo sia connesso
+			return this.product;
+		}
+		else{
+			throw new  RuntimeException("graph incomplete: some nodes are not linked");
+		}
 	}
 	
 }

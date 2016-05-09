@@ -6,13 +6,16 @@ public class DirectedEdge implements Edge{
 	private Node target;
 	private int distance;
 	private int width;
+	private int weight;
 	
-	public DirectedEdge(Node s, Node d, int w){
+	public DirectedEdge(Node s, Node d, int w, int weight){
 		this.source = s;
 		this.target = d;
 		distance = (int) Math.sqrt((s.getX()-d.getX())*(s.getX()-d.getX()) 
 				+ (s.getY() - d.getY())*(s.getY() - d.getY()));
 		width = w;
+		this.weight = weight;
+		
 	}
 
 	public Node getSource() {
@@ -41,5 +44,13 @@ public class DirectedEdge implements Edge{
 	
 	public int getWidth(){
 		return width;
+	}
+	
+	public int getWeight(){
+		return weight;
+	}
+	
+	public String toString(){
+		return getSource().getId()+"->"+getTarget().getId();
 	}
 }

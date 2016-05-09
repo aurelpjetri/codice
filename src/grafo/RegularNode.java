@@ -17,8 +17,7 @@ public class RegularNode implements Node {
 		this.y = y; 
 		this.width = w;
 		this.height = h;
-		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
-		capacity = (width * height * 5); 
+		capacity = calculateCapacity(); 
 	}
 	
 	public List<Node> getReachableNodes(){
@@ -63,8 +62,12 @@ public class RegularNode implements Node {
 	}
 	
 	public String toString(){
-		String output = "";
-		output += getId() + " normal";
-		return output;
+		return getId()+": normal";
+	}
+	
+	//metodo per il calcolo della capacità dell'incrocio.
+	public int calculateCapacity(){
+		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
+		return (width * height * 5); 
 	}
 }

@@ -3,6 +3,7 @@ package grafo;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class GraphTest {
@@ -27,10 +28,10 @@ public class GraphTest {
 		n2 = new RegularNode(2,10,10,5,5);
 		n3 = new ExitPoint(3,20,0,5,5);
 
-		e1 = new  UndirectedEdge(n0, n1, 5);
-		e2 = new  UndirectedEdge(n1, n2, 5);
-		e3 = new  UndirectedEdge(n2, n3, 5);
-		e4 = new  UndirectedEdge(n0, n3, 5);
+		e1 = new  UndirectedEdge(n0, n1, 5, 3);
+		e2 = new  UndirectedEdge(n1, n2, 5, 3);
+		e3 = new  UndirectedEdge(n2, n3, 5, 3);
+		e4 = new  UndirectedEdge(n0, n3, 5, 3);
 		
 		graph.addNode(n0);
 		graph.addNode(n1);
@@ -56,25 +57,49 @@ public class GraphTest {
 
 	@Test
 	public void testGetNodeIntInt() {
-		assertEquals(n0, graph.getNode(0,0));
-		assertEquals(n1, graph.getNode(0,10));
-		assertEquals(n2, graph.getNode(10,10));
-		assertEquals(n3, graph.getNode(20,0));
+		assertEquals(n0, graph.getNodeFromCoordinates(0,0));
+		assertEquals(n1, graph.getNodeFromCoordinates(0,10));
+		assertEquals(n2, graph.getNodeFromCoordinates(10,10));
+		assertEquals(n3, graph.getNodeFromCoordinates(20,0));
 	}
 	
 	@Test(expected=RuntimeException.class)
 	public void testGetNodeIntIntExcep(){
-		graph.getNode(5, 5);
+		graph.getNodeFromCoordinates(5, 5);
 	}
 	
 	@Test(expected=RuntimeException.class)
 	public void testAddEdge(){
-		graph.addEdge(new  UndirectedEdge(n0, n1, 5));
+		graph.addEdge(new  UndirectedEdge(n0, n1, 5, 3));
 	}
 	
 	@Test
 	public void testValidateNodeIntInt(){
-		assertEquals(false, graph.validateNode(5, 5));
+		assertEquals(false, graph.validateNodeFromCoordinates(5, 5));
+	}
+	
+	@Test
+	public void testValidateGraph(){
+		assertEquals(true, graph.validateConnectedNodes());
 	}
 
+	@Ignore
+	@Test
+	public void testToString(){
+		String stringa = "";
+		assertEquals(stringa, graph.toString());
+	}
+	
+	@Test
+	public void testGetNodeExceptionMessage(){
+		try{
+			graph.getNode(6);
+		}
+		catch(RuntimeException e){
+			String message = "node "+6+" does not exist";
+			assertEquals(message, e.getMessage());
+		}
+	}
+	
+	
 }

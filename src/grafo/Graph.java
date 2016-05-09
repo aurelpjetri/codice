@@ -18,12 +18,20 @@ public class Graph {
 	
 	
 	//checks if a link between the nodes already exists
-	public void addEdge(Edge e){
+	public void addEdge(Edge e) throws RuntimeException{
 		if(validateEdge(e.getSource(), e.getTarget() ) ){
-			throw new RuntimeException("edge already existing");
+			throw new RuntimeException(" the edge between"+e.getSource().getId()+" and "+e.getTarget().getId()+" already exists");
 		}
 		else{
-			edges.add(e); 
+			edges.add(e);
+			//devo aggiornare la lista dei reachables nei nodi coinvolti
+			if(e instanceof DirectedEdge){
+				e.getSource().addReachable(e.getTarget());
+			}
+			else{
+				e.getSource().addReachable(e.getTarget());
+				e.getTarget().addReachable(e.getSource());
+			}
 		}
 	}
 	
@@ -47,23 +55,23 @@ public class Graph {
 	}
 	
 	
-	public Node getNode(int id){
+	public Node getNode(int id)throws RuntimeException{
 	
 		for(Node node : nodes){
 			if(node.getId() == id){
 				return node;
 			}
 		}
-		throw new RuntimeException("node doesent exist");
+		throw new RuntimeException("node "+id+" does not exist");
 
 	}
 	
-	public Node getNode(int x, int y){
+	public Node getNodeFromCoordinates(int x, int y)throws RuntimeException{
 		for(Node node: nodes){
 			if(node.getX() == x && node.getY() == y)
 				return node;
 		}
-		throw new RuntimeException("node x, y, doesent exist");
+		throw new RuntimeException("node "+x+" , "+y+" doesent exist");
 	}
 
 	public ArrayList<Node> getNodes(){
@@ -83,7 +91,7 @@ public class Graph {
 		return false;
 	}
 	
-	public boolean validateNode(int x, int y){
+	public boolean validateNodeFromCoordinates(int x, int y){
 		for(Node node: nodes){
 			if(node.getX() == x && node.getY() == y){
 				return true;
@@ -92,28 +100,33 @@ public class Graph {
 		return false;
 	}
 	
+	
+	//controlla che tutti i nodi siano collegati
+	public boolean validateConnectedNodes(){
+		for(Node n :  nodes){
+			for(Edge e  : edges){
+				if( e.getTarget().equals(n) || e.getSource().equals(n) ){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	public String toString(){
 		
 		String output = "";
 		
-		for(Node node:nodes){
-			output += "node: "+node.toString()+ " reachables:";
-			for(Node r : node.getReachableNodes()){
-				output +=+ r.getId()+" ";
-			}
-		}
-		
-//		for(Edge edge: edges){
-//			if(edge instanceof DirectedEdge){
-//				System.out.println(edge.getSource().getId()+"--->"
-//						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
-//			}
-//			else{
-//				System.out.println(edge.getSource().getId()+"----"
-//						+edge.getTarget().getId()+"  distance: "+edge.getDistance());
-//			}
+//		for(Node node:nodes){
+//			output += node.toString() + "\n";
 //		}
+//		
+//		return output;
 		
+		for(Edge e: edges){
+			output += e.toString() + "\n";
+		}
 		return output;
 	}
 

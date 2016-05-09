@@ -42,6 +42,7 @@
 	            <y>10</y>
     		</dst>
     		<width>5</width>
+    		<weight>3</weight>
 	    </edge>
 	    <edge>
 	        <type>undirected</type>
@@ -54,6 +55,7 @@
                     <y>10</y>
     		</dst>
     		<width>5</width>
+    		<weight>3</weight>
 	    </edge>
 	    <edge>
 	        <type>undirected</type>
@@ -66,6 +68,7 @@
                     <y>0</y>
     		</dst>
     		<width>5</width>
+    		<weight>3</weight>
 	    </edge>
 	    <edge>
 	        <type>undirected</type>
@@ -78,13 +81,25 @@
                     <y>0</y>
     		</dst>
     		<width>5</width>
+    		<weight>3</weight>
 	    </edge>
 	</edges>
 	<system>
-	
+		<node>
+			<x>0</x>
+			<y>0</y>
+			<behavior1>10</behavior1>
+			
+		</node>
 	</system>
 	<behaviors>
-	
+		
+		<behavior1>
+			<type></type>
+			<node></node>
+			<node></node>
+		</behavior1>
+		
 	</behaviors>
 	
 </graph>

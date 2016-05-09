@@ -3,7 +3,9 @@ package builder;
 import java.io.IOException;
 import java.util.List;
 
-import org.jdom2.*;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import grafo.*;
@@ -20,6 +22,7 @@ public class XMLParser {
 		
 		
 		String file = path;
+		Graph graph = new Graph();
 		
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = jdomBuilder.build(file);
@@ -28,8 +31,21 @@ public class XMLParser {
 		
 		builder.buildGraph();
 		
-		parseTree(root, builder);
-		return builder.getProduct();
+		try{
+			parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			e.printStackTrace();
+		}
+		
+		try{
+			graph = builder.getProduct();
+		}
+		catch(RuntimeException e){
+			e.printStackTrace();
+		}
+		
+		return graph;
 		
 	}
 	
@@ -60,9 +76,9 @@ public class XMLParser {
 				builder.buildEntryPoint(x, y, w, h);
 			}
 				
-//			else {
-//				throw new RuntimeException("not able to identify node type");
-//			}
+			else {
+				throw new RuntimeException("not able to identify node type");
+			}
 			
 		}
 		
@@ -72,14 +88,21 @@ public class XMLParser {
 			int srcY = Integer.parseInt(n.getChild("src").getChild("y").getText());
 			int dstX = Integer.parseInt(n.getChild("dst").getChild("x").getText());
 			int dstY = Integer.parseInt(n.getChild("dst").getChild("y").getText());
-			int w = Integer.parseInt(n.getChild("width").getText());
+			int width = Integer.parseInt(n.getChild("width").getText());
+			int weight = Integer.parseInt(n.getChild("weight").getText());
 			
-			if(type.startsWith("d")){
-				builder.buildDirectedEdge(srcX, srcY, dstX, dstY, w);
+			try{
+				if(type.startsWith("d")){
+					builder.buildDirectedEdge(srcX, srcY, dstX, dstY, width, weight);
+				}
+				else{
+					builder.buildUndirectedEdge(srcX, srcY, dstX, dstY, width, weight);
+				}
 			}
-			else{
-				builder.buildUndirectedEdge(srcX, srcY, dstX, dstY, w);
+			catch(RuntimeException e){
+				e.printStackTrace();
 			}
+			
 		}
 		
 	}
