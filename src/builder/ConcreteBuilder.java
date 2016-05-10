@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ConcreteBuilder {
 
 	private Graph product;
-	private List<Integer> ids;
+	private ArrayList<Integer> ids;
 	
 	public void buildGraph(){
 		product = new Graph();

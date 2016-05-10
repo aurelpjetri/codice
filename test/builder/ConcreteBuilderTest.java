@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import grafo.Graph;
+
 
 public class ConcreteBuilderTest {
 	
@@ -24,6 +26,9 @@ public class ConcreteBuilderTest {
 		builder.buildUndirectedEdge(0, 10, 10, 10, 10, 10);
 		builder.buildUndirectedEdge(10, 10, 20, 0, 10, 10);
 		builder.buildUndirectedEdge(0, 0, 20, 0, 10, 10);
+		
+		Graph grafo = builder.getProduct();
+		System.out.println(grafo.getNodes().get(0).getId());
 	}
 
 	@Test

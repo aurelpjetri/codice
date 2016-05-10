@@ -1,8 +1,6 @@
 package builder;
 
-import java.io.IOException;
 
-import org.jdom2.JDOMException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,24 +12,17 @@ public class XMLParserTest2 {
 	
 	
 	@Before
-	public void setUp() throws JDOMException, IOException  {
+	public void setUp() {
 		parser = new XMLParser();
+		graph = new Graph();
 		
 		
 	}
 	
 	@Test
 	public void testParser(){
-		try{
-			graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/errorTestExample.xml");
-		}
-		catch(RuntimeException e){
-			System.out.println(e.getMessage());
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/errorTestExample.xml");
+
 	}
 
 }

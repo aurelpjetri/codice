@@ -2,7 +2,10 @@ package grafo;
 
 import java.util.ArrayList;
 
-public class Graph {
+import visitor.GraphVisitor;
+import visitor.Visitable;
+
+public class Graph implements Visitable {
 	
 	private ArrayList<Node> nodes;
 	private ArrayList<Edge> edges;
@@ -130,4 +133,12 @@ public class Graph {
 		return output;
 	}
 
+	//SEZIONE DEDICATA AL VISITOR
+	
+	public void accept(GraphVisitor visitor){
+		visitor.visit(this);
+	}
+	
+	
+	
 }
