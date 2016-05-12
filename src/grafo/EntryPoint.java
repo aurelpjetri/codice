@@ -10,16 +10,37 @@ public class EntryPoint implements Node {
 	private int x, y;
 	private int capacity;
 	private int width, height;
+	private int radius;
 	
-	public EntryPoint(int id, int x, int y, int w, int h){
+	//metodo statico usato per validare i parametri prima della costruzione del nodo
+	public static void validateNodeParameters(int x, int y, int w, int h, int r){
+		if(x<0){
+			throw new RuntimeException("Illegal value of parameter 'x': "+x);
+		}
+		if(y<0){
+			throw new RuntimeException("Illegal value of parameter 'y': "+y);
+		}
+		if(w<1){
+			throw new RuntimeException("Illegal value of parameter 'w': "+w);
+		}
+		if(h<1){
+			throw new RuntimeException("Illegal value of parameter 'h': "+h);
+		}
+		if(r<1){
+			throw new RuntimeException("Illegal value of parameter 'r': "+r);
+		}
+	}
+	
+	public EntryPoint(int id, int x, int y, int w, int h, int r){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
 		this.y = y;
-		width = w;
-		height = h;
+		this.width = w;
+		this.height = h;
 		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
-		capacity = (width * height * 5); 
+		this.capacity = calculateCapacity();
+		this.radius = r;
 	}
 	
 	public String getType(){
@@ -55,6 +76,10 @@ public class EntryPoint implements Node {
 		return height;
 	}
 	
+	public int getRadius(){
+		return radius;
+	}
+	
 	public void changeReachable(Node old, Node neW){
 		reachables.remove(old);
 		reachables.add(neW);
@@ -67,6 +92,12 @@ public class EntryPoint implements Node {
 	
 	public int getCapacity(){
 		return this.capacity;
+	}
+	
+	//metodo per il calcolo della capacità dell'incrocio.
+	//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
+	public int calculateCapacity(){
+		return (width * height * 5);
 	}
 	
 	public String toString(){

@@ -81,73 +81,61 @@ public class XMLParser {
 		String defaultEdgeType = graph.getAttributeValue("edgedefault");
 		
 		for(Element n : nodes){
-			String type = defaultNodeType;
-			int x = -1;
-			int y = -1;
-			int w = -1;
-			int h = -1;
 			
+			String type = getTextAttributeOfElement(n, "nt");
 			
-			for(Element attr : n.getChildren("data")){
-				if(attr.getAttributeValue("key").contains("nt")){
-					type = attr.getText();
-				}
-				if(attr.getAttributeValue("key").contains("nx")){
-					x = Integer.parseInt(attr.getText());
-				}
-				if(attr.getAttributeValue("key").contains("ny")){
-					y = Integer.parseInt(attr.getText());
-				}
-				if(attr.getAttributeValue("key").contains("nw")){
-					w = Integer.parseInt(attr.getText());
-				}
-				if(attr.getAttributeValue("key").contains("nh")){
-					h = Integer.parseInt(attr.getText());
-				}
+			if(type == null){
+				type = defaultNodeType;
 			}
 			
-			if(x<0 || y<0 || w<0 || h<0){
-				throw new RuntimeException("was not able to identify some attributes");
-			}
+			int x = Integer.parseInt(getTextAttributeOfElement(n, "nx"));
+			
+			int y = Integer.parseInt(getTextAttributeOfElement(n, "ny"));
+			
+			int w = Integer.parseInt(getTextAttributeOfElement(n, "nw"));
+			
+			int h = Integer.parseInt(getTextAttributeOfElement(n, "nh"));
+			
+			int r = Integer.parseInt(getTextAttributeOfElement(n, "nr"));
 
 			if(type.equalsIgnoreCase("N")){
-				builder.buildRegularNode(x, y, w, h);
+				builder.buildRegularNode(x, y, w, h, r);
 			}
 			if(type.equalsIgnoreCase("EX")){
-				builder.buildExitPoint(x, y, w, h);
+				builder.buildExitPoint(x, y, w, h, r);
 			}
 			if(type.equalsIgnoreCase("EN")){
-				builder.buildEntryPoint(x, y, w, h);
+				builder.buildEntryPoint(x, y, w, h, r);
 			}
 				
 			else if(!type.equalsIgnoreCase("EN") && 
 					!type.equalsIgnoreCase("EX")&&
 					!type.equalsIgnoreCase("N")){
-				throw new RuntimeException("not able to identify node type"+type);
+				throw new RuntimeException("not able to identify node type "+type);
 			}
 			
 			
 			
 		}
 		
-		for(Element n : edges){
+		for(Element e : edges){
 			
-			String type = defaultEdgeType;
+			String type = getTextAttributeOfElement(e, "et");
 			
-			if(getElementWithAttributeValue(n.getChildren(), "key", "et") != null){
-				type = getElementWithAttributeValue(n.getChildren(), "key", "et").getText();
+			if(type == null){
+				type = defaultEdgeType;
 			}
 			
-			Element source = getElementWithAttributeValue(nodes, "id", n.getAttributeValue("source"));
-			int srcX = Integer.parseInt(getTextAttributeofElement(source, "nx"));
-			int srcY = Integer.parseInt(getTextAttributeofElement(source, "ny"));
+			Element source = getElementWithAttributeValue(nodes, "id", e.getAttributeValue("source"));
+			int srcX = Integer.parseInt(getTextAttributeOfElement(source, "nx"));
+			int srcY = Integer.parseInt(getTextAttributeOfElement(source, "ny"));
 			
-			Element target = getElementWithAttributeValue(nodes, "id", n.getAttributeValue("target"));
-			int trgX = Integer.parseInt(getTextAttributeofElement(target, "nx"));
-			int trgY = Integer.parseInt(getTextAttributeofElement(target, "ny"));
+			Element target = getElementWithAttributeValue(nodes, "id", e.getAttributeValue("target"));
+			int trgX = Integer.parseInt(getTextAttributeOfElement(target, "nx"));
+			int trgY = Integer.parseInt(getTextAttributeOfElement(target, "ny"));
 			
-			int weight = Integer.parseInt(getTextAttributeofElement(n, "ewg"));
-			int width = Integer.parseInt(getTextAttributeofElement(n, "ewd"));
+			int weight = Integer.parseInt(getTextAttributeOfElement(e, "ewg"));
+			int width = Integer.parseInt(getTextAttributeOfElement(e, "ewd"));
 			
 			try{
 				if(type.startsWith("d")){
@@ -157,16 +145,16 @@ public class XMLParser {
 					builder.buildUndirectedEdge(srcX, srcY, trgX, trgY, width, weight);
 				}
 			}
-			catch(RuntimeException e){
-				e.printStackTrace();
+			catch(RuntimeException exep){
+				exep.printStackTrace();
 			}
 			
 		}
 		
 	}
 	
-	//restituisce il nodo con una determinata cippia nome/valore per un attributo
-	//usato per estrarre il nodo con id specifico nel documento
+	//cerca tra gli "elements" quello con attributo "name" = "value" e lo restituisce
+	//usato per cercare il nodo con un determinato 'id'
 	public Element getElementWithAttributeValue(List<Element> elements, String name, String value){
 		for(Element el : elements){
 			if(el.getAttributeValue(name).contains(value)){
@@ -176,9 +164,10 @@ public class XMLParser {
 		return null;
 	}
 	
-	//restituisce il testo contenuto nel nodo-attributo, figlio dell'elemento "e" 
-	//con il valore "value" associato all'attributo key
-	public String getTextAttributeofElement(Element e, String value){
+	
+	//itera tra i figli di 'e', si ferma in quello con attributo 'key'= "value",
+	//restituisce il 'text' sottostante
+	public String getTextAttributeOfElement(Element e, String value){
 		for(Element child : e.getChildren()){
 			if(child.getAttributeValue("key").contains(value)){
 				return child.getText();

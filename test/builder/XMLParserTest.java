@@ -29,7 +29,7 @@ public class XMLParserTest {
 	@Ignore
 	@Test
 	public void testProduct() throws IOException, JDOMException{
-		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/example.xml");
+		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/standardExample.xml");
 	}
 	
 	@Test

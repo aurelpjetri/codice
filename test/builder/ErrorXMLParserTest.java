@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import grafo.Graph;
 
-public class XMLParserTest2 {
+public class ErrorXMLParserTest {
 	private XMLParser parser;
 	private Graph graph;
 	
@@ -22,7 +22,7 @@ public class XMLParserTest2 {
 	@Test
 	public void testParser(){
 		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/errorTestExample.xml");
-
 	}
+	
 
 }

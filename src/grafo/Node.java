@@ -18,6 +18,8 @@ public interface Node {
 	
 	public int getHeight();
 	
+	public int getRadius();
+	
 	public String getType();
 
 	public void changeReachable(Node old, Node neW);
@@ -25,6 +27,5 @@ public interface Node {
 	public void addReachable(Node n);
 	
 	public String toString();
-	
 	
 }

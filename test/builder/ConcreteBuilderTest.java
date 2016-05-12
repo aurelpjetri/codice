@@ -1,12 +1,9 @@
 package builder;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import grafo.Graph;
-
 
 public class ConcreteBuilderTest {
 	
@@ -17,10 +14,10 @@ public class ConcreteBuilderTest {
 		
 		builder = new ConcreteBuilder();
 		builder.buildGraph();
-		builder.buildRegularNode(0, 0, 10, 10);
-		builder.buildRegularNode(0, 10, 10, 10);
-		builder.buildRegularNode(10, 10, 10, 10);
-		builder.buildRegularNode(20, 0, 10, 10);
+		builder.buildRegularNode(0, 0, 10, 10, 10);
+		builder.buildRegularNode(0, 10, 10, 10, 10);
+		builder.buildRegularNode(10, 10, 10, 10, 10);
+		builder.buildRegularNode(20, 0, 10, 10, 10);
 		
 		builder.buildUndirectedEdge(0, 0, 0, 10, 5, 5);
 		builder.buildUndirectedEdge(0, 10, 10, 10, 10, 10);
@@ -37,7 +34,7 @@ public class ConcreteBuilderTest {
 			builder.buildUndirectedEdge(0, 0, 0, 10, 10, 10);
 		}
 		catch(RuntimeException e){
-			String message = " the edge between"+1+" and "+2+" already exists";
+			String message = " the edge between "+0+" and "+1+" already exists";
 			assertEquals(message, e.getMessage());
 		}
 	}

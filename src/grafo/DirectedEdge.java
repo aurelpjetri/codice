@@ -8,6 +8,18 @@ public class DirectedEdge implements Edge{
 	private int width;
 	private int weight;
 	
+	//metodo statico usato per validare i parametri prima della costruzione del nodo
+	public static void validateNodeParameters( int w, int h){
+		
+		if(w<1){
+			throw new RuntimeException("Illegal value of parameter 'w': "+w);
+		}
+		if(h<1){
+			throw new RuntimeException("Illegal value of parameter 'h': "+h);
+		}
+	}
+	
+	
 	public DirectedEdge(Node s, Node d, int w, int weight){
 		this.source = s;
 		this.target = d;

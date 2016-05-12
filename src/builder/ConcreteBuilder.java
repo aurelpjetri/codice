@@ -1,37 +1,36 @@
 package builder;
 
 import grafo.*;
-//import grafo.Edge;
-import grafo.DirectedEdge;
-import java.util.List;
-import java.util.ArrayList;
+
 
 public class ConcreteBuilder {
 
 	private Graph product;
-	private ArrayList<Integer> ids;
+	private int lastId;
+	// mantenere memoria dell'ultimo id generato
+	
 	
 	public void buildGraph(){
 		product = new Graph();
-		ids = new ArrayList<Integer>();
+		lastId = 0;
 	}
 	
-	public void buildRegularNode(int x, int y, int w, int h){
-		ids.add(1);
-		int id = ids.size();
-		product.addNode(new RegularNode(id, x, y, w, h));
+	public void buildRegularNode(int x, int y, int w, int h, int r){
+		RegularNode.validateNodeParameters(x, y, w, h, r);
+		product.addNode(new RegularNode(lastId, x, y, w, h, r));
+		lastId += 1;
 	}
 	
-	public void buildExitPoint(int x , int y, int w, int h){
-		ids.add(1);
-		int id = ids.size();
-		product.addNode( new ExitPoint(id, x, y, w, h));
+	public void buildExitPoint(int x , int y, int w, int h, int r){
+		ExitPoint.validateNodeParameters(x, y, w, h, r);
+		product.addNode( new ExitPoint(lastId, x, y, w, h, r));
+		lastId += 1;
 	}
 	
-	public void buildEntryPoint(int x , int y, int w, int h){
-		ids.add(1);
-		int id = ids.size();
-		product.addNode( new EntryPoint(id, x, y, w, h));
+	public void buildEntryPoint(int x , int y, int w, int h, int r){
+		EntryPoint.validateNodeParameters(x, y, w, h, r);
+		product.addNode( new EntryPoint(lastId, x, y, w, h, r));
+		lastId += 1;
 	}
 		
 	public void buildDirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int width, int weight) throws RuntimeException{
@@ -45,7 +44,8 @@ public class ConcreteBuilder {
 	}
 	
 	public Graph getProduct() throws RuntimeException{
-		if(product.validateConnectedNodes())	{ //controlla che il grafo sia connesso
+		//controlla che il grafo sia connesso
+		if(product.validateConnectedNodes())	{ 
 			return this.product;
 		}
 		else{

@@ -23,10 +23,10 @@ public class GraphTest {
 	@Before
 	public void setUp() throws Exception {
 		graph = new Graph();
-		n0 = new RegularNode(0,0,0,5,5);
-		n1 = new EntryPoint(1,0,10,5,5);
-		n2 = new RegularNode(2,10,10,5,5);
-		n3 = new ExitPoint(3,20,0,5,5);
+		n0 = new RegularNode(0,0,0,5,5,5);
+		n1 = new EntryPoint(1,0,10,5,5,5);
+		n2 = new RegularNode(2,10,10,5,5,5);
+		n3 = new ExitPoint(3,20,0,5,5,5);
 
 		e1 = new  UndirectedEdge(n0, n1, 5, 3);
 		e2 = new  UndirectedEdge(n1, n2, 5, 3);

@@ -23,7 +23,7 @@ public class Graph implements Visitable {
 	//checks if a link between the nodes already exists
 	public void addEdge(Edge e) throws RuntimeException{
 		if(validateEdge(e.getSource(), e.getTarget() ) ){
-			throw new RuntimeException(" the edge between"+e.getSource().getId()+" and "+e.getTarget().getId()+" already exists");
+			throw new RuntimeException(" the edge between "+e.getSource().getId()+" and "+e.getTarget().getId()+" already exists");
 		}
 		else{
 			edges.add(e);
@@ -106,14 +106,19 @@ public class Graph implements Visitable {
 	
 	//controlla che tutti i nodi siano collegati
 	public boolean validateConnectedNodes(){
+		boolean connected;
 		for(Node n :  nodes){
+			connected = false;
 			for(Edge e  : edges){
 				if( e.getTarget().equals(n) || e.getSource().equals(n) ){
-					return true;
+					connected = true;
 				}
 			}
+			if(!connected){
+				return false;
+			}
 		}
-		return false;
+		return true;
 	}
 	
 	
@@ -138,7 +143,5 @@ public class Graph implements Visitable {
 	public void accept(GraphVisitor visitor){
 		visitor.visit(this);
 	}
-	
-	
 	
 }
