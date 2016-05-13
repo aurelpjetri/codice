@@ -1,6 +1,9 @@
 package grafo;
 
+import java.io.IOException;
 import java.util.*;
+
+import visitor.Visitor;
 
 public class RegularNode implements Node {
 
@@ -95,5 +98,9 @@ public class RegularNode implements Node {
 	public int calculateCapacity(){
 		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
 		return (width * height * 5); 
+	}
+	
+	public void accept(Visitor visitor) throws IOException{
+		visitor.visit(this);
 	}
 }

@@ -1,6 +1,9 @@
 package grafo;
 
+import java.io.IOException;
 import java.util.List;
+
+import visitor.Visitor;
 
 public interface Node {
 
@@ -27,5 +30,7 @@ public interface Node {
 	public void addReachable(Node n);
 	
 	public String toString();
+	
+	public void accept(Visitor v) throws IOException;
 	
 }

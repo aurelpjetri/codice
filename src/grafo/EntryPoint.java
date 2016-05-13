@@ -1,7 +1,10 @@
 package grafo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import visitor.Visitor;
 
 public class EntryPoint implements Node {
 
@@ -102,5 +105,9 @@ public class EntryPoint implements Node {
 	
 	public String toString(){
 		return getId()+": entry";
+	}
+	
+	public void accept(Visitor visitor) throws IOException{
+		visitor.visit(this);
 	}
 }

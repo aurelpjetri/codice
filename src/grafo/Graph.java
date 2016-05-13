@@ -1,11 +1,11 @@
 package grafo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import visitor.GraphVisitor;
-import visitor.Visitable;
+import visitor.*;
 
-public class Graph implements Visitable {
+public class Graph {
 	
 	private ArrayList<Node> nodes;
 	private ArrayList<Edge> edges;
@@ -140,7 +140,27 @@ public class Graph implements Visitable {
 
 	//SEZIONE DEDICATA AL VISITOR
 	
-	public void accept(GraphVisitor visitor){
+	public int getMaxEastCoordinate(){
+		int max = 0;
+		for (Node n : nodes){
+			if(n.getX() > max){
+				max = n.getX();
+			}
+		}
+		return max;
+	}
+	
+	public int getMaxNorthCoordinate(){
+		int max = 0;
+		for (Node n : nodes){
+			if(n.getY() > max){
+				max = n.getY();
+			}
+		}
+		return max;
+	}
+	
+	public void accept(Visitor visitor) throws IOException{
 		visitor.visit(this);
 	}
 	

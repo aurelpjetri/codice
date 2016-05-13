@@ -1,7 +1,10 @@
 package grafo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import visitor.Visitor;
 
 
 
@@ -102,4 +105,7 @@ public class ExitPoint implements Node{
 		return getId()+": exit";
 	}
 	
+	public void accept(Visitor visitor) throws IOException{
+		visitor.visit(this);
+	}
 }
