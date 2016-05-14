@@ -1,5 +1,9 @@
 package grafo;
 
+import java.io.IOException;
+
+import visitor.Visitor;
+
 public interface Edge {
 
 	public Node getSource();
@@ -13,5 +17,7 @@ public interface Edge {
 	public int getDistance();
 	
 	public int getWidth();
+	
+	public void accept(Visitor visitor)throws IOException;
 	
 }

@@ -26,7 +26,7 @@ public class NetLogoGraphVisitorTest {
 	@Test
 	public void visitGraphTest() {
 		try{
-			visitor = new ProvaGraphVisitor();
+			visitor = new NetLogoGraphVisitor();
 			graph.accept(visitor);
 		}
 		catch(IOException e){

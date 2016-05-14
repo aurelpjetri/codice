@@ -1,5 +1,9 @@
 package grafo;
 
+import java.io.IOException;
+
+import visitor.Visitor;
+
 public class UndirectedEdge implements Edge{
 
 	private Node source;
@@ -51,5 +55,9 @@ public class UndirectedEdge implements Edge{
 	
 	public String toString(){
 		return getSource().getId()+"--"+getTarget().getId();
+	}
+	
+	public void accept(Visitor v) throws IOException{
+		v.visit(this);
 	}
 }

@@ -223,4 +223,14 @@ to make-beacon-exit
   set interest-point? false
 end
 
+;FUNZIONE DI APPOGGIO SCRITTA DA ME
+;restituisce il beacon alle coordinate x y
+to-report get-beacon-at [x y]
+  let current-beacon []
+  ask patch x y [
+    set current-beacon beacons-here
+  ]
+  report one-of current-beacon
+end
+
 ;;******************************************

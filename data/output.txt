@@ -223,6 +223,16 @@ to make-beacon-exit
   set interest-point? false
 end
 
+;FUNZIONE DI APPOGGIO SCRITTA DA ME
+;restituisce il beacon alle coordinate x y
+to-report get-beacon-at [x y]
+  let current-beacon []
+  ask patch x y [
+    set current-beacon beacons-here
+  ]
+  report one-of current-beacon
+end
+
 ;;******************************************
 to generate-map
   let new-world-width 2 * world-offset + 20
@@ -238,28 +248,46 @@ to generate-map
 end 
 
 to generate-beacons
-  ask patch 0 0 [sprout-beacon 1 [
+  ask patch (world-offset + 0) (world-offset + 0) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
   ]]
-  ask patch 0 10 [sprout-beacon 1 [
+  ask patch (world-offset + 0) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
   ]]
-  ask patch 10 10 [sprout-beacon 1 [
+  ask patch (world-offset + 10) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
   ]]
-  ask patch 20 0 [sprout-beacon 1 [
+  ask patch (world-offset + 20) (world-offset + 0) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
   ]]
+end
+to connect-beacons
+  ask get-beacon-at (world-offset + 0) (world-offset + 0) [
+    create-street-with get-beacon-at (world-offset + 0) (world-offset + 10) [
+      set weight 3
+      set street-width 3]]
+  ask get-beacon-at (world-offset + 0) (world-offset + 10) [
+    create-street-with get-beacon-at (world-offset + 10) (world-offset + 10) [
+      set weight 3
+      set street-width 3]]
+  ask get-beacon-at (world-offset + 10) (world-offset + 10) [
+    create-street-with get-beacon-at (world-offset + 20) (world-offset + 0) [
+      set weight 3
+      set street-width 3]]
+  ask get-beacon-at (world-offset + 0) (world-offset + 0) [
+    create-street-with get-beacon-at (world-offset + 20) (world-offset + 0) [
+      set weight 3
+      set street-width 3]]
 end

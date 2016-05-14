@@ -46,19 +46,19 @@
 		</node>
 		<edge id="e0" source="n0" target="n1">
 			<data key="ewg">3</data>
-			<data key="ewd">5</data>
+			<data key="ewd">3</data>
 		</edge>
 		<edge id="e1" source="n1" target="n2">
 			<data key="ewg">3</data>
-			<data key="ewd">5</data>		
+			<data key="ewd">3</data>		
 		</edge>
 		<edge id="e2" source="n2" target="n3">
 			<data key="ewg">3</data>
-			<data key="ewd">5</data>
+			<data key="ewd">3</data>
 		</edge>
 		<edge id="e3" source="n0" target="n3">
 			<data key="ewg">3</data>
-			<data key="ewd">5</data>
+			<data key="ewd">3</data>
 		</edge>
 	</graph>
 </grafoxml>

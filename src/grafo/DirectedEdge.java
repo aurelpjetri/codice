@@ -1,5 +1,9 @@
 package grafo;
 
+import java.io.IOException;
+
+import visitor.Visitor;
+
 public class DirectedEdge implements Edge{
 
 	private Node source;
@@ -64,5 +68,9 @@ public class DirectedEdge implements Edge{
 	
 	public String toString(){
 		return getSource().getId()+"->"+getTarget().getId();
+	}
+
+	public void accept(Visitor v) throws IOException{
+		v.visit(this);
 	}
 }
