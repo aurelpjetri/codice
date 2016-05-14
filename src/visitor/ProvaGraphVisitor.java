@@ -26,7 +26,7 @@ public class ProvaGraphVisitor implements Visitor{
 		outputStream = null;
 		File f = new File("data/output.txt");
 		f.createNewFile();
-		myFileWriter = new FileWriter(f, true);
+		myFileWriter = new FileWriter(f);
 	}
 	
 	public void visit(Graph g) throws IOException{
@@ -79,7 +79,7 @@ public class ProvaGraphVisitor implements Visitor{
 	public void visit(RegularNode n) throws IOException{
 		
 			
-            outputStream = new PrintWriter(myFileWriter);
+//            outputStream = new PrintWriter(myFileWriter);
             
             
             outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
@@ -97,7 +97,7 @@ public class ProvaGraphVisitor implements Visitor{
 	public void visit(EntryPoint n) throws IOException{
 		
 		
-        outputStream = new PrintWriter(myFileWriter);
+//        outputStream = new PrintWriter(myFileWriter);
         
         
         outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
@@ -112,7 +112,7 @@ public class ProvaGraphVisitor implements Visitor{
 	
 	public void visit(ExitPoint n) throws IOException{
 		
-        outputStream = new PrintWriter(myFileWriter);
+//        outputStream = new PrintWriter(myFileWriter);
         
         
         outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
