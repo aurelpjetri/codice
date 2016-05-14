@@ -60,6 +60,7 @@ public class NetLogoGraphVisitor implements Visitor{
             
             outputStream.println("end");
         } 
+
         finally {
             if (inputStream != null) {
                 inputStream.close();
@@ -84,6 +85,7 @@ public class NetLogoGraphVisitor implements Visitor{
             outputStream.println("  ]]");
                         
 		}
+
 		finally{
 			System.out.println(outputStream.checkError());
 			if (outputStream != null) {

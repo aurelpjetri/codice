@@ -19,13 +19,14 @@ public class NetLogoGraphVisitorTest {
 		parser = new XMLParser();
 		graph = parser.parseDocumentForGraph("src/standardExample.xml");
 		
-		visitor = new ProvaGraphVisitor();
+		
 		
 	}
 
 	@Test
 	public void visitGraphTest() {
 		try{
+			visitor = new ProvaGraphVisitor();
 			graph.accept(visitor);
 		}
 		catch(IOException e){

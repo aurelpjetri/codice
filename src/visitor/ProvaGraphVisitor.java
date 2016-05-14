@@ -1,6 +1,7 @@
 package visitor;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,26 +22,18 @@ public class ProvaGraphVisitor implements Visitor{
 	private FileWriter myFileWriter;
 	
 	public ProvaGraphVisitor() throws IOException{
-		try{
-			inputStream = new BufferedReader(new FileReader("data/input.txt"));
-			outputStream = new PrintWriter(myFileWriter);
-			myFileWriter = new FileWriter("data/output.txt");
-		}
-		finally{
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (outputStream != null) {
-                outputStream.close();
-            }
-		}
-        
-	
-		
+		inputStream = null;
+		outputStream = null;
+		File f = new File("data/output.txt");
+		f.createNewFile();
+		myFileWriter = new FileWriter(f, true);
 	}
 	
 	public void visit(Graph g) throws IOException{
 		
+        try {
+            inputStream = new BufferedReader(new FileReader("data/input.txt"));
+            outputStream = new PrintWriter(myFileWriter);
 
             String l;
             while ((l = inputStream.readLine()) != null) {
@@ -68,12 +61,26 @@ public class ProvaGraphVisitor implements Visitor{
             	n.accept(this);
             }
             
+            outputStream = new PrintWriter(myFileWriter);
+            
             outputStream.println("end");
-      
+        } 
+
+        finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        }
 	}
 	
 	public void visit(RegularNode n) throws IOException{
-	          
+		
+			
+            outputStream = new PrintWriter(myFileWriter);
+            
             
             outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
             outputStream.println("    make-beacon-normal");
@@ -81,40 +88,41 @@ public class ProvaGraphVisitor implements Visitor{
             outputStream.println("    set intersection-height "+n.getHeight());
             outputStream.println("    set intersection-radius "+n.getRadius());
             outputStream.println("  ]]");
+                        
+			System.out.println(outputStream.checkError());
+
 
 	}
 	
 	public void visit(EntryPoint n) throws IOException{
-	
-			
-            
-            
-            outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
-            outputStream.println("    make-beacon-entry");
-            outputStream.println("    set intersection-width "+n.getWidth());
-            outputStream.println("    set intersection-height "+n.getHeight());
-            outputStream.println("    set intersection-radius "+n.getRadius());
-            outputStream.println("  ]]");
-	            
-			
-
-
+		
+		
+        outputStream = new PrintWriter(myFileWriter);
+        
+        
+        outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
+        outputStream.println("    make-beacon-normal");
+        outputStream.println("    set intersection-width "+n.getWidth());
+        outputStream.println("    set intersection-height "+n.getHeight());
+        outputStream.println("    set intersection-radius "+n.getRadius());
+        outputStream.println("  ]]");
+                    
+		System.out.println(outputStream.checkError());
 	}
 	
 	public void visit(ExitPoint n) throws IOException{
-	
-			
-            
-            
-            outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
-            outputStream.println("    make-beacon-exit");
-            outputStream.println("    set intersection-width "+n.getWidth());
-            outputStream.println("    set intersection-height "+n.getHeight());
-            outputStream.println("    set intersection-radius "+n.getRadius());
-            outputStream.println("  ]]");
-            
 		
-
+        outputStream = new PrintWriter(myFileWriter);
+        
+        
+        outputStream.println("  ask patch "+n.getX()+" "+n.getY()+" [sprout-beacon 1 [");
+        outputStream.println("    make-beacon-normal");
+        outputStream.println("    set intersection-width "+n.getWidth());
+        outputStream.println("    set intersection-height "+n.getHeight());
+        outputStream.println("    set intersection-radius "+n.getRadius());
+        outputStream.println("  ]]");
+                    
+		System.out.println(outputStream.checkError());
 	}	
 	
 	public void visit(DirectedEdge e){
