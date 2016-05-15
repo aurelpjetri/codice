@@ -223,6 +223,12 @@ to make-beacon-exit
   set interest-point? false
 end
 
+to generate-interest-points
+  ask n-of 2 beacons with [entry-point? = false and exit-point? = false] [
+    set interest-point? true
+  ]
+end
+
 ;FUNZIONE DI APPOGGIO SCRITTA DA ME
 ;restituisce il beacon alle coordinate x y
 to-report get-beacon-at [x y]

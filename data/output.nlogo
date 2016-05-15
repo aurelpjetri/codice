@@ -223,6 +223,12 @@ to make-beacon-exit
   set interest-point? false
 end
 
+to generate-interest-points
+  ask n-of 2 beacons with [entry-point? = false and exit-point? = false] [
+    set interest-point? true
+  ]
+end
+
 ;FUNZIONE DI APPOGGIO SCRITTA DA ME
 ;restituisce il beacon alle coordinate x y
 to-report get-beacon-at [x y]
@@ -236,41 +242,52 @@ end
 ;;******************************************INIZIO
 to generate-map
   let new-world-width 2 * world-offset + 20
-  let new-world-height 2 * world-offset + 10
-  resize-world 0 new-world-width 0 new-world-height 
-
-  generate-beacons 
-  connect-beacons 
-  draw-squares 
-  draw-streets 
-  make-patches-non-wall 
-
+  let new-world-height 2 * world-offset + 20
+  resize-world 0 new-world-width 0 new-world-height
+  generate-beacons
+  generate-interest-points
+  connect-beacons
+  draw-squares
+  draw-streets
+  make-patches-non-wall
 end 
 
 to generate-beacons
   ask patch (world-offset + 0) (world-offset + 0) [sprout-beacons 1 [
-    make-beacon-normal
+    make-beacon-entry
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
+    set intersection-radius 3
   ]]
   ask patch (world-offset + 0) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
+    set intersection-radius 3
+  ]]
+  ask patch (world-offset + 0) (world-offset + 20) [sprout-beacons 1 [
+    make-beacon-normal
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
   ]]
   ask patch (world-offset + 10) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
+    set intersection-radius 3
   ]]
-  ask patch (world-offset + 20) (world-offset + 0) [sprout-beacons 1 [
+  ask patch (world-offset + 10) (world-offset + 0) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
+    set intersection-radius 3
+  ]]
+  ask patch (world-offset + 20) (world-offset + 0) [sprout-beacons 1 [
+    make-beacon-exit
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
   ]]
 end
 to connect-beacons
@@ -279,6 +296,10 @@ to connect-beacons
       set weight 3
       set street-width 3]]
   ask get-beacon-at (world-offset + 0) (world-offset + 10) [
+    create-street-with get-beacon-at (world-offset + 0) (world-offset + 20) [
+      set weight 3
+      set street-width 3]]
+  ask get-beacon-at (world-offset + 0) (world-offset + 20) [
     create-street-with get-beacon-at (world-offset + 10) (world-offset + 10) [
       set weight 3
       set street-width 3]]
@@ -287,6 +308,10 @@ to connect-beacons
       set weight 3
       set street-width 3]]
   ask get-beacon-at (world-offset + 0) (world-offset + 0) [
+    create-street-with get-beacon-at (world-offset + 10) (world-offset + 0) [
+      set weight 3
+      set street-width 3]]
+  ask get-beacon-at (world-offset + 10) (world-offset + 0) [
     create-street-with get-beacon-at (world-offset + 20) (world-offset + 0) [
       set weight 3
       set street-width 3]]

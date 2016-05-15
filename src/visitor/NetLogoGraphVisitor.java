@@ -1,7 +1,6 @@
 package visitor;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,12 +47,13 @@ public class NetLogoGraphVisitor implements Visitor{
             outputStream.println("to generate-map");
             outputStream.println("  let new-world-width 2 * world-offset + "+maxX);
             outputStream.println("  let new-world-height 2 * world-offset + "+maxY);
-            outputStream.println("  resize-world 0 new-world-width 0 new-world-height \n");
-            outputStream.println("  generate-beacons \n"
-			            		+ "  connect-beacons \n"
-			            		+ "  draw-squares \n"
-			            		+ "  draw-streets \n"
-			            		+ "  make-patches-non-wall \n");
+            outputStream.println("  resize-world 0 new-world-width 0 new-world-height");
+            outputStream.println("  generate-beacons");
+            outputStream.println("  generate-interest-points");
+            outputStream.println("  connect-beacons");
+            outputStream.println("  draw-squares");
+            outputStream.println("  draw-streets");
+            outputStream.println("  make-patches-non-wall");
             outputStream.println("end \n");
             
             outputStream.println("to generate-beacons");
@@ -117,7 +117,7 @@ public class NetLogoGraphVisitor implements Visitor{
 	public void visit(EntryPoint n) throws IOException{
 		if(outputStream != null){
 			outputStream.println("  ask patch (world-offset + "+n.getX()+") (world-offset + "+n.getY()+") [sprout-beacons 1 [");
-	        outputStream.println("    make-beacon-normal");
+	        outputStream.println("    make-beacon-entry");
 	        outputStream.println("    set intersection-width "+n.getWidth());
 	        outputStream.println("    set intersection-height "+n.getHeight());
 	        outputStream.println("    set intersection-radius "+n.getRadius());
@@ -125,14 +125,13 @@ public class NetLogoGraphVisitor implements Visitor{
 		}else if (outputStream == null){
 			throw  new RuntimeException("unable to perform streaming");
 		}
-        
-                    
+         
 	}
 	
 	public void visit(ExitPoint n) throws IOException{
 		if(outputStream != null){
 	        outputStream.println("  ask patch (world-offset + "+n.getX()+") (world-offset + "+n.getY()+") [sprout-beacons 1 [");
-	        outputStream.println("    make-beacon-normal");
+	        outputStream.println("    make-beacon-exit");
 	        outputStream.println("    set intersection-width "+n.getWidth());
 	        outputStream.println("    set intersection-height "+n.getHeight());
 	        outputStream.println("    set intersection-radius "+n.getRadius());
