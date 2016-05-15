@@ -9,7 +9,12 @@ La clausola Try/Finally è usata solo nel visit del Grafo, in cui si chiamano gl
 
 Update: Il Visitor dovrebbe essere corretto.
 
+Behaviors: 
+- Aggiunti metodi in builder per costruizione behaviors. 
 
+- Aggiunta lista di behaviors in Graph e metodi utili.
+
+- Modificato XMLParser per la lettura dei behaviors
 
 
 
