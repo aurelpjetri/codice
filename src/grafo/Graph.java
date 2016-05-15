@@ -3,16 +3,20 @@ package grafo;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import visitor.*;
+import behaviors.Behavior;
+import visitor.Visitor;
 
 public class Graph {
 	
 	private ArrayList<Node> nodes;
 	private ArrayList<Edge> edges;
 	
+	private ArrayList<Behavior> behaviors;
+	
 	public Graph(){
 		this.nodes = new ArrayList<Node>();
 		this.edges= new ArrayList<Edge>();
+		behaviors = new ArrayList<Behavior>();
 	}
 	
 	public void addNode(Node n){
@@ -83,6 +87,23 @@ public class Graph {
 	
 	public ArrayList<Edge> getEdges(){
 		return this.edges;
+	}
+	
+	public ArrayList<Behavior> getBehaviors(){
+		return behaviors;
+	}
+	
+	public void addBehavior(Behavior b){
+		behaviors.add(b);
+	}
+	
+	public Behavior getBehaviorFromId(int id){
+		for(Behavior b: behaviors){
+			if(b.getId() == id){
+				return b;
+			}
+		}
+		return null;
 	}
 	
 	public boolean validateNode(int id){

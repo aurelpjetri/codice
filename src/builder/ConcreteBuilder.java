@@ -1,6 +1,14 @@
 package builder;
 
-import grafo.*;
+import behaviors.Behavior;
+import behaviors.ConcreteBehavior1;
+import grafo.DirectedEdge;
+import grafo.EntryPoint;
+import grafo.ExitPoint;
+import grafo.Graph;
+import grafo.Node;
+import grafo.RegularNode;
+import grafo.UndirectedEdge;
 
 
 public class ConcreteBuilder {
@@ -41,6 +49,24 @@ public class ConcreteBuilder {
 	public void buildUndirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int width, int weight) throws RuntimeException{
 		UndirectedEdge edge = new UndirectedEdge(product.getNodeFromCoordinates(sourceX, sourceY),product.getNodeFromCoordinates(targetX, targetY), width, weight);
 		product.addEdge(edge);
+	}
+	
+	
+	public void buildConcreteBehavior1(int id){
+		Behavior b = new ConcreteBehavior1(id);
+		product.addBehavior(b);
+	}
+	
+	public void buildInterestPointOnBehavior(int x, int y, int id, boolean optionalityFlag){
+		
+		if(optionalityFlag){
+			Node n = product.getNodeFromCoordinates(x, y);
+			product.getBehaviorFromId(id).addOptionalIp(n);
+		}
+		else{
+			Node n = product.getNodeFromCoordinates(x, y);
+			product.getBehaviorFromId(id).addCoreIp(n);
+		}
 	}
 	
 	public Graph getProduct() throws RuntimeException{

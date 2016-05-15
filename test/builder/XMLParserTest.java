@@ -98,6 +98,11 @@ public class XMLParserTest {
 		}
 	}
 	
+	@Test
+	public void testBehaviors(){
+		assertEquals(2, graph.getBehaviors().size());
+		assertEquals(1, graph.getBehaviorFromId(1).getCoreIp().size());
+	}
 
 	
 }

@@ -1,11 +1,19 @@
 package behaviors;
 
-import grafo.*;
+import java.util.List;
+
+import grafo.Node;
 
 public interface Behavior {
-
-	public Graph getBehaviorGraph();
 	
-	public Graph buildBehaviorGraph();
+	public int getId();
+
+	public List<Node> getCoreIp();
+	
+	public List<Node> getOptionalIp();
+	
+	public void addOptionalIp(Node n);
+
+	public void addCoreIp(Node n);
 	
 }

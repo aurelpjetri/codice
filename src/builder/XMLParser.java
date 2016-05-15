@@ -1,6 +1,7 @@
 package builder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -58,7 +59,13 @@ public class XMLParser {
 	
 	public void parseTree(Element node, ConcreteBuilder builder){
 		
-		Element graph = node.getChild("graph");
+//		Element graph = node.getChild("graph");
+		
+		Element graph = getElementWithAttributeValue(node.getChildren(), "id", "G");
+		
+		Element behaviorList = getElementWithAttributeValue(node.getChildren(), "id", "Behaviors");
+		
+		List<Element> behaviors = behaviorList.getChildren("node");
 		
 		List<Element> nodes = graph.getChildren("node");
 		
@@ -145,6 +152,25 @@ public class XMLParser {
 				exep.printStackTrace();
 			}
 			
+		}
+		
+		for (Element b : behaviors){
+			Element behavior = b.getChild("graph");
+			 
+			int id = Integer.parseInt(behavior.getAttributeValue("id"));
+			
+			builder.buildConcreteBehavior1(id);
+			
+			for(Element i : behavior.getChildren()){
+				String id1 = i.getAttributeValue("id");
+				
+				Element poi = getElementWithAttributeValue(nodes, "id", id1);
+				int poiX = Integer.parseInt(getTextAttributeOfElement(poi, "nx"));
+				int poiY = Integer.parseInt(getTextAttributeOfElement(poi, "ny"));
+				
+				builder.buildInterestPointOnBehavior(poiX, poiY, id, !i.getChildren().isEmpty() );
+			}
+	
 		}
 		
 	}
