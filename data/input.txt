@@ -233,4 +233,4 @@ to-report get-beacon-at [x y]
   report one-of current-beacon
 end
 
-;;******************************************
+;;******************************************INIZIO

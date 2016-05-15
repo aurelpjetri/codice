@@ -19,21 +19,22 @@ import grafo.UndirectedEdge;
 public class NetLogoGraphVisitor implements Visitor{
 	
 	private BufferedReader inputStream;
+	private BufferedReader inputStream2;
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
 	
 	public NetLogoGraphVisitor() throws IOException{
 		inputStream = null;
+		inputStream2 = null;
 		outputStream = null;
-		File f = new File("data/output.txt");
-		f.createNewFile();
-		myFileWriter = new FileWriter(f);
+		myFileWriter = new FileWriter("data/output.nlogo");
 	}
 	
 	public void visit(Graph g) throws IOException{
 		
         try {
             inputStream = new BufferedReader(new FileReader("data/input.txt"));
+            inputStream2 = new BufferedReader(new FileReader("data/input2.txt"));
             outputStream = new PrintWriter(myFileWriter);
 
             String l;
@@ -75,6 +76,9 @@ public class NetLogoGraphVisitor implements Visitor{
             }
             
             outputStream.println("end");
+            while ((l = inputStream2.readLine()) != null) {
+                outputStream.println(l);
+            }
            
         } 
 		catch(RuntimeException e){
@@ -83,6 +87,9 @@ public class NetLogoGraphVisitor implements Visitor{
         finally {
             if (inputStream != null) {
                 inputStream.close();
+            }
+            if(inputStream2 != null){
+            	inputStream2.close();
             }
             if (outputStream != null) {
                 outputStream.close();

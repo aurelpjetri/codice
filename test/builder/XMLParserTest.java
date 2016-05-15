@@ -22,7 +22,7 @@ public class XMLParserTest {
 	@Before
 	public void setUp() throws JDOMException, IOException  {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/standardExample.xml");
+		graph = parser.parseDocumentForGraph("data/standardExample.xml");
 		
 	}
 	
@@ -94,7 +94,7 @@ public class XMLParserTest {
 	@Test
 	public void testEdgesWidth(){
 		for(Edge e : graph.getEdges()){
-			assertEquals(5, e.getWidth());
+			assertEquals(3, e.getWidth());
 		}
 	}
 	

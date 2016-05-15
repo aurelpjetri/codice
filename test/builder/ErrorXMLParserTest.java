@@ -21,7 +21,7 @@ public class ErrorXMLParserTest {
 	
 	@Test
 	public void testParser(){
-		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/errorTestExample.xml");
+		graph = parser.parseDocumentForGraph("data/errorTestExample.xml");
 	}
 	
 
