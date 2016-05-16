@@ -1,7 +1,6 @@
 package builder;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -61,7 +60,7 @@ public class XMLParser {
 		
 //		Element graph = node.getChild("graph");
 		
-		Element graph = getElementWithAttributeValue(root.getChildren(), "id", "G");
+		Element graph = getElementWithAttributeValue(root.getChildren(), "id", "Graph");
 		
 		
 		List<Element> behaviors = getElementWithAttributeValue(root.getChildren(), "id", "Behaviors").getChildren("node");
@@ -77,7 +76,7 @@ public class XMLParser {
 		String defaultNodeType = null;
 		
 		for(Element at : attributes){
-			if(at.getAttributeValue("id").contains("nt")){
+			if(at.getAttributeValue("id").contains("nType")){
 				defaultNodeType = at.getChild("default").getText();
 			}
 		}
@@ -86,7 +85,7 @@ public class XMLParser {
 		
 		for(Element n : nodes){
 			
-			String type = getTextAttributeOfElement(n, "nt");
+			String type = getTextAttributeOfElement(n, "nType");
 			
 			if(type == null){
 				type = defaultNodeType;
@@ -99,31 +98,31 @@ public class XMLParser {
 			
 			int y = Integer.parseInt(getTextAttributeOfElement(n, "ny"));
 			
-			int w = Integer.parseInt(getTextAttributeOfElement(n, "nw"));
+			int w = Integer.parseInt(getTextAttributeOfElement(n, "nWidth"));
 			
-			int h = Integer.parseInt(getTextAttributeOfElement(n, "nh"));
+			int h = Integer.parseInt(getTextAttributeOfElement(n, "nHeight"));
 			
-			int r = Integer.parseInt(getTextAttributeOfElement(n, "nr"));
+			int r = Integer.parseInt(getTextAttributeOfElement(n, "nRadius"));
 			
 			int s = 0;
 			
 			if(nodeStatusElement != null){
-				s = Integer.parseInt(getTextAttributeOfElement(nodeStatusElement, "ns"));
+				s = Integer.parseInt(getTextAttributeOfElement(nodeStatusElement, "nStatus"));
 			}
 
-			if(type.equalsIgnoreCase("N")){
+			if(type.equalsIgnoreCase("normal")){
 				builder.buildRegularNode(x, y, w, h, r, s);
 			}
-			if(type.equalsIgnoreCase("EX")){
+			if(type.equalsIgnoreCase("exit")){
 				builder.buildExitPoint(x, y, w, h, r, s);
 			}
-			if(type.equalsIgnoreCase("EN")){
+			if(type.equalsIgnoreCase("entry")){
 				builder.buildEntryPoint(x, y, w, h, r, s);
 			}
 				
-			else if(!type.equalsIgnoreCase("EN") && 
-					!type.equalsIgnoreCase("EX")&&
-					!type.equalsIgnoreCase("N")){
+			else if(!type.equalsIgnoreCase("normal") && 
+					!type.equalsIgnoreCase("exit")&&
+					!type.equalsIgnoreCase("normal")){
 				throw new RuntimeException("not able to identify node type "+type);
 			}
 			
@@ -132,7 +131,7 @@ public class XMLParser {
 		
 		for(Element e : edges){
 			
-			String type = getTextAttributeOfElement(e, "et");
+			String type = getTextAttributeOfElement(e, "eType");
 			
 			if(type == null){
 				type = defaultEdgeType;
@@ -146,8 +145,8 @@ public class XMLParser {
 			int trgX = Integer.parseInt(getTextAttributeOfElement(target, "nx"));
 			int trgY = Integer.parseInt(getTextAttributeOfElement(target, "ny"));
 			
-			int weight = Integer.parseInt(getTextAttributeOfElement(e, "ewg"));
-			int width = Integer.parseInt(getTextAttributeOfElement(e, "ewd"));
+			int weight = Integer.parseInt(getTextAttributeOfElement(e, "weight"));
+			int width = Integer.parseInt(getTextAttributeOfElement(e, "eWidth"));
 			
 			try{
 				if(type.startsWith("d")){
@@ -163,12 +162,24 @@ public class XMLParser {
 			
 		}
 		
+		
 		for (Element b : behaviors){
 			Element behavior = b.getChild("graph");
-			 
+			
+			String type = b.getChild("data").getText();
+			
 			int id = Integer.parseInt(behavior.getAttributeValue("id"));
 			
-			builder.buildConcreteBehavior1(id);
+			
+			if(type.equalsIgnoreCase("evacuate")){
+				builder.buildEvacuateBehavior(id);
+			}
+			if(type.equalsIgnoreCase("visit")){
+				builder.buildVisitBehavior(id);
+			}
+			else if (!type.equalsIgnoreCase("evacuate") && !type.equalsIgnoreCase("visit")){
+				throw new RuntimeException("unable to identify type on behavior: "+id);
+			}
 			
 			for(Element i : behavior.getChildren()){
 				String id1 = i.getAttributeValue("id");

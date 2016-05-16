@@ -1,7 +1,7 @@
 package builder;
 
-import behaviors.Behavior;
-import behaviors.ConcreteBehavior1;
+import behaviors.EvacuateBehavior;
+import behaviors.VisitBehavior;
 import grafo.DirectedEdge;
 import grafo.EntryPoint;
 import grafo.ExitPoint;
@@ -52,22 +52,27 @@ public class ConcreteBuilder {
 	}
 	
 	
-	public void buildConcreteBehavior1(int id){
-		Behavior b = new ConcreteBehavior1(id);
-		product.addBehavior(b);
+	public void buildVisitBehavior(int id){
+		product.addBehavior(new VisitBehavior(id));
+	}
+	
+	public void buildEvacuateBehavior(int id){
+		product.addBehavior(new EvacuateBehavior(id));
 	}
 	
 	public void buildInterestPointOnBehavior(int x, int y, int id, boolean optionalityFlag){
 		
 		if(optionalityFlag){
 			Node n = product.getNodeFromCoordinates(x, y);
-			product.getBehaviorFromId(id).addOptionalIp(n);
+			product.getBehaviorFromId(id).addOptionalInterestPoint(n);
 		}
 		else{
 			Node n = product.getNodeFromCoordinates(x, y);
-			product.getBehaviorFromId(id).addCoreIp(n);
+			product.getBehaviorFromId(id).addCoreInterestPoint(n);
 		}
 	}
+	
+	
 	
 	public Graph getProduct() throws RuntimeException{
 		//controlla che il grafo sia connesso

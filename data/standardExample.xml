@@ -1,82 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grafoxml>
-	<key id="nt" for="node" attr.name="type" attr.type="string">
-		<default>N</default>
+	<!-- attributi per i nodi -->
+	<key id="nType" for="node" attr.name="type" attr.type="string">
+		<default>normal</default>
 	</key>
 	<key id="nx" for="node" attr.name="nodeX" attr.type="int" />
 	<key id="ny" for="node" attr.name="nodeY" attr.type="int" />
-	<key id="nw" for="node" attr.name="nodeWidth" attr.type="int" />
-	<key id="nh" for="node" attr.name="nodeHeight" attr.type="int" />
-	<key id="nr" for="node" attr.name="nodeRadius" attr.type="int" />
+	<key id="nWidth" for="node" attr.name="nodeWidth" attr.type="int" />
+	<key id="nHeight" for="node" attr.name="nodeHeight" attr.type="int" />
+	<key id="nRadius" for="node" attr.name="nodeRadius" attr.type="int" />
 	
-	<key id="ns" for="node" attr.name="nodeStatus" attr.type="int" />
+	<!-- attributi per lo stato iniziale -->
+	<key id="nStatus" for="node" attr.name="nodeStatus" attr.type="int" />
+	<key id="moverBehavior" for="node" attr.name="moverBehavior" attr.type="string" />
 	
-	
-	<key id="bo" for="node" attr.name="nodeOptionalityFlag" attr.type="booelan">
+	<!-- attributi per il behavior -->
+	<key id="bType" for="node" attr.name="behaviorType" attr.type="int" />
+	<key id="optionality" for="node" attr.name="nodeOptionalityFlag" attr.type="booelan">
 		<default>false</default>
 	</key>
-
-	<key id="et" for="edge" attr.name="type" attr.type="string" />
-	<key id="ewg" for="edge" attr.name="weight" attr.type="double" />
-	<key id="ewd" for="edge" attr.name="edgeWidth" attr.type="int" />
+	
+	<!-- attributi per gli archi -->
+	<key id="eType" for="edge" attr.name="type" attr.type="string" />
+	<key id="weight" for="edge" attr.name="weight" attr.type="double" />
+	<key id="eWidth" for="edge" attr.name="edgeWidth" attr.type="int" />
 	
 
-	<graph id="G" edgedefault="undirected">
+	<graph id="Graph" edgedefault="undirected">
 		<node id="n0">
 			<data key="nx">0</data>
 			<data key="ny">0</data>
-			<data key="nw">5</data>
-			<data key="nh">5</data>
-			<data key="nr">5</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">5</data>
 		</node>
 		<node id="n1">
-			<data key="nt">EN</data>
+			<data key="nType">entry</data>
 			<data key="nx">0</data>
 			<data key="ny">10</data>
-			<data key="nw">5</data>
-			<data key="nh">5</data>
-			<data key="nr">5</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">5</data>
 		</node>
 		<node id="n2">
 			<data key="nx">10</data>
 			<data key="ny">10</data>
-			<data key="nw">5</data>
-			<data key="nh">5</data>
-			<data key="nr">5</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">5</data>
 		</node>
 		<node id="n3">
-			<data key="nt">EX</data>
+			<data key="nType">exit</data>
 			<data key="nx">20</data>
 			<data key="ny">0</data>
-			<data key="nw">5</data>
-			<data key="nh">5</data>
-			<data key="nr">5</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">5</data>
 		</node>
 		<edge id="e0" source="n0" target="n1">
-			<data key="ewg">3</data>
-			<data key="ewd">3</data>
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
 		</edge>
 		<edge id="e1" source="n1" target="n2">
-			<data key="ewg">3</data>
-			<data key="ewd">3</data>		
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>		
 		</edge>
 		<edge id="e2" source="n2" target="n3">
-			<data key="ewg">3</data>
-			<data key="ewd">3</data>
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
 		</edge>
 		<edge id="e3" source="n0" target="n3">
-			<data key="ewg">3</data>
-			<data key="ewd">3</data>
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
 		</edge>
 	</graph>
 	
 	<graph id="Behaviors">
-		<node id="bn0">
+		<node id="b0">
+			<data key="bType">visit</data>
 			<graph id="0">
 				<node id="n1"/>
+				<node id="n2">
+					<data key="optionality">true</data>
+				</node>
 			</graph>
 		</node>
-		<node id="bn1">
+		<node id="b1">
+			<data key="bType">evacuate</data>
 			<graph id="1">
 				<node id="n2"/>
 			</graph>
@@ -85,13 +95,13 @@
 
 	<graph id="System">
 		<node id="n0">
-			<data key="ns">3</data>
+			<data key="nStatus">3</data>
 		</node>
 		<node id="n1">
-			<data key="ns">5</data>
+			<data key="nStatus">5</data>
 		</node>
 		<node id="n2">
-			<data key="ns">2</data>
+			<data key="nStatus">2</data>
 		</node>
 
 	</graph>

@@ -101,11 +101,12 @@ public class XMLParserTest {
 	@Test
 	public void testBehaviors(){
 		assertEquals(2, graph.getBehaviors().size());
-		assertEquals(1, graph.getBehaviorFromId(1).getCoreIp().size());
+		assertEquals(1, graph.getBehaviorFromId(1).getCoreInterestPoints().size());
 	}
 	
 	@Test
 	public void testStatus(){
+		assertEquals(2, graph.getBehaviors().size());
 		assertEquals(3, graph.getNodeFromCoordinates(0, 0).getStatus());
 		assertEquals(0, graph.getNodeFromCoordinates(20, 0).getStatus());
 	}

@@ -8,12 +8,12 @@ public interface Behavior {
 	
 	public int getId();
 
-	public List<Node> getCoreIp();
+	public List<Node> getCoreInterestPoints();
 	
-	public List<Node> getOptionalIp();
+	public List<Node> getOptionalInterestPoints();
 	
-	public void addOptionalIp(Node n);
+	public void addOptionalInterestPoint(Node n);
 
-	public void addCoreIp(Node n);
+	public void addCoreInterestPoint(Node n);
 	
 }

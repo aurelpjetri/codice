@@ -64,9 +64,7 @@ public class NetLogoGraphVisitor implements Visitor{
         		n.accept(this);
             	
             }
-            
-            
-            
+  
             outputStream.println("end");
             
             outputStream.println("to connect-beacons");
