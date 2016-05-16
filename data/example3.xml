@@ -28,34 +28,70 @@
 
 	<graph id="Graph" edgedefault="undirected">
 		<node id="n0">
+			<data key="nType">entry</data>
 			<data key="nx">0</data>
 			<data key="ny">0</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<node id="n1">
-			<data key="nType">entry</data>
 			<data key="nx">0</data>
 			<data key="ny">10</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<node id="n2">
 			<data key="nx">10</data>
 			<data key="ny">10</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<node id="n3">
+			<data key="nx">10</data>
+			<data key="ny">20</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">3</data>
+		</node>
+		<node id="n4">
+			<data key="nx">10</data>
+			<data key="ny">30</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">3</data>
+		</node>
+		<node id="n5">
+			<data key="nType">exit</data>
+			<data key="nx">20</data>
+			<data key="ny">30</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">3</data>
+		</node>
+		<node id="n6">
+			<data key="nx">20</data>
+			<data key="ny">20</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">3</data>
+		</node>
+		<node id="n7">
+			<data key="nx">20</data>
+			<data key="ny">10</data>
+			<data key="nWidth">5</data>
+			<data key="nHeight">5</data>
+			<data key="nRadius">3</data>
+		</node>
+		<node id="n8">
 			<data key="nType">exit</data>
 			<data key="nx">20</data>
 			<data key="ny">0</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<edge id="e0" source="n0" target="n1">
 			<data key="weight">3</data>
@@ -69,7 +105,36 @@
 			<data key="weight">3</data>
 			<data key="eWidth">3</data>
 		</edge>
-		<edge id="e3" source="n0" target="n3">
+		<edge id="e3" source="n3" target="n4">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e4" source="n4" target="n5">
+			<data key="eType">directed</data>
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e6" source="n5" target="n6">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e7" source="n6" target="n7">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e8" source="n7" target="n8">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e9" source="n3" target="n5">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e10" source="n2" target="n7">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e11" source="n2" target="n8">
 			<data key="weight">3</data>
 			<data key="eWidth">3</data>
 		</edge>
@@ -79,8 +144,9 @@
 		<node id="b0">
 			<data key="bType">visit</data>
 			<graph id="0">
-				<node id="n1"/>
-				<node id="n2">
+				<node id="n3"/>
+				<node id="n6"/>
+				<node id="n4">
 					<data key="optionality">true</data>
 				</node>
 			</graph>
@@ -88,7 +154,8 @@
 		<node id="b1">
 			<data key="bType">evacuate</data>
 			<graph id="1">
-				<node id="n2"/>
+				<node id="n3"/>
+				<node id="n7"/>
 			</graph>
 		</node>
 	</graph>

@@ -22,15 +22,11 @@ public class XMLParserTest {
 	@Before
 	public void setUp() throws JDOMException, IOException  {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/standardExample.xml");
+		graph = parser.parseDocumentForGraph("data/example.xml");
 		
 	}
 	
-	@Ignore
-	@Test
-	public void testProduct() throws IOException, JDOMException{
-		graph = parser.parseDocumentForGraph("/home/aurel/workspace/prototipe/src/standardExample.xml");
-	}
+
 	
 	@Test
 	public void testEdgesBuilt(){
@@ -52,7 +48,7 @@ public class XMLParserTest {
 
 	}
 	
-
+	@Ignore
 	@Test
 	public void testEdgesType(){
 		boolean result = true;

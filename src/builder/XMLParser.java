@@ -188,6 +188,10 @@ public class XMLParser {
 				int poiX = Integer.parseInt(getTextAttributeOfElement(poi, "nx"));
 				int poiY = Integer.parseInt(getTextAttributeOfElement(poi, "ny"));
 				
+				if(type.equalsIgnoreCase("evacuate") && !i.getChildren().isEmpty()){
+					throw new RuntimeException("evacuate behaviors don't have optional interest points");
+				}
+				
 				builder.buildInterestPointOnBehavior(poiX, poiY, id, !i.getChildren().isEmpty() );
 			}
 	

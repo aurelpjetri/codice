@@ -32,8 +32,8 @@ public class NetLogoGraphVisitor implements Visitor{
 	public void visit(Graph g) throws IOException{
 		
         try {
-            inputStream = new BufferedReader(new FileReader("data/input.txt"));
-            inputStream2 = new BufferedReader(new FileReader("data/input2.txt"));
+            inputStream = new BufferedReader(new FileReader("data/inputPre.txt"));
+            inputStream2 = new BufferedReader(new FileReader("data/inputPost.txt"));
             outputStream = new PrintWriter(myFileWriter);
 
             String l;
@@ -143,8 +143,8 @@ public class NetLogoGraphVisitor implements Visitor{
 	
 	public void visit(UndirectedEdge e){
 		if(outputStream != null){
-	        outputStream.println("  ask get-beacon-at (world-offset + "+e.getSource().getX()+") (world-offset + "+e.getSource().getY()+") [");
-	        outputStream.println("    create-street-with get-beacon-at (world-offset + "+e.getTarget().getX()+") (world-offset + "+e.getTarget().getY()+") [");
+	        outputStream.println("  ask beacons-on patch (world-offset + "+e.getSource().getX()+") (world-offset + "+e.getSource().getY()+") [");
+	        outputStream.println("    create-streets-with beacons-on patch (world-offset + "+e.getTarget().getX()+") (world-offset + "+e.getTarget().getY()+") [");
 	        outputStream.println("      set weight "+e.getWeight());
 	        outputStream.println("      set street-width "+e.getWidth()+"]]");
 		}
@@ -155,8 +155,8 @@ public class NetLogoGraphVisitor implements Visitor{
 	
 	public void visit(DirectedEdge e){
 		if(outputStream != null){
-	        outputStream.println("  ask get-beacon-at (world-offset + "+e.getSource().getX()+") (world-offset + "+e.getSource().getY()+") [");
-	        outputStream.println("    create-street-with get-beacon-at (world-offset + "+e.getTarget().getX()+") (world-offset + "+e.getTarget().getY()+") [");
+	        outputStream.println("  ask beacons-on patch (world-offset + "+e.getSource().getX()+") (world-offset + "+e.getSource().getY()+") [");
+	        outputStream.println("    create-directed-streets-to beacons-on patch (world-offset + "+e.getTarget().getX()+") (world-offset + "+e.getTarget().getY()+") [");
 	        outputStream.println("      set weight "+e.getWeight());
 	        outputStream.println("      set street-width "+e.getWidth()+"]]");
 

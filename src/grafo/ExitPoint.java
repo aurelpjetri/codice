@@ -17,6 +17,7 @@ public class ExitPoint implements Node{
 	private int width, height;
 	private int radius;
 	private int status;
+	private float sinkingRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
 	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
@@ -38,6 +39,10 @@ public class ExitPoint implements Node{
 		if(s<0){
 			throw new RuntimeException("Illegal value of parameter 's': "+s);
 		}
+	}
+	
+	public float getSinkingRate(){
+		return sinkingRate;
 	}
 	
 	public ExitPoint(int id, int x, int y, int w, int h, int r, int s){

@@ -15,6 +15,7 @@ public class EntryPoint implements Node {
 	private int width, height;
 	private int radius;
 	private int status;
+	private float generationRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
 	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
@@ -49,6 +50,10 @@ public class EntryPoint implements Node {
 		this.capacity = calculateCapacity();
 		this.radius = r;
 		status = s;
+	}
+	
+	public float getGenerationRate(){
+		return generationRate;
 	}
 	
 	public int getStatus(){
