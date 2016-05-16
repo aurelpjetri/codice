@@ -13,9 +13,10 @@ public class RegularNode implements Node {
 	private int capacity;
 	private int width, height;
 	private int radius;
+	private int status;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -31,10 +32,13 @@ public class RegularNode implements Node {
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
+		if(s<0){
+			throw new RuntimeException("Illegal value of parameter 's': "+s);
+		}
 	}
 	
 	
-	public RegularNode( int id, int x, int y, int w, int h, int r){
+	public RegularNode( int id, int x, int y, int w, int h, int r, int s){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x= x;
@@ -43,6 +47,12 @@ public class RegularNode implements Node {
 		this.height = h;
 		capacity = calculateCapacity(); 
 		this.radius = r;
+		status = s;
+
+	}
+	
+	public int getStatus(){
+		return status;
 	}
 	
 	public List<Node> getReachableNodes(){

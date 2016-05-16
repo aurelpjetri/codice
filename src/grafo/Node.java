@@ -32,5 +32,9 @@ public interface Node {
 	public String toString();
 	
 	public void accept(Visitor v) throws IOException;
+//	
+	public int getStatus();
+//	
+//	public void setStatus(int s);
 	
 }

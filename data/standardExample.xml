@@ -8,7 +8,10 @@
 	<key id="nw" for="node" attr.name="nodeWidth" attr.type="int" />
 	<key id="nh" for="node" attr.name="nodeHeight" attr.type="int" />
 	<key id="nr" for="node" attr.name="nodeRadius" attr.type="int" />
-
+	
+	<key id="ns" for="node" attr.name="nodeStatus" attr.type="int" />
+	
+	
 	<key id="bo" for="node" attr.name="nodeOptionalityFlag" attr.type="booelan">
 		<default>false</default>
 	</key>
@@ -80,5 +83,17 @@
 		</node>
 	</graph>
 
-	
+	<graph id="System">
+		<node id="n0">
+			<data key="ns">3</data>
+		</node>
+		<node id="n1">
+			<data key="ns">5</data>
+		</node>
+		<node id="n2">
+			<data key="ns">2</data>
+		</node>
+
+	</graph>
+
 </grafoxml>

@@ -56,22 +56,23 @@ public class XMLParser {
 		return graph;
 		
 	}
-	
-	public void parseTree(Element node, ConcreteBuilder builder){
+	 
+	public void parseTree(Element root, ConcreteBuilder builder){
 		
 //		Element graph = node.getChild("graph");
 		
-		Element graph = getElementWithAttributeValue(node.getChildren(), "id", "G");
+		Element graph = getElementWithAttributeValue(root.getChildren(), "id", "G");
 		
-		Element behaviorList = getElementWithAttributeValue(node.getChildren(), "id", "Behaviors");
 		
-		List<Element> behaviors = behaviorList.getChildren("node");
+		List<Element> behaviors = getElementWithAttributeValue(root.getChildren(), "id", "Behaviors").getChildren("node");
+		
+		Element system = getElementWithAttributeValue(root.getChildren(), "id", "System");
 		
 		List<Element> nodes = graph.getChildren("node");
 		
 		List<Element> edges = graph.getChildren("edge");
 				
-		List<Element> attributes = node.getChildren("key");
+		List<Element> attributes = root.getChildren("key");
 		
 		String defaultNodeType = null;
 		
@@ -91,6 +92,9 @@ public class XMLParser {
 				type = defaultNodeType;
 			}
 			
+			
+			Element nodeStatusElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id"));
+			
 			int x = Integer.parseInt(getTextAttributeOfElement(n, "nx"));
 			
 			int y = Integer.parseInt(getTextAttributeOfElement(n, "ny"));
@@ -100,15 +104,21 @@ public class XMLParser {
 			int h = Integer.parseInt(getTextAttributeOfElement(n, "nh"));
 			
 			int r = Integer.parseInt(getTextAttributeOfElement(n, "nr"));
+			
+			int s = 0;
+			
+			if(nodeStatusElement != null){
+				s = Integer.parseInt(getTextAttributeOfElement(nodeStatusElement, "ns"));
+			}
 
 			if(type.equalsIgnoreCase("N")){
-				builder.buildRegularNode(x, y, w, h, r);
+				builder.buildRegularNode(x, y, w, h, r, s);
 			}
 			if(type.equalsIgnoreCase("EX")){
-				builder.buildExitPoint(x, y, w, h, r);
+				builder.buildExitPoint(x, y, w, h, r, s);
 			}
 			if(type.equalsIgnoreCase("EN")){
-				builder.buildEntryPoint(x, y, w, h, r);
+				builder.buildEntryPoint(x, y, w, h, r, s);
 			}
 				
 			else if(!type.equalsIgnoreCase("EN") && 
@@ -116,7 +126,6 @@ public class XMLParser {
 					!type.equalsIgnoreCase("N")){
 				throw new RuntimeException("not able to identify node type "+type);
 			}
-			
 			
 			
 		}
@@ -173,7 +182,11 @@ public class XMLParser {
 	
 		}
 		
+
+		
 	}
+
+	
 	
 	//cerca tra gli "elements" quello con attributo "name" = "value" e lo restituisce
 	//usato per cercare il nodo con un determinato 'id'

@@ -16,9 +16,10 @@ public class ExitPoint implements Node{
 	private int capacity;
 	private int width, height;
 	private int radius;
+	private int status;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -34,9 +35,12 @@ public class ExitPoint implements Node{
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
+		if(s<0){
+			throw new RuntimeException("Illegal value of parameter 's': "+s);
+		}
 	}
 	
-	public ExitPoint(int id, int x, int y, int w, int h, int r){
+	public ExitPoint(int id, int x, int y, int w, int h, int r, int s){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
@@ -46,6 +50,11 @@ public class ExitPoint implements Node{
 		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
 		capacity = calculateCapacity();
 		this.radius = r;
+		status = s;
+	}
+	
+	public int getStatus(){
+		return status;
 	}
 	
 	public String getType(){

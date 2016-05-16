@@ -23,21 +23,21 @@ public class ConcreteBuilder {
 		lastId = 0;
 	}
 	
-	public void buildRegularNode(int x, int y, int w, int h, int r){
-		RegularNode.validateNodeParameters(x, y, w, h, r);
-		product.addNode(new RegularNode(lastId, x, y, w, h, r));
+	public void buildRegularNode(int x, int y, int w, int h, int r, int s){
+		RegularNode.validateNodeParameters(x, y, w, h, r, s);
+		product.addNode(new RegularNode(lastId, x, y, w, h, r, s));
 		lastId += 1;
 	}
 	
-	public void buildExitPoint(int x , int y, int w, int h, int r){
-		ExitPoint.validateNodeParameters(x, y, w, h, r);
-		product.addNode( new ExitPoint(lastId, x, y, w, h, r));
+	public void buildExitPoint(int x , int y, int w, int h, int r, int s){
+		ExitPoint.validateNodeParameters(x, y, w, h, r, s);
+		product.addNode( new ExitPoint(lastId, x, y, w, h, r, s));
 		lastId += 1;
 	}
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r){
-		EntryPoint.validateNodeParameters(x, y, w, h, r);
-		product.addNode( new EntryPoint(lastId, x, y, w, h, r));
+	public void buildEntryPoint(int x , int y, int w, int h, int r, int s){
+		EntryPoint.validateNodeParameters(x, y, w, h, r, s);
+		product.addNode( new EntryPoint(lastId, x, y, w, h, r, s));
 		lastId += 1;
 	}
 		

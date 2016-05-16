@@ -27,8 +27,8 @@ public class XMLParserTest2 {
 	
 	@Test
 	public void testBehaviors(){
-		assertEquals(2, graph.getBehaviors().size());
-		assertEquals(1, graph.getBehaviorFromId(1).getCoreIp().size());
+		assertEquals(1, graph.getBehaviors().size());
+		assertEquals(1, graph.getBehaviorFromId(0).getCoreIp().size());
 		assertEquals(graph.getNodeFromCoordinates(0, 10), graph.getBehaviorFromId(0).getCoreIp().get(0) );
 	}
 

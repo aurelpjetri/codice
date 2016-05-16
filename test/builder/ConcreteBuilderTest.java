@@ -14,10 +14,10 @@ public class ConcreteBuilderTest {
 		
 		builder = new ConcreteBuilder();
 		builder.buildGraph();
-		builder.buildRegularNode(0, 0, 10, 10, 10);
-		builder.buildRegularNode(0, 10, 10, 10, 10);
-		builder.buildRegularNode(10, 10, 10, 10, 10);
-		builder.buildRegularNode(20, 0, 10, 10, 10);
+		builder.buildRegularNode(0, 0, 10, 10, 10, 5);
+		builder.buildRegularNode(0, 10, 10, 10, 10, 5);
+		builder.buildRegularNode(10, 10, 10, 10, 10, 5);
+		builder.buildRegularNode(20, 0, 10, 10, 10, 5);
 		
 		builder.buildUndirectedEdge(0, 0, 0, 10, 5, 5);
 		builder.buildUndirectedEdge(0, 10, 10, 10, 10, 10);
