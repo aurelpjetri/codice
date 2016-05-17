@@ -41,8 +41,8 @@ beacons-own [
   entry-point?
   exit-point?
     
-  entry-ratio
-  exit-ratio
+  entry-ratios
+  exit-ratios
   
 ]
 
@@ -220,18 +220,22 @@ to make-beacon-normal
   set entry-point? false
   set exit-point? false
   set interest-point? false
+  set entry-ratios []
+  set exit-ratios []
 end
 
 to make-beacon-entry
   set entry-point? true
   set exit-point? false
   set interest-point? false
+  set entry-ratios []
 end
 
 to make-beacon-exit
   set entry-point? false
   set exit-point? true
   set interest-point? false
+  set exit-ratios []
 end
 
 to generate-interest-points

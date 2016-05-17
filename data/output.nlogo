@@ -41,8 +41,8 @@ beacons-own [
   entry-point?
   exit-point?
     
-  entry-ratio
-  exit-ratio
+  entry-ratios
+  exit-ratios
   
 ]
 
@@ -220,18 +220,22 @@ to make-beacon-normal
   set entry-point? false
   set exit-point? false
   set interest-point? false
+  set entry-ratios []
+  set exit-ratios []
 end
 
 to make-beacon-entry
   set entry-point? true
   set exit-point? false
   set interest-point? false
+  set entry-ratios []
 end
 
 to make-beacon-exit
   set entry-point? false
   set exit-point? true
   set interest-point? false
+  set exit-ratios []
 end
 
 to generate-interest-points
@@ -259,38 +263,28 @@ to generate-beacons
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
-    set entry-ratio []
-    set exit-ratio []
   ]]
   ask patch (world-offset + 0) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-entry
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
-    set entry-ratio [
-      [0 0.3]
-      [1 0.7]
-    ]
-    set exit-ratio []
+    set entry-ratios lput [0 0.3] entry-ratios
+    set entry-ratios lput [1 0.7] entry-ratios
   ]]
   ask patch (world-offset + 10) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
-    set entry-ratio []
-    set exit-ratio []
   ]]
   ask patch (world-offset + 20) (world-offset + 0) [sprout-beacons 1 [
     make-beacon-exit
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 5
-    set entry-ratio []
-    set exit-ratio [
-      [0 0.2]
-      [1 0.8]
-    ]
+    set exit-ratios lput [0 0.2] exit-ratios
+    set exit-ratios lput [1 0.8] exit-ratios
   ]]
 end
 to connect-beacons
