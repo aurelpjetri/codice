@@ -17,9 +17,7 @@ public class NetLogoGraphVisitorTest {
 	@Before
 	public void setUp() throws Exception {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/example3.xml");
-		
-		
+		graph = parser.parseDocumentForGraph("data/example.xml");
 		
 	}
 

@@ -104,7 +104,6 @@
 
 
 	<graph id="System">
-		
 		<node id="n0">
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
@@ -115,7 +114,6 @@
 				</behavior>
 			</graph>
 		</node>
-
 		<node id="n1">
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
@@ -128,7 +126,6 @@
 				</behavior>
 			</graph>
 		</node>
-		
 		<node id="n2">
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
@@ -139,8 +136,7 @@
 				</behavior>
 			</graph>
 		</node>
-		 
-		 <node id="n3">
+		<node id="n3">
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
 					<data key="moverQuantity">2</data>
@@ -152,7 +148,5 @@
 				</behavior>
 			</graph>
 		</node>	
-
 	</graph>
-
 </grafoxml>

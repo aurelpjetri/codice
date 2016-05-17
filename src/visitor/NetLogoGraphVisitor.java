@@ -104,6 +104,8 @@ public class NetLogoGraphVisitor implements Visitor{
             outputStream.println("    set intersection-width "+n.getWidth());
             outputStream.println("    set intersection-height "+n.getHeight());
             outputStream.println("    set intersection-radius "+n.getRadius());
+            outputStream.println("    set entry-ratio []");
+            outputStream.println("    set exit-ratio []");
             outputStream.println("  ]]");
 		}else if (outputStream == null){
 			throw new RuntimeException("unable to perform streaming");
@@ -119,6 +121,12 @@ public class NetLogoGraphVisitor implements Visitor{
 	        outputStream.println("    set intersection-width "+n.getWidth());
 	        outputStream.println("    set intersection-height "+n.getHeight());
 	        outputStream.println("    set intersection-radius "+n.getRadius());
+	        outputStream.println("    set entry-ratio [");
+	        for(int behaviorID : n.getGenerationRate().keySet()){
+	        	outputStream.println("      ["+behaviorID+" "+n.getGenerationRate().get(behaviorID)+"]");
+	        }
+	        outputStream.println("    ]");
+	        outputStream.println("    set exit-ratio []");
 	        outputStream.println("  ]]");
 		}else if (outputStream == null){
 			throw  new RuntimeException("unable to perform streaming");
@@ -133,6 +141,12 @@ public class NetLogoGraphVisitor implements Visitor{
 	        outputStream.println("    set intersection-width "+n.getWidth());
 	        outputStream.println("    set intersection-height "+n.getHeight());
 	        outputStream.println("    set intersection-radius "+n.getRadius());
+	        outputStream.println("    set entry-ratio []");
+	        outputStream.println("    set exit-ratio [");
+	        for(int behaviorID : n.getSinkingRate().keySet()){
+	        	outputStream.println("      ["+behaviorID+" "+n.getSinkingRate().get(behaviorID)+"]");
+	        }
+	        outputStream.println("    ]");
 	        outputStream.println("  ]]");
 		}
 		else if(outputStream == null){

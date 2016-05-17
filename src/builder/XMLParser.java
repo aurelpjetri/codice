@@ -92,6 +92,7 @@ public class XMLParser {
 			}
 			
 			
+			
 			Element nodeStatusElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id")).getChild("graph");
 			
 			int x = Integer.parseInt(getTextAttributeOfElement(n, "nx"));
@@ -108,8 +109,9 @@ public class XMLParser {
 			
 			HashMap<Integer,Float> rate = new HashMap<Integer,Float>();
 			 
+			
 			//DOVREI FARE UN CONTROLLO SUL ID DEL BEHAVIOR 
-			//PER VEDERE SE CORRISPONDE A A UN BEHAVIOR ESISTENTE
+			//PER VEDERE SE CORRISPONDE A UN BEHAVIOR ESISTENTE
 			if(!nType.equalsIgnoreCase("normal")){
 				for(Element behaviorState : nodeStatusElement.getChildren()){
 					int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));

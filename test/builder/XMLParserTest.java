@@ -110,6 +110,16 @@ public class XMLParserTest {
 		stato.put(1, 3);
 		
 		assertEquals(stato, graph.getNodeFromCoordinates(0, 0).getState());
+		
+		
+		HashMap<Integer, Float> rate = new HashMap<>();
+		
+		rate.put(0, (float)0.3);
+		rate.put(1, (float)0.7);
+		
+		assertEquals(rate, graph.getNodeFromCoordinates(0, 10).getGenerationRate());
+
+
 	}
 
 	

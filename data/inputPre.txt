@@ -40,6 +40,10 @@ beacons-own [
   interest-point?
   entry-point?
   exit-point?
+    
+  entry-ratio
+  exit-ratio
+  
 ]
 
 ;; Patches can be wall so they are now walkable
