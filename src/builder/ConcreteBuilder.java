@@ -1,5 +1,7 @@
 package builder;
 
+import java.util.HashMap;
+
 import behaviors.EvacuateBehavior;
 import behaviors.VisitBehavior;
 import grafo.DirectedEdge;
@@ -23,21 +25,21 @@ public class ConcreteBuilder {
 		lastId = 0;
 	}
 	
-	public void buildRegularNode(int x, int y, int w, int h, int r, int s){
-		RegularNode.validateNodeParameters(x, y, w, h, r, s);
-		product.addNode(new RegularNode(lastId, x, y, w, h, r, s));
+	public void buildRegularNode(int x, int y, int nWeight, int nHeight, int radius, HashMap<Integer,Integer> state){
+		RegularNode.validateNodeParameters(x, y, nWeight, nHeight, radius, state);
+		product.addNode(new RegularNode(lastId, x, y, nWeight, nHeight, radius, state));
 		lastId += 1;
 	}
 	
-	public void buildExitPoint(int x , int y, int w, int h, int r, int s){
-		ExitPoint.validateNodeParameters(x, y, w, h, r, s);
-		product.addNode( new ExitPoint(lastId, x, y, w, h, r, s));
+	public void buildExitPoint(int x , int y, int w, int h, int r, HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate){
+		ExitPoint.validateNodeParameters(x, y, w, h, r, s, sinkingRate);
+		product.addNode( new ExitPoint(lastId, x, y, w, h, r, s, sinkingRate));
 		lastId += 1;
 	}
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r, int s){
-		EntryPoint.validateNodeParameters(x, y, w, h, r, s);
-		product.addNode( new EntryPoint(lastId, x, y, w, h, r, s));
+	public void buildEntryPoint(int x , int y, int w, int h, int r, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate){
+		EntryPoint.validateNodeParameters(x, y, w, h, r, s, generationRate);
+		product.addNode( new EntryPoint(lastId, x, y, w, h, r, s, generationRate));
 		lastId += 1;
 	}
 		

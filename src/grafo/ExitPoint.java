@@ -2,6 +2,7 @@ package grafo;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import visitor.Visitor;
@@ -16,11 +17,11 @@ public class ExitPoint implements Node{
 	private int capacity;
 	private int width, height;
 	private int radius;
-	private int status;
-	private float sinkingRate;
+	private HashMap<Integer,Integer> state;
+	private HashMap<Integer, Float> sinkingRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> sinkingRate){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -36,16 +37,20 @@ public class ExitPoint implements Node{
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
-		if(s<0){
-			throw new RuntimeException("Illegal value of parameter 's': "+s);
+		for(int key : state.keySet()){
+			if(state.get(key)<0){
+				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
+			}
+		}
+		for(int key : sinkingRate.keySet()){
+			if(state.get(key)<0){
+				throw new RuntimeException("Illegal value of sinking rate for behavior :"+key);
+			}
 		}
 	}
 	
-	public float getSinkingRate(){
-		return sinkingRate;
-	}
 	
-	public ExitPoint(int id, int x, int y, int w, int h, int r, int s){
+	public ExitPoint(int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> sinkingRate){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
@@ -55,11 +60,20 @@ public class ExitPoint implements Node{
 		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
 		capacity = calculateCapacity();
 		this.radius = r;
-		status = s;
+		this.state = state;
+		this.sinkingRate = sinkingRate;
 	}
 	
-	public int getStatus(){
-		return status;
+	public HashMap<Integer, Float> getSinkingRate(){
+		return sinkingRate;
+	}
+	
+	public HashMap<Integer, Float> getGenerationRate(){
+		return null;
+	}
+	
+	public HashMap<Integer, Integer> getState(){
+		return state;
 	}
 	
 	public String getType(){

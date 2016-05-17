@@ -1,6 +1,7 @@
 package grafo;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import visitor.Visitor;
@@ -32,9 +33,11 @@ public interface Node {
 	public String toString();
 	
 	public void accept(Visitor v) throws IOException;
-//	
-	public int getStatus();
-//	
-//	public void setStatus(int s);
+
+	public HashMap<Integer,Integer> getState();
+	
+	public HashMap<Integer, Float> getSinkingRate();
+	
+	public HashMap<Integer, Float> getGenerationRate();
 	
 }

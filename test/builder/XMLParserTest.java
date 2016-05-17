@@ -3,6 +3,7 @@ package builder;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.jdom2.JDOMException;
 import org.junit.Before;
@@ -100,11 +101,15 @@ public class XMLParserTest {
 		assertEquals(1, graph.getBehaviorFromId(1).getCoreInterestPoints().size());
 	}
 	
+
 	@Test
 	public void testStatus(){
-		assertEquals(2, graph.getBehaviors().size());
-		assertEquals(3, graph.getNodeFromCoordinates(0, 0).getStatus());
-		assertEquals(0, graph.getNodeFromCoordinates(20, 0).getStatus());
+		HashMap<Integer, Integer> stato = new HashMap<>();
+		
+		stato.put(0, 2);
+		stato.put(1, 3);
+		
+		assertEquals(stato, graph.getNodeFromCoordinates(0, 0).getState());
 	}
 
 	

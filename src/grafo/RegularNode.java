@@ -13,10 +13,10 @@ public class RegularNode implements Node {
 	private int capacity;
 	private int width, height;
 	private int radius;
-	private int status;
+	private HashMap<Integer,Integer> state;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state ){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -32,13 +32,15 @@ public class RegularNode implements Node {
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
-		if(s<0){
-			throw new RuntimeException("Illegal value of parameter 's': "+s);
+		for(int key : state.keySet()){
+			if(state.get(key)<0){
+				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
+			}
 		}
 	}
 	
 	
-	public RegularNode( int id, int x, int y, int w, int h, int r, int s){
+	public RegularNode( int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x= x;
@@ -47,13 +49,23 @@ public class RegularNode implements Node {
 		this.height = h;
 		capacity = calculateCapacity(); 
 		this.radius = r;
-		status = s;
+		this.state = state;
 
 	}
 	
-	public int getStatus(){
-		return status;
+	public HashMap<Integer,Integer> getState(){
+		return state;
 	}
+	
+	public HashMap<Integer, Float> getSinkingRate(){
+		return null;
+	}
+	
+	
+	public HashMap<Integer, Float> getGenerationRate(){
+		return null;
+	}
+	
 	
 	public List<Node> getReachableNodes(){
 		return reachables;

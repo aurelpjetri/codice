@@ -2,6 +2,7 @@ package grafo;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import visitor.Visitor;
@@ -14,11 +15,11 @@ public class EntryPoint implements Node {
 	private int capacity;
 	private int width, height;
 	private int radius;
-	private int status;
-	private float generationRate;
+	private HashMap<Integer,Integer> state;
+	private HashMap<Integer, Float> generationRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r, int s){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -34,12 +35,20 @@ public class EntryPoint implements Node {
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
-		if(s<0){
-			throw new RuntimeException("Illegal value of parameter 's': "+s);
+		for(int key : state.keySet()){
+			if(state.get(key)<0){
+				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
+			}
 		}
+		for(int key : generationRate.keySet()){
+			if(state.get(key)<0){
+				throw new RuntimeException("Illegal value of generation rate for behavior :"+key);
+			}
+		}
+		
 	}
 	
-	public EntryPoint(int id, int x, int y, int w, int h, int r, int s){
+	public EntryPoint(int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
@@ -49,15 +58,20 @@ public class EntryPoint implements Node {
 		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
 		this.capacity = calculateCapacity();
 		this.radius = r;
-		status = s;
+		this.state = state;
+		this.generationRate = generationRate;
 	}
 	
-	public float getGenerationRate(){
+	public HashMap<Integer, Float> getGenerationRate(){
 		return generationRate;
 	}
 	
-	public int getStatus(){
-		return status;
+	public HashMap<Integer, Float> getSinkingRate(){
+		return null;
+	}
+	
+	public HashMap<Integer,Integer> getState(){
+		return state;
 	}
 	
 	public String getType(){
