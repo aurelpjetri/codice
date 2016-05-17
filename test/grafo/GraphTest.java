@@ -2,6 +2,8 @@ package grafo;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,10 +25,21 @@ public class GraphTest {
 	@Before
 	public void setUp() throws Exception {
 		graph = new Graph();
-		n0 = new RegularNode(0,0,0,5,5,5, 3);
-		n1 = new EntryPoint(1,0,10,5,5,5, 3);
-		n2 = new RegularNode(2,10,10,5,5,5, 3);
-		n3 = new ExitPoint(3,20,0,5,5,5, 3);
+		
+		HashMap<Integer, Integer> stato = new HashMap<>();
+		stato.put(0, 2);
+		stato.put(1, 3);
+		
+		HashMap<Integer, Float> rate = new HashMap<>();
+		
+		stato.put(0, 2);
+		stato.put(1, 3);
+		rate.put(0, (float)0.3);
+		rate.put(1, (float)0.7);
+		n0 = new RegularNode(0,0,0,5,5,5,stato);
+		n1 = new EntryPoint(1,0,10,5,5,5, stato, rate);
+		n2 = new RegularNode(2,10,10,5,5,5, stato);
+		n3 = new ExitPoint(3,20,0,5,5,5, stato, rate);
 
 		e1 = new  UndirectedEdge(n0, n1, 5, 3);
 		e2 = new  UndirectedEdge(n1, n2, 5, 3);
