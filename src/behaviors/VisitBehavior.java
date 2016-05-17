@@ -1,9 +1,11 @@
 package behaviors;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import grafo.Node;
+import visitor.Visitor;
 
 public class VisitBehavior implements Behavior{
 	private List<Node> coreInterestPoints;
@@ -36,5 +38,7 @@ public class VisitBehavior implements Behavior{
 		optionalInterestPoints.add(n);
 	}
 	
-	
+	public void accept(Visitor v)throws IOException{
+		v.visit(this);
+	}
 }

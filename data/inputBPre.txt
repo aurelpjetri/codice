@@ -142,6 +142,49 @@ to move
   ]
 end
 
+;; Check if I've reached the beacons and update my path,
+;; otherwise keep going towards the current-beacon
+to update-path
+  ask movers [
+    let next-beacon current-beacon
+    let current-mover self
+
+    ;; have I reached the current beacon?
+    ask current-beacon [
+      if member? [patch-here] of myself patches in-radius intersection-radius [
+        ;; set the previous beacon to the current-one, since we have reached it
+        ask myself [set previous-beacon current-beacon]
+
+        ;; Control if this beacon is in my destination list and remove it
+        check-if-involuntary-destination current-mover self
+
+        ;; calculate the full path to my destination
+        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
+        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
+
+        ;; If there are more than one beacon in the path I haven't reached my destination
+        ;; nw-path returns with the current beacon, so we take only the tail of the list
+        if not empty? but-first full-path
+          [ ask myself [set current-beacon item 1 full-path] ]
+
+        ;; if only one item is present in the weighted path
+        ;; a destination-beacon has been reached, here we check with if for
+        ;; more security
+        if self = [destination-beacon] of myself
+          [
+            ;; remove the current destination-beacon from this list
+            ask current-mover [
+              ifelse not empty? destination-list
+                ;;[ run table:get destination-ordering destination-order]
+			    [set-destination-min-distance]
+                [ set destination-beacon one-of beacons with [exit-point? = true]]
+              set color [color] of destination-beacon
+          ] ]
+      ]
+    ]
+    face current-beacon
+  ]
+end
 
 
 to check-if-involuntary-destination [agent tmp-beacon]
@@ -241,6 +284,15 @@ to change-poi
   ]
   ask poi-die [set interest-point? false]
   toggle-graph-view
+end
+
+to-report get-interest-beacons [coor-list]
+  let a map [item 0 sort ?] (map [ beacons-on patch (item 0 ?) (item 1 ?) ] )
+  let list-of-beacons []
+  foreach [ [10 10] [10 25] [40 40] ] [
+    set list-of-beacons lput (item 0 sort (beacons-on patch (item 0 ?) (item 1 ?))) list-of-beacons
+  ]
+  report list-of-beacons
 end
 
 ;; =================== INIZIO

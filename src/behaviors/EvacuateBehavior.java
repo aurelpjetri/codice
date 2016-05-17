@@ -1,9 +1,11 @@
 package behaviors;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import grafo.Node;
+import visitor.Visitor;
 
 public class EvacuateBehavior implements Behavior{
 
@@ -34,4 +36,7 @@ public class EvacuateBehavior implements Behavior{
 	public void addOptionalInterestPoint(Node n) {
 	}
 	
+	public void accept(Visitor v)throws IOException{
+		v.visit(this);
+	}
 }

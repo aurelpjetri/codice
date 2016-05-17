@@ -2,6 +2,7 @@ package visitor;
 
 import java.io.IOException;
 
+import behaviors.Behavior;
 import grafo.DirectedEdge;
 import grafo.EntryPoint;
 import grafo.ExitPoint;
@@ -22,5 +23,7 @@ public interface Visitor {
 	public void visit(UndirectedEdge e)throws IOException;
 	
 	public void visit(DirectedEdge e)throws IOException;
+	
+	public void visit(Behavior b)throws IOException;
 	
 }

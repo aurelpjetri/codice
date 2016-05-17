@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import behaviors.Behavior;
 import grafo.DirectedEdge;
 import grafo.Edge;
 import grafo.EntryPoint;
@@ -172,5 +173,7 @@ public class NetLogoGraphVisitor implements Visitor{
 		}
 	}
 	
-	
+	public void visit(Behavior b){
+	}
+
 }

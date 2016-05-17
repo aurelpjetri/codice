@@ -1,8 +1,10 @@
 package behaviors;
 
+import java.io.IOException;
 import java.util.List;
 
 import grafo.Node;
+import visitor.Visitor;
 
 public interface Behavior {
 	
@@ -15,5 +17,7 @@ public interface Behavior {
 	public void addOptionalInterestPoint(Node n);
 
 	public void addCoreInterestPoint(Node n);
+	
+	public void accept(Visitor v)throws IOException;
 	
 }
