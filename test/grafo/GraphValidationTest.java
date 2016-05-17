@@ -37,10 +37,10 @@ public class GraphValidationTest {
 		graph.addNode(n2);
 		graph.addNode(n3);
 		
-//		graph.addEdge(e1);
+		graph.addEdge(e1);
 		graph.addEdge(e2);
 		graph.addEdge(e3);
-//		graph.addEdge(e4);
+		graph.addEdge(e4);
 		
 	}
 
