@@ -1,7 +1,5 @@
 package visitor;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 
 import org.junit.Before;
@@ -19,7 +17,7 @@ public class NetLogoBehaviorVisitorTest {
 	@Before
 	public void setUp() throws Exception {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/example.xml");
+		graph = parser.parseDocumentForGraph("data/example3.xml");
 		
 	}
 

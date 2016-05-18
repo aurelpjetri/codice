@@ -17,17 +17,21 @@ public class NetLogoGraphVisitorTest {
 	@Before
 	public void setUp() throws Exception {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/example.xml");
+		
 		
 	}
 
 	@Test
 	public void visitGraphTest() {
 		try{
+			graph = parser.parseDocumentForGraph("data/example3.xml");
 			visitor = new NetLogoGraphVisitor();
 			graph.accept(visitor);
 		}
 		catch(IOException e){
+			e.printStackTrace();
+		}
+		catch(RuntimeException e){
 			e.printStackTrace();
 		}
 	}

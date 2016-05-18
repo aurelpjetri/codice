@@ -247,7 +247,7 @@ end
 ;;******************************************INIZIO
 to generate-map
   let new-world-width 2 * world-offset + 20
-  let new-world-height 2 * world-offset + 10
+  let new-world-height 2 * world-offset + 30
   resize-world 0 new-world-width 0 new-world-height
   generate-beacons
   generate-interest-points
@@ -259,32 +259,64 @@ end
 
 to generate-beacons
   ask patch (world-offset + 0) (world-offset + 0) [sprout-beacons 1 [
-    make-beacon-normal
-    set intersection-width 5
-    set intersection-height 5
-    set intersection-radius 5
-  ]]
-  ask patch (world-offset + 0) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-entry
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
-    set entry-ratios lput [0 0.3] entry-ratios
-    set entry-ratios lput [1 0.7] entry-ratios
+    set intersection-radius 3
+    set entry-ratios lput [0 40.0] entry-ratios
+    set entry-ratios lput [1 60.0] entry-ratios
+  ]]
+  ask patch (world-offset + 0) (world-offset + 10) [sprout-beacons 1 [
+    make-beacon-normal
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
   ]]
   ask patch (world-offset + 10) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
+    set intersection-radius 3
+  ]]
+  ask patch (world-offset + 10) (world-offset + 20) [sprout-beacons 1 [
+    make-beacon-normal
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
+  ]]
+  ask patch (world-offset + 10) (world-offset + 30) [sprout-beacons 1 [
+    make-beacon-normal
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
+  ]]
+  ask patch (world-offset + 20) (world-offset + 30) [sprout-beacons 1 [
+    make-beacon-exit
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
+    set exit-ratios lput [0 60.0] exit-ratios
+    set exit-ratios lput [1 40.0] exit-ratios
+  ]]
+  ask patch (world-offset + 20) (world-offset + 20) [sprout-beacons 1 [
+    make-beacon-normal
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
+  ]]
+  ask patch (world-offset + 20) (world-offset + 10) [sprout-beacons 1 [
+    make-beacon-normal
+    set intersection-width 5
+    set intersection-height 5
+    set intersection-radius 3
   ]]
   ask patch (world-offset + 20) (world-offset + 0) [sprout-beacons 1 [
     make-beacon-exit
     set intersection-width 5
     set intersection-height 5
-    set intersection-radius 5
-    set exit-ratios lput [0 0.2] exit-ratios
-    set exit-ratios lput [1 0.8] exit-ratios
+    set intersection-radius 3
+    set exit-ratios lput [0 50.0] exit-ratios
+    set exit-ratios lput [1 50.0] exit-ratios
   ]]
 end
 to connect-beacons
@@ -297,11 +329,39 @@ to connect-beacons
       set weight 3
       set street-width 3]]
   ask beacons-on patch (world-offset + 10) (world-offset + 10) [
+    create-streets-with beacons-on patch (world-offset + 10) (world-offset + 20) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 10) (world-offset + 20) [
+    create-streets-with beacons-on patch (world-offset + 10) (world-offset + 30) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 10) (world-offset + 30) [
+    create-directed-streets-to beacons-on patch (world-offset + 20) (world-offset + 30) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 20) (world-offset + 30) [
+    create-streets-with beacons-on patch (world-offset + 20) (world-offset + 20) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 20) (world-offset + 20) [
+    create-streets-with beacons-on patch (world-offset + 20) (world-offset + 10) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 20) (world-offset + 10) [
     create-streets-with beacons-on patch (world-offset + 20) (world-offset + 0) [
       set weight 3
       set street-width 3]]
-  ask beacons-on patch (world-offset + 0) (world-offset + 0) [
-    create-directed-streets-to beacons-on patch (world-offset + 20) (world-offset + 0) [
+  ask beacons-on patch (world-offset + 10) (world-offset + 20) [
+    create-streets-with beacons-on patch (world-offset + 20) (world-offset + 30) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 10) (world-offset + 10) [
+    create-streets-with beacons-on patch (world-offset + 20) (world-offset + 10) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 10) (world-offset + 10) [
+    create-streets-with beacons-on patch (world-offset + 20) (world-offset + 0) [
       set weight 3
       set street-width 3]]
 end

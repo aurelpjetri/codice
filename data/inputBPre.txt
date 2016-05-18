@@ -17,7 +17,7 @@ directed-link-breed [directed-streets directed-street]
 movers-own [
   destination-beacon ;; current destination moving towards
   destination-list ;; list of all my locations
-  destination-order ;; Table with strategies to calculate my next destination
+  mover-behavior ;; Table with strategies to calculate my next destination
   destination-reached ;; whether I've reached the current destination
   current-beacon ;; current beacon on my path
   previous-beacon ;; beacon that I'm coming from
@@ -49,6 +49,7 @@ beacons-own [
   interest-point?
   entry-point?
   entry-ratios
+  exit-ratios
   exit-point?
 ]
 
@@ -62,7 +63,7 @@ globals [
   global-crowd-max-at-patch
 
   ;; global tables
-  destination-ordering
+  behaviors-map
 
   ;; Needed for import to work
   world-offset
@@ -176,7 +177,7 @@ to update-path
             ask current-mover [
               ifelse not empty? destination-list
                 ;;[ run table:get destination-ordering destination-order]
-			    [set-destination-min-distance]
+			    [set-destination-ordered-list]
                 [ set destination-beacon one-of beacons with [exit-point? = true]]
               set color [color] of destination-beacon
           ] ]
@@ -285,11 +286,48 @@ to change-poi
   ask poi-die [set interest-point? false]
   toggle-graph-view
 end
+;;=================== modificate
+
+
+to generate-new-mover
+  sprout-movers 1 [
+    set current-beacon min-one-of beacons [distance myself]
+    set previous-beacon current-beacon
+    set undesired-street false
+    set speed 0.1
+    set patience global-patience
+
+    ;; destination part uses current-node so declare it after
+    ;; destination list is saved as a list so we can do more complex
+    ;; operations on it.. agentsets are always in random order.
+    ;; By simply calling sort on an agentset, we get an ordered list
+
+	;;------------------------------------------------------------------------------
+    
+    set mover-behavior get-random-mover-behaviour [entry-ratios] of current-beacon     
+
+	set destination-list table:get behaviors-map mover-behavior
+    set destination-list sort destination-list
+	
+	set-destination-ordered-list
+
+	;;-------------------------------------------------------------------------------
+	
+    set destination-reached false
+
+    ;; set transparency
+    set color [color] of destination-beacon
+    ifelse is-list? color
+      [ set color lput 100 sublist color 0 3 ]
+      [ set color lput 100 extract-rgb color ]
+
+  ]
+end
+
 
 to-report get-interest-beacons [coor-list]
-  let a map [item 0 sort ?] (map [ beacons-on patch (item 0 ?) (item 1 ?) ] )
   let list-of-beacons []
-  foreach [ [10 10] [10 25] [40 40] ] [
+  foreach  coor-list [
     set list-of-beacons lput (item 0 sort (beacons-on patch (item 0 ?) (item 1 ?))) list-of-beacons
   ]
   report list-of-beacons

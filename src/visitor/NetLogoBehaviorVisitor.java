@@ -64,6 +64,10 @@ public class NetLogoBehaviorVisitor implements Visitor {
             }
             outputStream.println("end");
             
+            while ((l = inputStream2.readLine()) != null) {
+                outputStream.println(l);
+            }
+            
 		}
       finally {
             if (inputStream != null) {
@@ -79,12 +83,12 @@ public class NetLogoBehaviorVisitor implements Visitor {
 	}
 	
 	public void visit(Behavior behavior){
-		String beacons = "";
+		String beacons = "map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [";
 		for(Node n : behavior.getCoreInterestPoints()){
-			beacons = beacons.concat(" ["+n.getX()+" "+n.getY()+"] ");
+			beacons = beacons.concat(" [("+n.getX()+") ("+n.getY()+")] ");
 		}
 		
-		outputStream.println("  table:put behaviors-list "+behavior.getId()+" get-interest-beacons ["+beacons+"]");
+		outputStream.println("  table:put behaviors-map "+behavior.getId()+" get-interest-beacons "+beacons+"]");
 	}
 
 	public void visit(DirectedEdge e){

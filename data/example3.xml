@@ -10,9 +10,11 @@
 	<key id="nHeight" for="node" attr.name="nodeHeight" attr.type="int" />
 	<key id="nRadius" for="node" attr.name="nodeRadius" attr.type="int" />
 	
+	
 	<!-- attributi per lo stato iniziale -->
-	<key id="nStatus" for="node" attr.name="nodeStatus" attr.type="int" />
-	<key id="moverBehavior" for="node" attr.name="moverBehavior" attr.type="string" />
+	<key id="moverQuantity" for="node" attr.name="numberOfMovers" attr.type="int" />
+	<key id="rate" for="node" attr.name="entryOrExitRate" attr.type="float" />
+		
 	
 	<!-- attributi per il behavior -->
 	<key id="bType" for="node" attr.name="behaviorType" attr.type="int" />
@@ -154,7 +156,7 @@
 		<node id="b1">
 			<data key="bType">evacuate</data>
 			<graph id="1">
-				<node id="n3"/>
+				<node id="n2"/>
 				<node id="n7"/>
 			</graph>
 		</node>
@@ -162,15 +164,101 @@
 
 	<graph id="System">
 		<node id="n0">
-			<data key="nStatus">3</data>
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+					<data key="rate">40</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+					<data key="rate">60</data>
+				</behavior>
+			</graph>
 		</node>
 		<node id="n1">
-			<data key="nStatus">5</data>
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+			</graph>
 		</node>
 		<node id="n2">
-			<data key="nStatus">2</data>
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+			</graph>
 		</node>
-
+		<node id="n3">
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+			</graph>
+		</node>
+		<node id="n4">
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+			</graph>
+		</node>
+		<node id="n5">
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+					<data key="rate">60</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+					<data key="rate">40</data>
+				</behavior>
+			</graph>
+		</node>
+		<node id="n6">
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+			</graph>
+		</node>
+		<node id="n7">
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+				</behavior>
+			</graph>
+		</node>
+		<node id="n8">
+			<graph id="state">
+				<behavior id="0">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+					<data key="rate">50</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior --> 
+					<data key="moverQuantity">0</data>
+					<data key="rate">50</data>
+				</behavior>
+			</graph>
+		</node>
 	</graph>
 
 </grafoxml>
