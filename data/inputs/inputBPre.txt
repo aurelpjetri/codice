@@ -17,14 +17,17 @@ directed-link-breed [directed-streets directed-street]
 movers-own [
   destination-beacon ;; current destination moving towards
   destination-list ;; list of all my locations
-  mover-behavior ;; Table with strategies to calculate my next destination
+  destination-order ;; Table with strategies to calculate my next destination
   destination-reached ;; whether I've reached the current destination
   current-beacon ;; current beacon on my path
   previous-beacon ;; beacon that I'm coming from
   undesired-street ;; street that is not included in my path, since i got stuck there
   speed
+  mover-behavior
   should-move? ;; used when calculating the next patch
   patience ;; for how long can I be stuck before changing my direction
+
+  movers-data ;; used for outputing some results
 ]
 
 streets-own [
@@ -49,7 +52,6 @@ beacons-own [
   interest-point?
   entry-point?
   entry-ratios
-  exit-ratios
   exit-point?
 ]
 
@@ -63,6 +65,7 @@ globals [
   global-crowd-max-at-patch
 
   ;; global tables
+  destination-ordering
   behaviors-map
 
   ;; Needed for import to work
@@ -73,16 +76,20 @@ globals [
   grid-size
   n-interest-points
   export-filename
+
+  ;; Needed for results collection
+  global-movers-results
+  global-list-interest-points
+  global-list-exit-points
 ]
 
 ;; IMPORT AND DEFAULTS
 ;; ===================
 
-to import
+to setup
   import-world import-filename
   default-configuration
 end
-
 
 
 ;; GO PROCEDURE
@@ -97,9 +104,14 @@ end
 
 to old-movers-leave
   ask beacons with [exit-point? = true] [
+    let exit-beacon self
     ask patches in-radius intersection-radius [
       ask movers-here [
-        if random-float 1 < exit-ratio and empty? destination-list [ die ] ]
+        if random-float 1 < exit-ratio and empty? destination-list [
+          ;; generate final data and put them in a global var
+          movers-data-collect exit-beacon
+          movers-data-move-to-global
+          die ] ]
     ]
   ]
 end
@@ -115,6 +127,27 @@ to new-movers-enter
 end
 
 
+;; Populate the table movers-data with some information needed for results
+to movers-data-setup
+  set movers-data table:make
+  table:put movers-data "enter" ticks
+  table:put movers-data "total_agents" count movers
+  foreach (sentence global-list-interest-points global-list-exit-points) [
+    table:put movers-data (word "agents_" ?) count (movers with [destination-beacon = ?])
+    table:put movers-data (word "exit_" ?) 0
+  ]
+end
+
+;; Collect the data before a mover dies, and then put them in global var
+to movers-data-collect [passing-beacon]
+  ;; Only collect the time the first time we pass a destination
+  if table:get movers-data (word "exit_" passing-beacon) = 0
+   [table:put movers-data (word "exit_" passing-beacon) ticks]
+end
+
+to movers-data-move-to-global
+  table:put global-movers-results who table:to-list movers-data
+end
 
 ;; Given a list of behaviours and their probabilities
 ;; returns a random behaviour wrt to those probabilities
@@ -144,12 +177,11 @@ to move
 end
 
 
-
-
 to check-if-involuntary-destination [agent tmp-beacon]
   if member? tmp-beacon [destination-list] of agent [
     let new-destination-list filter [? != tmp-beacon] [destination-list] of agent
-    ask agent [set destination-list new-destination-list]
+    ask agent [set destination-list new-destination-list
+               movers-data-collect tmp-beacon]
   ]
 end
 
@@ -202,9 +234,12 @@ to orient-random-mover [random-mover]
         ;; if my previous beacon is different from the current and destination I should move
         ;; towards it => (item 0 full-path), otherwise there will be more than one element
         ;; in the full-path and it is more convenient to move towards the (item 1 full-path)
-        ifelse current-beacon != previous-beacon and previous-beacon != destination-beacon
+        ifelse current-beacon != previous-beacon ;and previous-beacon != destination-beacon
           [set current-beacon item 0 full-path]
-          [set current-beacon item 1 full-path]
+          [ifelse previous-beacon != destination-beacon
+            [set current-beacon item 1 full-path]
+            [set current-beacon item 0 full-path]
+          ]
       ]
     ]
   ]
@@ -244,6 +279,30 @@ to change-poi
   ask poi-die [set interest-point? false]
   toggle-graph-view
 end
+
+;; ==================================================================
+;; RESULTS OUTPUT
+;; ==================================================================
+;; Called at the end by the BehaviourSpace
+
+to register-results
+  ;; open a file
+  file-open (word "experiment_" behaviorspace-experiment-name "_run_" behaviorspace-run-number ".csv")
+
+  let onei first table:keys global-movers-results
+  file-print to-csv (list "who" (to-csv map [item 0 ?] table:get global-movers-results onei))
+  foreach table:keys global-movers-results [
+    file-print to-csv (list ? (to-csv map [item 1 ?] table:get global-movers-results ?))
+  ]
+
+  ;; close it
+  file-close
+end
+
+to-report to-csv [l]
+  report reduce [(word ?1 ", " ?2)] l
+end
+
 ;;=================== modificate
 
 ;; Check if I've reached the beacons and update my path,

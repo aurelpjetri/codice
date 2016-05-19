@@ -32,7 +32,7 @@ BUTTON
 282
 169
 NIL
-import
+setup
 NIL
 1
 T
@@ -49,7 +49,7 @@ INPUTBOX
 281
 127
 import-filename
-grids/grid_4_poi_3_01.csv
+grids/grid_x_poi_y_01.csv
 1
 0
 String
@@ -156,7 +156,7 @@ entry-ratio
 entry-ratio
 0
 0.1
-0.025
+0.061
 0.001
 1
 NIL
@@ -539,6 +539,32 @@ NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="1" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <final>register-results</final>
+    <timeLimit steps="1000"/>
+    <enumeratedValueSet variable="import-filename">
+      <value value="&quot;grids/grid_4_poi_3_01.csv&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="entry-ratio">
+      <value value="0.061"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="exit-ratio">
+      <value value="0.087"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="global-patience">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="use-exits">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="use-entries">
+      <value value="true"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default

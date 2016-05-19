@@ -17,14 +17,17 @@ directed-link-breed [directed-streets directed-street]
 movers-own [
   destination-beacon ;; current destination moving towards
   destination-list ;; list of all my locations
-  mover-behavior ;; Table with strategies to calculate my next destination
+  destination-order ;; Table with strategies to calculate my next destination
   destination-reached ;; whether I've reached the current destination
   current-beacon ;; current beacon on my path
   previous-beacon ;; beacon that I'm coming from
   undesired-street ;; street that is not included in my path, since i got stuck there
   speed
+  mover-behavior
   should-move? ;; used when calculating the next patch
   patience ;; for how long can I be stuck before changing my direction
+
+  movers-data ;; used for outputing some results
 ]
 
 streets-own [
@@ -49,7 +52,6 @@ beacons-own [
   interest-point?
   entry-point?
   entry-ratios
-  exit-ratios
   exit-point?
 ]
 
@@ -63,6 +65,7 @@ globals [
   global-crowd-max-at-patch
 
   ;; global tables
+  destination-ordering
   behaviors-map
 
   ;; Needed for import to work
@@ -73,16 +76,20 @@ globals [
   grid-size
   n-interest-points
   export-filename
+
+  ;; Needed for results collection
+  global-movers-results
+  global-list-interest-points
+  global-list-exit-points
 ]
 
 ;; IMPORT AND DEFAULTS
 ;; ===================
 
-to import
+to setup
   import-world import-filename
   default-configuration
 end
-
 
 
 ;; GO PROCEDURE
@@ -97,9 +104,14 @@ end
 
 to old-movers-leave
   ask beacons with [exit-point? = true] [
+    let exit-beacon self
     ask patches in-radius intersection-radius [
       ask movers-here [
-        if random-float 1 < exit-ratio and empty? destination-list [ die ] ]
+        if random-float 1 < exit-ratio and empty? destination-list [
+          ;; generate final data and put them in a global var
+          movers-data-collect exit-beacon
+          movers-data-move-to-global
+          die ] ]
     ]
   ]
 end
@@ -115,6 +127,27 @@ to new-movers-enter
 end
 
 
+;; Populate the table movers-data with some information needed for results
+to movers-data-setup
+  set movers-data table:make
+  table:put movers-data "enter" ticks
+  table:put movers-data "total_agents" count movers
+  foreach (sentence global-list-interest-points global-list-exit-points) [
+    table:put movers-data (word "agents_" ?) count (movers with [destination-beacon = ?])
+    table:put movers-data (word "exit_" ?) 0
+  ]
+end
+
+;; Collect the data before a mover dies, and then put them in global var
+to movers-data-collect [passing-beacon]
+  ;; Only collect the time the first time we pass a destination
+  if table:get movers-data (word "exit_" passing-beacon) = 0
+   [table:put movers-data (word "exit_" passing-beacon) ticks]
+end
+
+to movers-data-move-to-global
+  table:put global-movers-results who table:to-list movers-data
+end
 
 ;; Given a list of behaviours and their probabilities
 ;; returns a random behaviour wrt to those probabilities
@@ -143,56 +176,12 @@ to move
   ]
 end
 
-;; Check if I've reached the beacons and update my path,
-;; otherwise keep going towards the current-beacon
-to update-path
-  ask movers [
-    let next-beacon current-beacon
-    let current-mover self
-
-    ;; have I reached the current beacon?
-    ask current-beacon [
-      if member? [patch-here] of myself patches in-radius intersection-radius [
-        ;; set the previous beacon to the current-one, since we have reached it
-        ask myself [set previous-beacon current-beacon]
-
-        ;; Control if this beacon is in my destination list and remove it
-        check-if-involuntary-destination current-mover self
-
-        ;; calculate the full path to my destination
-        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
-        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
-
-        ;; If there are more than one beacon in the path I haven't reached my destination
-        ;; nw-path returns with the current beacon, so we take only the tail of the list
-        if not empty? but-first full-path
-          [ ask myself [set current-beacon item 1 full-path] ]
-
-        ;; if only one item is present in the weighted path
-        ;; a destination-beacon has been reached, here we check with if for
-        ;; more security
-        if self = [destination-beacon] of myself
-          [
-            ;; remove the current destination-beacon from this list
-            ask current-mover [
-              ifelse not empty? destination-list
-                ;;[ run table:get destination-ordering destination-order]
-			    [set-destination-min-distance]
-                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
-                ;[ set destination-beacon one-of beacons with [exit-point? = true]]
-              set color [color] of destination-beacon
-          ] ]
-      ]
-    ]
-    face current-beacon
-  ]
-end
-
 
 to check-if-involuntary-destination [agent tmp-beacon]
   if member? tmp-beacon [destination-list] of agent [
     let new-destination-list filter [? != tmp-beacon] [destination-list] of agent
-    ask agent [set destination-list new-destination-list]
+    ask agent [set destination-list new-destination-list
+               movers-data-collect tmp-beacon]
   ]
 end
 
@@ -245,9 +234,12 @@ to orient-random-mover [random-mover]
         ;; if my previous beacon is different from the current and destination I should move
         ;; towards it => (item 0 full-path), otherwise there will be more than one element
         ;; in the full-path and it is more convenient to move towards the (item 1 full-path)
-        ifelse current-beacon != previous-beacon and previous-beacon != destination-beacon
+        ifelse current-beacon != previous-beacon ;and previous-beacon != destination-beacon
           [set current-beacon item 0 full-path]
-          [set current-beacon item 1 full-path]
+          [ifelse previous-beacon != destination-beacon
+            [set current-beacon item 1 full-path]
+            [set current-beacon item 0 full-path]
+          ]
       ]
     ]
   ]
@@ -287,8 +279,76 @@ to change-poi
   ask poi-die [set interest-point? false]
   toggle-graph-view
 end
+
+;; ==================================================================
+;; RESULTS OUTPUT
+;; ==================================================================
+;; Called at the end by the BehaviourSpace
+
+to register-results
+  ;; open a file
+  file-open (word "experiment_" behaviorspace-experiment-name "_run_" behaviorspace-run-number ".csv")
+
+  let onei first table:keys global-movers-results
+  file-print to-csv (list "who" (to-csv map [item 0 ?] table:get global-movers-results onei))
+  foreach table:keys global-movers-results [
+    file-print to-csv (list ? (to-csv map [item 1 ?] table:get global-movers-results ?))
+  ]
+
+  ;; close it
+  file-close
+end
+
+to-report to-csv [l]
+  report reduce [(word ?1 ", " ?2)] l
+end
+
 ;;=================== modificate
 
+;; Check if I've reached the beacons and update my path,
+;; otherwise keep going towards the current-beacon
+to update-path
+  ask movers [
+    let next-beacon current-beacon
+    let current-mover self
+
+    ;; have I reached the current beacon?
+    ask current-beacon [
+      if member? [patch-here] of myself patches in-radius intersection-radius [
+        ;; set the previous beacon to the current-one, since we have reached it
+        ask myself [set previous-beacon current-beacon]
+
+        ;; Control if this beacon is in my destination list and remove it
+        check-if-involuntary-destination current-mover self
+
+        ;; calculate the full path to my destination
+        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
+        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
+
+        ;; If there are more than one beacon in the path I haven't reached my destination
+        ;; nw-path returns with the current beacon, so we take only the tail of the list
+        if not empty? but-first full-path
+          [ ask myself [set current-beacon item 1 full-path] ]
+
+        ;; if only one item is present in the weighted path
+        ;; a destination-beacon has been reached, here we check with if for
+        ;; more security
+        if self = [destination-beacon] of myself
+          [
+            ;; remove the current destination-beacon from this list
+            ask current-mover [
+              ifelse not empty? destination-list
+                ;;[ run table:get destination-ordering destination-order]
+			    [set-destination-min-distance]
+                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
+                ;[ set destination-beacon one-of beacons with [exit-point? = true]]
+              set color [color] of destination-beacon
+          ] ]
+      ]
+    ]
+    face current-beacon
+  ]
+end
 
 to generate-new-mover
   sprout-movers 1 [
@@ -335,9 +395,6 @@ to-report get-interest-beacons [coor-list]
 end
 
 ;; =================== INIZIO
-
-
-
 to default-configuration
   set-default-shape beacons "box"
   set-default-shape movers "circle"
@@ -381,7 +438,7 @@ BUTTON
 282
 169
 NIL
-import
+setup
 NIL
 1
 T
@@ -398,7 +455,7 @@ INPUTBOX
 281
 127
 import-filename
-grids/grid_4_poi_3_01.csv
+grids/grid_x_poi_y_01.csv
 1
 0
 String
@@ -505,7 +562,7 @@ entry-ratio
 entry-ratio
 0
 0.1
-0.025
+0.061
 0.001
 1
 NIL
@@ -888,6 +945,32 @@ NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="1" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <final>register-results</final>
+    <timeLimit steps="1000"/>
+    <enumeratedValueSet variable="import-filename">
+      <value value="&quot;grids/grid_4_poi_3_01.csv&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="entry-ratio">
+      <value value="0.061"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="exit-ratio">
+      <value value="0.087"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="global-patience">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="use-exits">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="use-entries">
+      <value value="true"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default

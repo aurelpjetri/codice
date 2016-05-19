@@ -41,17 +41,6 @@ public class NetLogoBehaviorVisitor implements Visitor {
                 outputStream.println(l);
             }
             
-//            ;; Set some defaults and globals for this model
-//            to default-configuration
-//              set-default-shape beacons "box"
-//              set-default-shape movers "circle"
-//              set global-crowd-max-at-patch 5
-//
-//              ;; List of possible destination ordering strategies
-//              set destination-ordering table:make
-//            	
-//              table:put destination-ordering "orderedList" "set-destination-ordered-list"
-//            end
 
             outputStream.println("to default-configuration");
             outputStream.println("  set-default-shape beacons \"box\"");
