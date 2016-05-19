@@ -1,20 +1,23 @@
-Analisi del cocumento XML attraverso la libreria JDOM2 e costruzione del grafo attraverso ConcreteBuilder
+#Generatore di modelli NetLogo
 
-package behaviors da sistemare
+###Behaviors 
+Evacuate e Visit sono trattate indistintamente per il momendo, per entrambi si usa solo la lista dei CoreInterestPoints
 
-Nel package grafo è presente anche un esempio di documento XML su cui mi sono basato per la scrittura del parser e un documento xml sbagliato usato per testare le eccezioni lanciate.
+###Builder
+Si usa la libreria JDOM inclusa nel folder *lib*
+Aggiunte interfacce Builder e Parser 
 
-{Visitor parzialmente funzionante. Insicuro sulla correttezza, nei visit nei vari nodi non chiudo la connessione, poiché questo fa fallire lo stream sui nodi successivi al primo. 
-La clausola Try/Finally è usata solo nel visit del Grafo, in cui si chiamano gli accept (e quindi i visit) sui vari nodi. Quindi la connessione è chiusa ( 'outputStream.close()' ) solo alla fine del visit del grafo.}
+###Graph
+Rappresenta l'informazione letta dal documento XML
 
-Update: Il Visitor dovrebbe essere corretto.
+###Visitor
+Due visitor separati che generano due file netlogo diversi, uno per la generazione della mappa (NetLogoGrahVisitor) e uno per il comportamento degli attori nell'ambiente(NetLogoBehaviorGraph).
 
-Behaviors: 
-- Aggiunti metodi in builder per costruizione behaviors. 
+-Da aggiustare l'INPUT-STREAM, in modo da avere un unico file.
 
-- Aggiunta lista di behaviors in Graph e metodi utili.
+##Data
 
-- Modificato XMLParser per la lettura dei behaviors
+Gli inputs e gli outputs sono distinti con A per il generatore della mappa e B per *grid-multi-destination*
 
 
 
