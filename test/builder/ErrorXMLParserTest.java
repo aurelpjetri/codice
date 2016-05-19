@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import grafo.Graph;
+import graph.Graph;
 
 public class ErrorXMLParserTest {
 	private XMLParser parser;

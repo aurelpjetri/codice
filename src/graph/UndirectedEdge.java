@@ -1,4 +1,4 @@
-package grafo;
+package graph;
 
 import java.io.IOException;
 

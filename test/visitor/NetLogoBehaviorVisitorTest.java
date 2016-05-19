@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import builder.XMLParser;
-import grafo.Graph;
+import graph.Graph;
 
 public class NetLogoBehaviorVisitorTest {
 

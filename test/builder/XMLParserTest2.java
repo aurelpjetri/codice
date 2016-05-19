@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import behaviors.EvacuateBehavior;
 import behaviors.VisitBehavior;
-import grafo.Graph;
+import graph.Graph;
 
 public class XMLParserTest2 {
 

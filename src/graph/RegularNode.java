@@ -1,13 +1,11 @@
-package grafo;
+package graph;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import visitor.Visitor;
 
-public class EntryPoint implements Node {
+public class RegularNode implements Node {
 
 	private ArrayList<Node> reachables;
 	private int id;
@@ -16,10 +14,9 @@ public class EntryPoint implements Node {
 	private int width, height;
 	private int radius;
 	private HashMap<Integer,Integer> state;
-	private HashMap<Integer, Float> generationRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state ){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -40,50 +37,46 @@ public class EntryPoint implements Node {
 				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
 			}
 		}
-		for(int key : generationRate.keySet()){
-			if(state.get(key)<0){
-				throw new RuntimeException("Illegal value of generation rate for behavior :"+key);
-			}
-		}
-		
 	}
 	
-	public EntryPoint(int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){
+	
+	public RegularNode( int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state){
 		reachables = new ArrayList<Node>();
 		this.id = id;
-		this.x = x;
-		this.y = y;
+		this.x= x;
+		this.y = y; 
 		this.width = w;
 		this.height = h;
-		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
-		this.capacity = calculateCapacity();
+		capacity = calculateCapacity(); 
 		this.radius = r;
 		this.state = state;
-		this.generationRate = generationRate;
-	}
-	
-	public HashMap<Integer, Float> getGenerationRate(){
-		return generationRate;
-	}
-	
-	public HashMap<Integer, Float> getSinkingRate(){
-		return null;
+
 	}
 	
 	public HashMap<Integer,Integer> getState(){
 		return state;
 	}
 	
-	public String getType(){
-		return "entry";
+	public HashMap<Integer, Float> getSinkingRate(){
+		return null;
 	}
 	
-	public void addReachable(Node n){
-		reachables.add(n);
+	
+	public HashMap<Integer, Float> getGenerationRate(){
+		return null;
 	}
+	
 	
 	public List<Node> getReachableNodes(){
 		return reachables;
+	}
+	
+	public String getType(){
+		return "normal";
+	}
+	
+	public int getId(){
+		return this.id;
 	}
 	
 	public int getX() {
@@ -93,10 +86,9 @@ public class EntryPoint implements Node {
 	public int getY() {
 		return y;
 	}
-
 	
-	public int getId(){
-		return this.id;
+	public int getCapacity(){
+		return this.capacity;
 	}
 	
 	public int getWidth(){
@@ -111,28 +103,23 @@ public class EntryPoint implements Node {
 		return radius;
 	}
 	
+	public void addReachable(Node n){
+		reachables.add(n);
+	}
+	
 	public void changeReachable(Node old, Node neW){
 		reachables.remove(old);
 		reachables.add(neW);
-		
-	}
-	
-	public void generateActor(){
-		//genera attori
-	}
-	
-	public int getCapacity(){
-		return this.capacity;
-	}
-	
-	//metodo per il calcolo della capacità dell'incrocio.
-	//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
-	public int calculateCapacity(){
-		return (width * height * 5);
 	}
 	
 	public String toString(){
-		return getId()+": entry";
+		return getId()+": normal";
+	}
+	
+	//metodo per il calcolo della capacità dell'incrocio.
+	public int calculateCapacity(){
+		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
+		return (width * height * 5); 
 	}
 	
 	public void accept(Visitor visitor) throws IOException{

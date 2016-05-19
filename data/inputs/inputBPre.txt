@@ -143,49 +143,7 @@ to move
   ]
 end
 
-;; Check if I've reached the beacons and update my path,
-;; otherwise keep going towards the current-beacon
-to update-path
-  ask movers [
-    let next-beacon current-beacon
-    let current-mover self
 
-    ;; have I reached the current beacon?
-    ask current-beacon [
-      if member? [patch-here] of myself patches in-radius intersection-radius [
-        ;; set the previous beacon to the current-one, since we have reached it
-        ask myself [set previous-beacon current-beacon]
-
-        ;; Control if this beacon is in my destination list and remove it
-        check-if-involuntary-destination current-mover self
-
-        ;; calculate the full path to my destination
-        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
-        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
-
-        ;; If there are more than one beacon in the path I haven't reached my destination
-        ;; nw-path returns with the current beacon, so we take only the tail of the list
-        if not empty? but-first full-path
-          [ ask myself [set current-beacon item 1 full-path] ]
-
-        ;; if only one item is present in the weighted path
-        ;; a destination-beacon has been reached, here we check with if for
-        ;; more security
-        if self = [destination-beacon] of myself
-          [
-            ;; remove the current destination-beacon from this list
-            ask current-mover [
-              ifelse not empty? destination-list
-                ;;[ run table:get destination-ordering destination-order]
-			    [set-destination-ordered-list]
-                [ set destination-beacon one-of beacons with [exit-point? = true]]
-              set color [color] of destination-beacon
-          ] ]
-      ]
-    ]
-    face current-beacon
-  ]
-end
 
 
 to check-if-involuntary-destination [agent tmp-beacon]
@@ -288,6 +246,50 @@ to change-poi
 end
 ;;=================== modificate
 
+;; Check if I've reached the beacons and update my path,
+;; otherwise keep going towards the current-beacon
+to update-path
+  ask movers [
+    let next-beacon current-beacon
+    let current-mover self
+
+    ;; have I reached the current beacon?
+    ask current-beacon [
+      if member? [patch-here] of myself patches in-radius intersection-radius [
+        ;; set the previous beacon to the current-one, since we have reached it
+        ask myself [set previous-beacon current-beacon]
+
+        ;; Control if this beacon is in my destination list and remove it
+        check-if-involuntary-destination current-mover self
+
+        ;; calculate the full path to my destination
+        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
+        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
+
+        ;; If there are more than one beacon in the path I haven't reached my destination
+        ;; nw-path returns with the current beacon, so we take only the tail of the list
+        if not empty? but-first full-path
+          [ ask myself [set current-beacon item 1 full-path] ]
+
+        ;; if only one item is present in the weighted path
+        ;; a destination-beacon has been reached, here we check with if for
+        ;; more security
+        if self = [destination-beacon] of myself
+          [
+            ;; remove the current destination-beacon from this list
+            ask current-mover [
+              ifelse not empty? destination-list
+                ;;[ run table:get destination-ordering destination-order]
+			    [set-destination-min-distance]
+                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
+                ;[ set destination-beacon one-of beacons with [exit-point? = true]]
+              set color [color] of destination-beacon
+          ] ]
+      ]
+    ]
+    face current-beacon
+  ]
+end
 
 to generate-new-mover
   sprout-movers 1 [
@@ -309,7 +311,7 @@ to generate-new-mover
 	set destination-list table:get behaviors-map mover-behavior
     set destination-list sort destination-list
 	
-	set-destination-ordered-list
+	set-destination-min-distance
 
 	;;-------------------------------------------------------------------------------
 	
@@ -334,6 +336,3 @@ to-report get-interest-beacons [coor-list]
 end
 
 ;; =================== INIZIO
-
-
-

@@ -3,7 +3,8 @@ package builder;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import grafo.Graph;
+
+import graph.Graph;
 
 public class ConcreteBuilderTest {
 	

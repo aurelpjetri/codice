@@ -9,9 +9,9 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-import grafo.Graph;
+import graph.Graph;
 
-public class XMLParser {
+public class XMLParser implements Parser{
 
 	private ConcreteBuilder builder;
 	

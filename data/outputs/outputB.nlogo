@@ -177,8 +177,9 @@ to update-path
             ask current-mover [
               ifelse not empty? destination-list
                 ;;[ run table:get destination-ordering destination-order]
-			    [set-destination-ordered-list]
-                [ set destination-beacon one-of beacons with [exit-point? = true]]
+			    [set-destination-min-distance]
+                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
+                ;[ set destination-beacon one-of beacons with [exit-point? = true]]
               set color [color] of destination-beacon
           ] ]
       ]
@@ -309,7 +310,7 @@ to generate-new-mover
 	set destination-list table:get behaviors-map mover-behavior
     set destination-list sort destination-list
 	
-	set-destination-ordered-list
+	set-destination-min-distance
 
 	;;-------------------------------------------------------------------------------
 	

@@ -7,6 +7,14 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import graph.Edge;
+import graph.EntryPoint;
+import graph.ExitPoint;
+import graph.Graph;
+import graph.Node;
+import graph.RegularNode;
+import graph.UndirectedEdge;
+
 public class GraphValidationTest {
 	
 	private Graph graph;

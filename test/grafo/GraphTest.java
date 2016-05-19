@@ -8,6 +8,14 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import graph.Edge;
+import graph.EntryPoint;
+import graph.ExitPoint;
+import graph.Graph;
+import graph.Node;
+import graph.RegularNode;
+import graph.UndirectedEdge;
+
 public class GraphTest {
 
 	private Graph graph;

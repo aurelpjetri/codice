@@ -3,12 +3,12 @@ package visitor;
 import java.io.IOException;
 
 import behaviors.Behavior;
-import grafo.DirectedEdge;
-import grafo.EntryPoint;
-import grafo.ExitPoint;
-import grafo.Graph;
-import grafo.RegularNode;
-import grafo.UndirectedEdge;
+import graph.DirectedEdge;
+import graph.EntryPoint;
+import graph.ExitPoint;
+import graph.Graph;
+import graph.RegularNode;
+import graph.UndirectedEdge;
 
 public interface Visitor {
 	

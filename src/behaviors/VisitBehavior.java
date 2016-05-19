@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import grafo.Node;
+import graph.Node;
 import visitor.Visitor;
 
 public class VisitBehavior implements Behavior{

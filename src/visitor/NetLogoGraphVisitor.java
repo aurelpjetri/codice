@@ -7,38 +7,38 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import behaviors.Behavior;
-import grafo.DirectedEdge;
-import grafo.Edge;
-import grafo.EntryPoint;
-import grafo.ExitPoint;
-import grafo.Graph;
-import grafo.Node;
-import grafo.RegularNode;
-import grafo.UndirectedEdge;
+import graph.DirectedEdge;
+import graph.Edge;
+import graph.EntryPoint;
+import graph.ExitPoint;
+import graph.Graph;
+import graph.Node;
+import graph.RegularNode;
+import graph.UndirectedEdge;
 
 public class NetLogoGraphVisitor implements Visitor{
 	
-	private BufferedReader inputStream;
-	private BufferedReader inputStream2;
+	private BufferedReader inputStreamPre;
+	private BufferedReader inputStreamPost; 
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
-	
+	 
 	public NetLogoGraphVisitor() throws IOException{
-		inputStream = null;
-		inputStream2 = null;
+		inputStreamPre = null;
+		inputStreamPost = null;
 		outputStream = null;
-		myFileWriter = new FileWriter("data/output.nlogo");
+		myFileWriter = new FileWriter("data/outputs/outputA.nlogo");
 	}
 	
 	public void visit(Graph g) throws IOException{
 		
         try {
-            inputStream = new BufferedReader(new FileReader("data/inputPre.txt"));
-            inputStream2 = new BufferedReader(new FileReader("data/inputPost.txt"));
+            inputStreamPre = new BufferedReader(new FileReader("data/inputs/inputAPre.txt"));
+            inputStreamPost = new BufferedReader(new FileReader("data/inputs/inputAPost.txt"));
             outputStream = new PrintWriter(myFileWriter);
 
             String l;
-            while ((l = inputStream.readLine()) != null) {
+            while ((l = inputStreamPre.readLine()) != null) {
                 outputStream.println(l);
             }
             
@@ -75,7 +75,7 @@ public class NetLogoGraphVisitor implements Visitor{
             }
             
             outputStream.println("end");
-            while ((l = inputStream2.readLine()) != null) {
+            while ((l = inputStreamPost.readLine()) != null) {
                 outputStream.println(l);
             }
            
@@ -84,11 +84,11 @@ public class NetLogoGraphVisitor implements Visitor{
 		        	e.printStackTrace();
         }
         finally {
-            if (inputStream != null) {
-                inputStream.close();
+            if (inputStreamPre != null) {
+                inputStreamPre.close();
             }
-            if(inputStream2 != null){
-            	inputStream2.close();
+            if(inputStreamPost != null){
+            	inputStreamPost.close();
             }
             if (outputStream != null) {
                 outputStream.close();

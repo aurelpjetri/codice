@@ -1,4 +1,4 @@
-package grafo;
+package graph;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ public interface Node {
 	public int getId();
 	
 	public int getCapacity();
+	
+	public int calculateCapacity();
 	
 	public List<Node> getReachableNodes();
 	

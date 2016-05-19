@@ -4,16 +4,16 @@ import java.util.HashMap;
 
 import behaviors.EvacuateBehavior;
 import behaviors.VisitBehavior;
-import grafo.DirectedEdge;
-import grafo.EntryPoint;
-import grafo.ExitPoint;
-import grafo.Graph;
-import grafo.Node;
-import grafo.RegularNode;
-import grafo.UndirectedEdge;
+import graph.DirectedEdge;
+import graph.EntryPoint;
+import graph.ExitPoint;
+import graph.Graph;
+import graph.Node;
+import graph.RegularNode;
+import graph.UndirectedEdge;
 
 
-public class ConcreteBuilder {
+public class ConcreteBuilder implements Builder{
 
 	private Graph product;
 	private int lastId;
@@ -53,7 +53,6 @@ public class ConcreteBuilder {
 		product.addEdge(edge);
 	}
 	
-	
 	public void buildVisitBehavior(int id){
 		product.addBehavior(new VisitBehavior(id));
 	}
@@ -73,8 +72,6 @@ public class ConcreteBuilder {
 			product.getBehaviorFromId(id).addCoreInterestPoint(n);
 		}
 	}
-	
-	
 	
 	public Graph getProduct() throws RuntimeException{
 		//controlla che il grafo sia connesso

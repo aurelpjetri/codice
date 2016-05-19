@@ -7,37 +7,37 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import behaviors.Behavior;
-import grafo.DirectedEdge;
-import grafo.EntryPoint;
-import grafo.ExitPoint;
-import grafo.Graph;
-import grafo.Node;
-import grafo.RegularNode;
-import grafo.UndirectedEdge;
+import graph.DirectedEdge;
+import graph.EntryPoint;
+import graph.ExitPoint;
+import graph.Graph;
+import graph.Node;
+import graph.RegularNode;
+import graph.UndirectedEdge;
 
 public class NetLogoBehaviorVisitor implements Visitor {
 
-	private BufferedReader inputStream;
-	private BufferedReader inputStream2;
+	private BufferedReader inputStreamPre;
+	private BufferedReader inputStreamPost;
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
 	
 	public NetLogoBehaviorVisitor() throws IOException {
-		inputStream = null;
-		inputStream = null;
-		inputStream2 = null;
+		inputStreamPre = null;
+		inputStreamPre = null;
+		inputStreamPost = null;
 		outputStream = null;
-		myFileWriter = new FileWriter("data/outputB.nlogo");
+		myFileWriter = new FileWriter("data/outputs/outputB.nlogo");
 	}
 	
 	public void visit(Graph g) throws IOException{
 		try{
-			inputStream = new BufferedReader(new FileReader("data/inputBPre.txt"));
-            inputStream2 = new BufferedReader(new FileReader("data/inputBPost.txt"));
+			inputStreamPre = new BufferedReader(new FileReader("data/inputs/inputBPre.txt"));
+            inputStreamPost = new BufferedReader(new FileReader("data/inputs/inputBPost.txt"));
             outputStream = new PrintWriter(myFileWriter);
 
             String l;
-            while ((l = inputStream.readLine()) != null) {
+            while ((l = inputStreamPre.readLine()) != null) {
                 outputStream.println(l);
             }
             
@@ -64,17 +64,17 @@ public class NetLogoBehaviorVisitor implements Visitor {
             }
             outputStream.println("end");
             
-            while ((l = inputStream2.readLine()) != null) {
+            while ((l = inputStreamPost.readLine()) != null) {
                 outputStream.println(l);
             }
             
 		}
       finally {
-            if (inputStream != null) {
-                inputStream.close();
+            if (inputStreamPre != null) {
+                inputStreamPre.close();
             }
-            if(inputStream2 != null){
-            	inputStream2.close();
+            if(inputStreamPost != null){
+            	inputStreamPost.close();
             }
             if (outputStream != null) {
                 outputStream.close();

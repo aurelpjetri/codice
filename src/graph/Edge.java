@@ -1,4 +1,4 @@
-package grafo;
+package graph;
 
 import java.io.IOException;
 
@@ -17,6 +17,8 @@ public interface Edge {
 	public int getDistance();
 	
 	public int getWidth();
+	
+	public int getWeight();
 	
 	public void accept(Visitor visitor)throws IOException;
 	

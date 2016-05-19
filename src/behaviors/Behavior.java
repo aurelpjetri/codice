@@ -3,7 +3,7 @@ package behaviors;
 import java.io.IOException;
 import java.util.List;
 
-import grafo.Node;
+import graph.Node;
 import visitor.Visitor;
 
 public interface Behavior {
