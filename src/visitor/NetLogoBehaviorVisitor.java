@@ -17,27 +17,30 @@ import graph.UndirectedEdge;
 
 public class NetLogoBehaviorVisitor implements Visitor {
 
-	private BufferedReader inputStreamPre;
-	private BufferedReader inputStreamPost;
+//	private BufferedReader inputStreamPre;
+//	private BufferedReader inputStreamPost;
+	private BufferedReader inputTest;
+	
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
 	
 	public NetLogoBehaviorVisitor() throws IOException {
-		inputStreamPre = null;
-		inputStreamPre = null;
-		inputStreamPost = null;
+//		inputStreamPre = null;
+//		inputStreamPost = null;
 		outputStream = null;
-		myFileWriter = new FileWriter("data/outputs/outputB.nlogo");
+		myFileWriter = new FileWriter("data/outputs/outputBTest.nlogo");
 	}
 	
 	public void visit(Graph g) throws IOException{
 		try{
-			inputStreamPre = new BufferedReader(new FileReader("data/inputs/inputBPre.txt"));
-            inputStreamPost = new BufferedReader(new FileReader("data/inputs/inputBPost.txt"));
+			inputTest = new BufferedReader(new FileReader("data/inputs/inputTest.txt"));
+//			inputStreamPre = new BufferedReader(new FileReader("data/inputs/inputBPre.txt"));
+//          inputStreamPost = new BufferedReader(new FileReader("data/inputs/inputBPost.txt"));
             outputStream = new PrintWriter(myFileWriter);
 
             String l;
-            while ((l = inputStreamPre.readLine()) != null) {
+            while (!inputTest.readLine().equals(";;===start")){
+        		l = inputTest.readLine();
                 outputStream.println(l);
             }
             
@@ -53,18 +56,22 @@ public class NetLogoBehaviorVisitor implements Visitor {
             }
             outputStream.println("end");
             
-            while ((l = inputStreamPost.readLine()) != null) {
+            while (inputTest.readLine() != null) {
+            	l = inputTest.readLine();
                 outputStream.println(l);
             }
             
 		}
       finally {
-            if (inputStreamPre != null) {
-                inputStreamPre.close();
-            }
-            if(inputStreamPost != null){
-            	inputStreamPost.close();
-            }
+	    	  if(inputTest != null){
+	    		  inputTest.close();
+	    	  }
+//            if (inputStreamPre != null) {
+//                inputStreamPre.close();
+//            }
+//            if(inputStreamPost != null){
+//            	inputStreamPost.close();
+//            }
             if (outputStream != null) {
                 outputStream.close();
             }
