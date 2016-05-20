@@ -23,11 +23,12 @@ movers-own [
   previous-beacon ;; beacon that I'm coming from
   undesired-street ;; street that is not included in my path, since i got stuck there
   speed
-  mover-behavior
   should-move? ;; used when calculating the next patch
   patience ;; for how long can I be stuck before changing my direction
 
   movers-data ;; used for outputing some results
+  
+  mover-behavior
 ]
 
 streets-own [
@@ -67,7 +68,6 @@ globals [
 
   ;; global tables
   destination-ordering
-  behaviors-map
 
   ;; Needed for import to work
   world-offset
@@ -82,6 +82,9 @@ globals [
   global-movers-results
   global-list-interest-points
   global-list-exit-points
+  
+  behaviors-map
+  
 ]
 
 ;; IMPORT AND DEFAULTS
@@ -92,6 +95,26 @@ to setup
   default-configuration
 end
 
+;; Set some defaults and globals for this model
+to default-configuration
+  set-default-shape beacons "box"
+  set-default-shape movers "circle"
+  set global-crowd-max-at-patch 5
+
+  ;; List of possible destination ordering strategies
+  set destination-ordering table:make
+  table:put destination-ordering "minDistance" "set-destination-min-distance"
+  table:put destination-ordering "orderedList" "set-destination-ordered-list"
+
+  ;; Results
+  set global-movers-results table:make
+  ;; List of various destinations
+  set global-list-interest-points sort beacons with [interest-point? = true]
+  set global-list-exit-points sort beacons with [exit-point? = true]
+  
+;;===start
+  
+end
 
 ;; GO PROCEDURE
 ;; ============
@@ -127,13 +150,55 @@ to new-movers-enter
   ]
 end
 
+to-report get-interest-beacons [coor-list]
+  let list-of-beacons []
+  foreach  coor-list [
+    set list-of-beacons lput (item 0 sort (beacons-on patch (item 0 ?) (item 1 ?))) list-of-beacons
+  ]
+  report list-of-beacons
+end
+
+to generate-new-mover
+  sprout-movers 1 [
+    set current-beacon min-one-of beacons [distance myself]
+    set previous-beacon current-beacon
+    set undesired-street false
+    set speed 0.5
+    set patience global-patience
+
+    ;; destination part uses current-node so declare it after
+    ;; destination list is saved as a list so we can do more complex
+    ;; operations on it.. agentsets are always in random order.
+    ;; By simply calling sort on an agentset, we get an ordered list
+
+    set mover-behavior get-random-mover-behaviour [entry-ratios] of current-beacon     
+
+	set destination-list table:get behaviors-map mover-behavior
+
+    set destination-list sort destination-list
+    
+
+    set-destination-ordered-list
+    set destination-reached false
+
+    ;; populate the initial map for the output data
+    movers-data-setup
+
+    ;; set transparency
+    set color [color] of destination-beacon
+    ifelse is-list? color
+      [ set color lput 100 sublist color 0 3 ]
+      [ set color lput 100 extract-rgb color ]
+
+  ]
+end
 
 ;; Populate the table movers-data with some information needed for results
 to movers-data-setup
   set movers-data table:make
   table:put movers-data "enter" ticks
   table:put movers-data "total_agents" count movers
-  foreach (sort beacons with [entry-point? = false]) [
+  foreach (sentence global-list-interest-points global-list-exit-points) [
     table:put movers-data (word "agents_" ?) count (movers with [destination-beacon = ?])
     table:put movers-data (word "exit_" ?) 0
   ]
@@ -177,6 +242,48 @@ to move
   ]
 end
 
+;; Check if I've reached the beacons and update my path,
+;; otherwise keep going towards the current-beacon
+to update-path
+  ask movers [
+    let current-mover self
+
+    ;; have I reached the current beacon?
+    ask current-beacon [
+      if member? [patch-here] of myself patches in-radius intersection-radius [
+        ;; set the previous beacon to the current-one, since we have reached it
+        ask myself [set previous-beacon current-beacon]
+
+        ;; Control if this beacon is in my destination list and remove it
+        check-if-involuntary-destination current-mover self
+
+        ;; calculate the full path to my destination
+        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
+        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
+
+        ;; If there are more than one beacon in the path I haven't reached my destination
+        ;; nw-path returns with the current beacon, so we take only the tail of the list
+        if not empty? but-first full-path
+          [ ask myself [set current-beacon item 1 full-path] ]
+
+        ;; if only one item is present in the weighted path
+        ;; a destination-beacon has been reached, here we check with if for
+        ;; more security
+        if self = [destination-beacon] of myself
+          [
+            ;; remove the current destination-beacon from this list
+            ask current-mover [
+              movers-data-collect myself
+              ifelse not empty? destination-list
+                [ set-destination-ordered-list ]
+                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
+              set color [color] of destination-beacon
+          ] ]
+      ]
+    ]
+    face current-beacon
+  ]
+end
 
 to check-if-involuntary-destination [agent tmp-beacon]
   if member? tmp-beacon [destination-list] of agent [
@@ -303,126 +410,6 @@ end
 to-report to-csv [l]
   report reduce [(word ?1 ", " ?2)] l
 end
-
-;;=================== modificate
-
-;; Check if I've reached the beacons and update my path,
-;; otherwise keep going towards the current-beacon
-to update-path
-  ask movers [
-    let next-beacon current-beacon
-    let current-mover self
-
-    ;; have I reached the current beacon?
-    ask current-beacon [
-      if member? [patch-here] of myself patches in-radius intersection-radius [
-        ;; set the previous beacon to the current-one, since we have reached it
-        ask myself [set previous-beacon current-beacon]
-
-        ;; Control if this beacon is in my destination list and remove it
-        check-if-involuntary-destination current-mover self
-
-        ;; calculate the full path to my destination
-        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
-        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
-
-        ;; If there are more than one beacon in the path I haven't reached my destination
-        ;; nw-path returns with the current beacon, so we take only the tail of the list
-        if not empty? but-first full-path
-          [ ask myself [set current-beacon item 1 full-path] ]
-
-        ;; if only one item is present in the weighted path
-        ;; a destination-beacon has been reached, here we check with if for
-        ;; more security
-        if self = [destination-beacon] of myself
-          [
-            ;; remove the current destination-beacon from this list
-            ask current-mover [
-              ifelse not empty? destination-list
-			    [run table:get destination-ordering destination-order]
-                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
-              set color [color] of destination-beacon
-          ] ]
-      ]
-    ]
-    face current-beacon
-  ]
-end
-
-to generate-new-mover
-  sprout-movers 1 [
-    set current-beacon min-one-of beacons [distance myself]
-    set previous-beacon current-beacon
-    set undesired-street false
-    set speed 0.1
-    set patience global-patience
-
-    ;; destination part uses current-node so declare it after
-    ;; destination list is saved as a list so we can do more complex
-    ;; operations on it.. agentsets are always in random order.
-    ;; By simply calling sort on an agentset, we get an ordered list
-
-	;;------------------------------------------------------------------------------
-    
-    set mover-behavior get-random-mover-behaviour [entry-ratios] of current-beacon     
-
-	set destination-list table:get behaviors-map mover-behavior
-    set destination-list sort destination-list
-	
-	set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["minDistance" 50]] of current-beacon
-    run table:get destination-ordering destination-order
-
-    ;;set-destination-ordered-list
-	;;-------------------------------------------------------------------------------
-	
-    set destination-reached false
-
-    ;; populate the initial map for the output data
-    movers-data-setup
-
-    ;; set transparency
-    set color [color] of destination-beacon
-    ifelse is-list? color
-      [ set color lput 100 sublist color 0 3 ]
-      [ set color lput 100 extract-rgb color ]
-
-  ]
-end
-
-
-to-report get-interest-beacons [coor-list]
-  let list-of-beacons []
-  foreach  coor-list [
-    set list-of-beacons lput (item 0 sort (beacons-on patch (item 0 ?) (item 1 ?))) list-of-beacons
-  ]
-  report list-of-beacons
-end
-
-;; Set some defaults and globals for this model
-to default-configuration
-  set-default-shape beacons "box"
-  set-default-shape movers "circle"
-  set global-crowd-max-at-patch 5
-
-  ;; List of possible destination ordering strategies
-  set destination-ordering table:make
-  table:put destination-ordering "minDistance" "set-destination-min-distance"
-  table:put destination-ordering "orderedList" "set-destination-ordered-list"
-
-  ;; Results
-  set global-movers-results table:make
-  ;; List of various destinations
-  set global-list-interest-points sort beacons with [interest-point? = true]
-  set global-list-exit-points sort beacons with [exit-point? = true]
-
-  set behaviors-map table:make
-  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
-  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
-
-end
-
-
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 305
