@@ -18,29 +18,26 @@ import graph.UndirectedEdge;
 
 public class NetLogoGraphVisitor implements Visitor{
 	
-	private BufferedReader inputStreamPre;
-	private BufferedReader inputStreamPost; 
+	private BufferedReader inputStream;
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
 	 
 	public NetLogoGraphVisitor() throws IOException{
-		inputStreamPre = null;
-		inputStreamPost = null;
+		inputStream = null;
 		outputStream = null;
-		myFileWriter = new FileWriter("data/outputs/outputA.nlogo");
+		myFileWriter = new FileWriter("data/outputs/outputGraph.nlogo");
 	}
 	
 	public void visit(Graph g) throws IOException{
 		
         try {
-            inputStreamPre = new BufferedReader(new FileReader("data/inputs/inputAPre.txt"));
-            inputStreamPost = new BufferedReader(new FileReader("data/inputs/inputAPost.txt"));
+            inputStream = new BufferedReader(new FileReader("data/inputs/inputGraph.txt"));
             outputStream = new PrintWriter(myFileWriter);
 
-            String l;
-            while ((l = inputStreamPre.readLine()) != null) {
-                outputStream.println(l);
-            }
+			String l;
+			while (!((l = inputStream.readLine()).equals(";;===start"))){
+				outputStream.println(l);
+			}
             
             int maxX = g.getMaxEastCoordinate();
             int maxY = g.getMaxNorthCoordinate();
@@ -75,20 +72,17 @@ public class NetLogoGraphVisitor implements Visitor{
             }
             
             outputStream.println("end");
-            while ((l = inputStreamPost.readLine()) != null) {
-                outputStream.println(l);
-            }
+            while ((l = inputStream.readLine()) != null) {
+				outputStream.println(l);
+			}
            
         } 
 		catch(RuntimeException e){
 		        	e.printStackTrace();
         }
         finally {
-            if (inputStreamPre != null) {
-                inputStreamPre.close();
-            }
-            if(inputStreamPost != null){
-            	inputStreamPost.close();
+            if (inputStream != null) {
+                inputStream.close();
             }
             if (outputStream != null) {
                 outputStream.close();

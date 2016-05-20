@@ -52,6 +52,7 @@ beacons-own [
   interest-point?
   entry-point?
   entry-ratios
+  exit-ratios
   exit-point?
 ]
 
@@ -339,7 +340,7 @@ to update-path
             ask current-mover [
               ifelse not empty? destination-list
                 ;;[ run table:get destination-ordering destination-order]
-			    [set-destination-min-distance]
+			    [set-destination-ordered-list]
                 [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
                 ;[ set destination-beacon one-of beacons with [exit-point? = true]]
               set color [color] of destination-beacon
@@ -370,11 +371,16 @@ to generate-new-mover
 	set destination-list table:get behaviors-map mover-behavior
     set destination-list sort destination-list
 	
-	set-destination-min-distance
+	;;set destination-order get-random-mover-behaviour [entry-ratios] of current-beacon
+    ;;run table:get destination-ordering destination-order
 
+    set-destination-ordered-list
 	;;-------------------------------------------------------------------------------
 	
     set destination-reached false
+
+    ;; populate the initial map for the output data
+    movers-data-setup
 
     ;; set transparency
     set color [color] of destination-beacon
@@ -394,7 +400,30 @@ to-report get-interest-beacons [coor-list]
   report list-of-beacons
 end
 
-;;===start
+;; Set some defaults and globals for this model
+to default-configuration
+  set-default-shape beacons "box"
+  set-default-shape movers "circle"
+  set global-crowd-max-at-patch 5
+
+  ;; List of possible destination ordering strategies
+  set destination-ordering table:make
+  table:put destination-ordering "minDistance" "set-destination-min-distance"
+  table:put destination-ordering "orderedList" "set-destination-ordered-list"
+
+  ;; Results
+  set global-movers-results table:make
+  ;; List of various destinations
+  set global-list-interest-points sort beacons with [interest-point? = true]
+  set global-list-exit-points sort beacons with [exit-point? = true]
+
+  set behaviors-map table:make
+  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
+  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
+
+end
+
+
 
 @#$#@#$#@
 GRAPHICS-WINDOW
