@@ -140,6 +140,14 @@
 			<data key="weight">3</data>
 			<data key="eWidth">3</data>
 		</edge>
+		<edge id="e12" source="n0" target="n2">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
+		<edge id="e13" source="n1" target="n3">
+			<data key="weight">3</data>
+			<data key="eWidth">3</data>
+		</edge>
 	</graph>
 	
 	<graph id="Behaviors">

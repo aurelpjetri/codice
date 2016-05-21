@@ -363,6 +363,14 @@ to connect-beacons
     create-streets-with beacons-on patch (world-offset + 20) (world-offset + 0) [
       set weight 3
       set street-width 3]]
+  ask beacons-on patch (world-offset + 0) (world-offset + 0) [
+    create-streets-with beacons-on patch (world-offset + 10) (world-offset + 10) [
+      set weight 3
+      set street-width 3]]
+  ask beacons-on patch (world-offset + 0) (world-offset + 10) [
+    create-streets-with beacons-on patch (world-offset + 10) (world-offset + 20) [
+      set weight 3
+      set street-width 3]]
 end
 
 

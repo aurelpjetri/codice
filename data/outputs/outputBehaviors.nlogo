@@ -369,7 +369,7 @@ to generate-new-mover
 	set destination-list table:get behaviors-map mover-behavior
     set destination-list sort destination-list
 	
-	set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["minDistance" 50]] of current-beacon
+	set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["orderedList" 50]] of current-beacon
     run table:get destination-ordering destination-order
 
     ;;set-destination-ordered-list
