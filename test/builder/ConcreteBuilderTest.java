@@ -8,12 +8,12 @@ import graph.Graph;
 
 public class ConcreteBuilderTest {
 	
-	private ConcreteBuilder builder;
+	private NetLogoGraphBuilder builder;
 
 	@Before
 	public void setUp() throws Exception {
 		
-		builder = new ConcreteBuilder();
+		builder = new NetLogoGraphBuilder();
 		builder.buildGraph();
 //		builder.buildRegularNode(0, 0, 10, 10, 10, 5);
 //		builder.buildRegularNode(0, 10, 10, 10, 10, 5);

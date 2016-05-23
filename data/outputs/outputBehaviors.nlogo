@@ -153,7 +153,7 @@ end
 ;; Given a list of behaviours and their probabilities
 ;; returns a random behaviour wrt to those probabilities
 to-report get-random-mover-behaviour [iter-list]
-  let random-dice random 100
+  let random-dice random-float 1
   let acc 0
   foreach iter-list [
     set acc acc + (item 1 ?)

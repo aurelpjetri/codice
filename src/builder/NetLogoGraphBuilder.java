@@ -13,7 +13,7 @@ import graph.RegularNode;
 import graph.UndirectedEdge;
 
 
-public class ConcreteBuilder implements Builder{
+public class NetLogoGraphBuilder implements Builder{
 
 	private Graph product;
 	private int lastId;

@@ -13,10 +13,10 @@ import graph.Graph;
 
 public class XMLParser implements Parser{
 
-	private ConcreteBuilder builder;
+	private NetLogoGraphBuilder builder;
 	
 	public XMLParser (){
-		builder = new ConcreteBuilder();
+		builder = new NetLogoGraphBuilder();
 	}
 	
 	public Graph parseDocumentForGraph(String path){
@@ -57,7 +57,7 @@ public class XMLParser implements Parser{
 		
 	}
 	 
-	public void parseTree(Element root, ConcreteBuilder builder){
+	public void parseTree(Element root, NetLogoGraphBuilder builder){
 		
 		
 		Element graph = getElementWithAttributeValue(root.getChildren(), "id", "Graph");
