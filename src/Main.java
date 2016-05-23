@@ -21,5 +21,12 @@ public class Main {
 		catch(RuntimeException e2){
 			e2.printStackTrace();
 		}
+		
+		
+//		XMLParser parser = new XMLParser();
+//		Graph graph = parser.parseDocumentForGraph("data/xmls/example3.xml");
+//		for(Node n : graph.getNodes()){
+//			for()
+//		}
 	}
 }

@@ -363,18 +363,18 @@ to generate-new-mover
     ;; By simply calling sort on an agentset, we get an ordered list
 
 	;;------------------------------------------------------------------------------
-    
-    set mover-behavior get-random-mover-behaviour [entry-ratios] of current-beacon     
+
+    set mover-behavior get-random-mover-behaviour [entry-ratios] of current-beacon
 
 	set destination-list table:get behaviors-map mover-behavior
     set destination-list sort destination-list
-	
+
 	set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["orderedList" 50]] of current-beacon
     run table:get destination-ordering destination-order
 
     ;;set-destination-ordered-list
 	;;-------------------------------------------------------------------------------
-	
+
     set destination-reached false
 
     ;; populate the initial map for the output data
@@ -398,6 +398,32 @@ to-report get-interest-beacons [coor-list]
   report list-of-beacons
 end
 
+to standard-mover-settings
+  set current-beacon min-one-of beacons [distance myself]
+  set previous-beacon current-beacon
+  set speed 0.1
+  set patience global-patience
+
+  set undesired-street false
+
+  set destination-list table:get behaviors-map mover-behavior
+  set destination-list sort destination-list
+
+  set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["orderedList" 50]] of current-beacon
+  run table:get destination-ordering destination-order
+
+  set destination-reached false
+
+  ;; populate the initial map for the output data
+  movers-data-setup
+
+  ;; set transparency
+  set color [color] of destination-beacon
+  ifelse is-list? color
+    [ set color lput 100 sublist color 0 3 ]
+    [ set color lput 100 extract-rgb color ]
+end
+
 ;; Set some defaults and globals for this model
 to default-configuration
   set-default-shape beacons "box"
@@ -415,12 +441,48 @@ to default-configuration
   set global-list-interest-points sort beacons with [interest-point? = true]
   set global-list-exit-points sort beacons with [exit-point? = true]
 
+  set-world-initial-state
+
   set behaviors-map table:make
   table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
   table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
-
+  set-world-initial-state
 end
-
+ 
+to set-world-initial-state 
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 0
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 1
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 10]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 0
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 10]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 1
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 30]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 0
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 30]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 1
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[20 20]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 0
+      standard-mover-settings]]]
+  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[20 20]] [
+    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+      set mover-behavior 1
+      standard-mover-settings]]]
+end
 
 
 @#$#@#$#@
