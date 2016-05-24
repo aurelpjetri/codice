@@ -441,7 +441,6 @@ to default-configuration
   set global-list-interest-points sort beacons with [interest-point? = true]
   set global-list-exit-points sort beacons with [exit-point? = true]
 
-  set-world-initial-state
 
 ;;===start
 

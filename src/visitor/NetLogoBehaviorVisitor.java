@@ -43,6 +43,7 @@ public class NetLogoBehaviorVisitor implements Visitor {
 				b.accept(this);
 			}
 
+			outputStream.println(" ");
 			outputStream.println("  set-world-initial-state");
 			outputStream.println("end");
 			outputStream.println(" ");
