@@ -445,11 +445,11 @@ to default-configuration
   set behaviors-map table:make
   table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
   table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
- 
+
   set-world-initial-state
 end
- 
-to set-world-initial-state 
+
+to set-world-initial-state
   ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
     ask one-of patches in-radius intersection-radius [sprout-movers 10 [
       set mover-behavior 0
@@ -536,7 +536,7 @@ INPUTBOX
 281
 127
 import-filename
-grids/grid_x_poi_y_01.csv
+example4.csv
 1
 0
 String

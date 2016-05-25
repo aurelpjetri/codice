@@ -6,6 +6,7 @@ import visitor.NetLogoBehaviorVisitor;
 import visitor.NetLogoGraphVisitor;
 
 public class Main {
+	// passa percorso file xml e percorso file di output sia per behavior che per grafo
 	public static void main(String args[]){
 		try{
 			XMLParser parser = new XMLParser();

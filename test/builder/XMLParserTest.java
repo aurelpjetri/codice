@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import behaviors.EvacuateBehavior;
+import behaviors.VisitBehavior;
 import builder.XMLParser;
 import graph.*;
 
@@ -23,7 +25,7 @@ public class XMLParserTest {
 	@Before
 	public void setUp() throws JDOMException, IOException  {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/example.xml");
+		graph = parser.parseDocumentForGraph("data/xmls/example3.xml");
 		
 	}
 	
@@ -93,14 +95,7 @@ public class XMLParserTest {
 		for(Edge e : graph.getEdges()){
 			assertEquals(3, e.getWidth());
 		}
-	}
-	
-	@Test
-	public void testBehaviors(){
-		assertEquals(2, graph.getBehaviors().size());
-		assertEquals(1, graph.getBehaviorFromId(1).getCoreInterestPoints().size());
-	}
-	
+	}	
 
 	@Test
 	public void testStatus(){
@@ -118,8 +113,23 @@ public class XMLParserTest {
 		rate.put(1, (float)0.7);
 		
 		assertEquals(rate, graph.getNodeFromCoordinates(0, 10).getGenerationRate());
-
-
+	}
+	
+	@Test
+	public void testBehaviors(){
+		assertEquals(2, graph.getBehaviors().size());
+		assertEquals(1, graph.getBehaviorFromId(0).getCoreInterestPoints().size());
+		assertEquals(true, graph.getBehaviorFromId(0) instanceof VisitBehavior );
+		assertEquals(true, graph.getBehaviorFromId(1) instanceof EvacuateBehavior );
+		assertEquals(graph.getNodeFromCoordinates(10, 10), graph.getBehaviorFromId(1).getCoreInterestPoints().get(0) );
+	}
+	
+	@Test
+	public void testBehaviorsOnExmple3(){
+		graph = parser.parseDocumentForGraph("data/xmls/example3.xml");
+		assertEquals(2, graph.getBehaviors().size());
+		assertEquals(true, graph.getBehaviorFromId(0) instanceof VisitBehavior );
+		assertEquals(true, graph.getBehaviorFromId(1) instanceof EvacuateBehavior );
 	}
 
 	

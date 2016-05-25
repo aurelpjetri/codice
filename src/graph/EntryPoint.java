@@ -40,12 +40,16 @@ public class EntryPoint implements Node {
 				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
 			}
 		}
+		float sum = 0; 
 		for(int key : generationRate.keySet()){
 			if(state.get(key)<0){
 				throw new RuntimeException("Illegal value of generation rate for behavior :"+key);
 			}
+			sum += state.get(key);
 		}
-		
+		if(sum != 1){
+			throw new RuntimeException("rates sum must be equal to 1, not: "+sum);
+		}
 	}
 	
 	public EntryPoint(int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){

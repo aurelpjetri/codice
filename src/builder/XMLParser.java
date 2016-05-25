@@ -19,7 +19,7 @@ public class XMLParser implements Parser{
 		builder = new NetLogoGraphBuilder();
 	}
 	
-	public Graph parseDocumentForGraph(String path){
+	public Graph parseDocumentForGraph(String path) throws RuntimeException{
 		
 		
 		String file = path;
@@ -38,6 +38,7 @@ public class XMLParser implements Parser{
 		Element root = jdomDocument.getRootElement();
 		
 		builder.buildGraph();
+		
 		
 		try{
 			parseTree(root, builder);
@@ -61,7 +62,6 @@ public class XMLParser implements Parser{
 		
 		
 		Element graph = getElementWithAttributeValue(root.getChildren(), "id", "Graph");
-		
 		
 		List<Element> behaviors = getElementWithAttributeValue(root.getChildren(), "id", "Behaviors").getChildren("node");
 		
@@ -92,7 +92,10 @@ public class XMLParser implements Parser{
 			}
 			
 			
+//			List<Element> nodeParametersStatus = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id")).getChildren();
 			
+//			Element nodeStatusElement = getElementWithAttributeValue(nodeParametersStatus, "id", "status");
+						
 			Element nodeStatusElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id")).getChild("graph");
 			
 			int x = Integer.parseInt(getTextAttributeOfElement(n, "nx"));
@@ -114,11 +117,16 @@ public class XMLParser implements Parser{
 			//PER VEDERE SE CORRISPONDE A UN BEHAVIOR ESISTENTE
 			if(!nType.equalsIgnoreCase("normal")){
 				for(Element behaviorState : nodeStatusElement.getChildren()){
-					int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
-					int localQuantity = Integer.parseInt(getTextAttributeOfElement(behaviorState, "moverQuantity"));
-					float localRate = Float.parseFloat(getTextAttributeOfElement(behaviorState, "rate"));
-					state.put(localId, localQuantity );
-					rate.put(localId, localRate);
+					if(getTextAttributeOfElement(behaviorState, "rate") == null){
+						throw new RuntimeException("exit rates missing on node: "+x+" , "+y);
+					}
+					else{
+						int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
+						int localQuantity = Integer.parseInt(getTextAttributeOfElement(behaviorState, "moverQuantity"));
+						float localRate = Float.parseFloat(getTextAttributeOfElement(behaviorState, "rate"));
+						state.put(localId, localQuantity );
+						rate.put(localId, localRate);
+					}
 				}
 			}
 			else{
@@ -222,7 +230,6 @@ public class XMLParser implements Parser{
 
 		
 	}
-
 	
 	
 	//cerca tra gli "elements" quello con attributo "name" = "value" e lo restituisce
