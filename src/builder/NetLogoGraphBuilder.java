@@ -31,15 +31,15 @@ public class NetLogoGraphBuilder implements Builder{
 		lastId += 1;
 	}
 	
-	public void buildExitPoint(int x , int y, int w, int h, int r, HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate){
-		ExitPoint.validateNodeParameters(x, y, w, h, r, s, sinkingRate);
-		product.addNode( new ExitPoint(lastId, x, y, w, h, r, s, sinkingRate));
+	public void buildExitPoint(int x , int y, int w, int h, int r, float exitRate, HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate){
+		ExitPoint.validateNodeParameters(x, y, w, h, r, exitRate, s, sinkingRate);
+		product.addNode( new ExitPoint(lastId, x, y, w, h, r, exitRate, s, sinkingRate));
 		lastId += 1;
 	}
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate){
-		EntryPoint.validateNodeParameters(x, y, w, h, r, s, generationRate);
-		product.addNode( new EntryPoint(lastId, x, y, w, h, r, s, generationRate));
+	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate){
+		EntryPoint.validateNodeParameters(x, y, w, h, r, entryRate, s,  generationRate);
+		product.addNode( new EntryPoint(lastId, x, y, w, h, r,entryRate, s, generationRate));
 		lastId += 1;
 	}
 		

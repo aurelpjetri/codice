@@ -314,8 +314,8 @@ to generate-beacons
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 3
-    set exit-ratios lput [0 0.5] exit-ratios
-    set exit-ratios lput [1 0.5] exit-ratios
+    set exit-ratios lput [0 0.6] exit-ratios
+    set exit-ratios lput [1 0.4] exit-ratios
   ]]
 end
 to connect-beacons
@@ -442,7 +442,7 @@ INPUTBOX
 275
 154
 export-filename
-grid_x_poi_y_01.csv
+example4.csv
 1
 0
 String

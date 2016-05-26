@@ -18,10 +18,11 @@ public class ExitPoint implements Node{
 	private int width, height;
 	private int radius;
 	private HashMap<Integer,Integer> state;
-	private HashMap<Integer, Float> sinkingRate;
+	private HashMap<Integer, Float> sinkingPercentage;
+	private float exitRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> sinkingRate){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, float exitR, HashMap<Integer,Integer> state, HashMap<Integer, Float> sinkingRate){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -37,38 +38,50 @@ public class ExitPoint implements Node{
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
-		for(int key : state.keySet()){
-			if(state.get(key)<0){
-				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
+		if(exitR<0 || exitR>1){
+			throw new RuntimeException("Illegal value of parameter 'exit-rate': "+exitR);
+		}
+		float sum = 0; 
+		for(int key : sinkingRate.keySet()){
+			if(sinkingRate.get(key)<0){
+				throw new RuntimeException("Illegal value of generation percentage for behavior :"+key);
 			}
+			sum += sinkingRate.get(key);
+		}
+		if(sum != 1){
+			throw new RuntimeException("percentages sum must be equal to 1, not: "+sum);
 		}
 		for(int key : sinkingRate.keySet()){
-			if(state.get(key)<0){
+			if(sinkingRate.get(key)<0){
 				throw new RuntimeException("Illegal value of sinking rate for behavior :"+key);
 			}
 		}
 	}
 	
 	
-	public ExitPoint(int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> sinkingRate){
+	public ExitPoint(int id, int x, int y, int w, int h, int r, float exitRate, HashMap<Integer,Integer> state, HashMap<Integer, Float> sinkingRate){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.width = w;
 		this.height = h;
-		//supponendo che le misure sono in metri e che in un metro quadrato ci stanno 5 persone
-		capacity = calculateCapacity();
+		this.capacity = calculateCapacity();
 		this.radius = r;
 		this.state = state;
-		this.sinkingRate = sinkingRate;
+		this.sinkingPercentage = sinkingRate;
+		this.exitRate = exitRate;
 	}
 	
-	public HashMap<Integer, Float> getSinkingRate(){
-		return sinkingRate;
+	public float getExitRate(){
+		return exitRate;
 	}
 	
-	public HashMap<Integer, Float> getGenerationRate(){
+	public HashMap<Integer, Float> getSinkingPercentage(){
+		return sinkingPercentage;
+	}
+	
+	public HashMap<Integer, Float> getGenerationPercentage(){
 		return null;
 	}
 	

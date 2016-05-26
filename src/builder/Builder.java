@@ -9,9 +9,9 @@ public interface Builder {
 	
 	public void buildRegularNode(int x, int y, int nWeight, int nHeight, int radius, HashMap<Integer,Integer> state);
 	
-	public void buildExitPoint(int x , int y, int w, int h, int r, HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate);
+	public void buildExitPoint(int x , int y, int w, int h, int r, float exitRate,  HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate);
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate);
+	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate,  HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate);
 		
 	public void buildDirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int width, int weight) throws RuntimeException;
 	

@@ -315,7 +315,7 @@ INPUTBOX
 275
 154
 export-filename
-grid_x_poi_y_01.csv
+example4.csv
 1
 0
 String

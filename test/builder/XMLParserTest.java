@@ -25,7 +25,7 @@ public class XMLParserTest {
 	@Before
 	public void setUp() throws JDOMException, IOException  {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/xmls/example3.xml");
+		graph = parser.parseDocumentForGraph("data/xmls/bPercentageExample.xml");
 		
 	}
 	
@@ -107,12 +107,14 @@ public class XMLParserTest {
 		assertEquals(stato, graph.getNodeFromCoordinates(0, 0).getState());
 		
 		
-		HashMap<Integer, Float> rate = new HashMap<>();
+		HashMap<Integer, Float> percentage = new HashMap<>();
 		
-		rate.put(0, (float)0.3);
-		rate.put(1, (float)0.7);
+		percentage.put(0, (float)0.3);
+		percentage.put(1, (float)0.7);
 		
-		assertEquals(rate, graph.getNodeFromCoordinates(0, 10).getGenerationRate());
+		EntryPoint ep = (EntryPoint) graph.getNodeFromCoordinates(0, 10);
+		
+		assertEquals(percentage, ep.getGenerationPercentage());
 	}
 	
 	@Test

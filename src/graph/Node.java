@@ -38,8 +38,9 @@ public interface Node {
 
 	public HashMap<Integer,Integer> getState();
 	
-	public HashMap<Integer, Float> getSinkingRate();
+//	public HashMap<Integer, Float> getSinkingPercentage();
+//	
+//	public HashMap<Integer, Float> getGenerationPercentage();
 	
-	public HashMap<Integer, Float> getGenerationRate();
 	
 }

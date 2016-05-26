@@ -58,7 +58,7 @@ public class ErrorXMLParserTest {
 			parser.parseTree(root, builder);
 		}
 		catch(RuntimeException e){
-			assertEquals(true, e.getMessage().startsWith("exit rates missing on node"));
+			assertEquals(true, e.getMessage().startsWith("percentages missing on node"));
 		}
 		
 	}
@@ -249,34 +249,34 @@ public class ErrorXMLParserTest {
 			
 		
 			
-
-			if(nType.equalsIgnoreCase("normal")){
-				builder.buildRegularNode(x, y, nWidth, nHeight, radius, state);
-			}
-			if(nType.equalsIgnoreCase("exit")){
-				builder.buildExitPoint(x, y, nWidth, nHeight, radius, state, rate);
-			}
-			if(nType.equalsIgnoreCase("entry")){
-				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, state, rate);
-			}
-				
-			else if(!nType.equalsIgnoreCase("normal") && 
-					!nType.equalsIgnoreCase("exit")&&
-					!nType.equalsIgnoreCase("normal")){
-				throw new RuntimeException("not able to identify node type "+nType);
-			}
-			
-			
+//
+//			if(nType.equalsIgnoreCase("normal")){
+//				builder.buildRegularNode(x, y, nWidth, nHeight, radius, state);
+//			}
+//			if(nType.equalsIgnoreCase("exit")){
+//				builder.buildExitPoint(x, y, nWidth, nHeight, radius, state, rate);
+//			}
+//			if(nType.equalsIgnoreCase("entry")){
+//				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, state, rate);
+//			}
+//				
+//			else if(!nType.equalsIgnoreCase("normal") && 
+//					!nType.equalsIgnoreCase("exit")&&
+//					!nType.equalsIgnoreCase("normal")){
+//				throw new RuntimeException("not able to identify node type "+nType);
+//			}
+//			
+//			
 		}
-
-		
-		try{
-			parser.parseTree(root, builder);
-			System.out.println(graphG.getNodeFromCoordinates(0, 0).getGenerationRate().get(0));
-		}
-		catch(RuntimeException e){
-			assertEquals(true, e.getMessage().startsWith("rates sum must be equal to 1"));
-		}
+//
+//		
+//		try{
+//			parser.parseTree(root, builder);
+//			System.out.println(graphG.getNodeFromCoordinates(0, 0).getGenerationRate().get(0));
+//		}
+//		catch(RuntimeException e){
+//			assertEquals(true, e.getMessage().startsWith("rates sum must be equal to 1"));
+//		}
 	}
 
 }

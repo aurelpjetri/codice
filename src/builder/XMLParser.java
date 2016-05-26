@@ -92,12 +92,13 @@ public class XMLParser implements Parser{
 			}
 			
 			
-//			List<Element> nodeParametersStatus = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id")).getChildren();
+			Element nodeSystemElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id"));
 			
-//			Element nodeStatusElement = getElementWithAttributeValue(nodeParametersStatus, "id", "status");
+			Element nodeStatusElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "state");
+			
+			Element nodeParametersElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "parameters");
+
 						
-			Element nodeStatusElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id")).getChild("graph");
-			
 			int x = Integer.parseInt(getTextAttributeOfElement(n, "nx"));
 			
 			int y = Integer.parseInt(getTextAttributeOfElement(n, "ny"));
@@ -110,44 +111,51 @@ public class XMLParser implements Parser{
 			
 			HashMap<Integer,Integer> state = new HashMap<Integer,Integer>();
 			
-			HashMap<Integer,Float> rate = new HashMap<Integer,Float>();
-			 
+			HashMap<Integer,Float> percentage = new HashMap<Integer,Float>();
+			
+			float rate = 0;
+			
 			
 			//DOVREI FARE UN CONTROLLO SUL ID DEL BEHAVIOR 
 			//PER VEDERE SE CORRISPONDE A UN BEHAVIOR ESISTENTE
 			if(!nType.equalsIgnoreCase("normal")){
-				for(Element behaviorState : nodeStatusElement.getChildren()){
-					if(getTextAttributeOfElement(behaviorState, "rate") == null){
-						throw new RuntimeException("exit rates missing on node: "+x+" , "+y);
+				
+				if(nodeParametersElement.getChild("data") == null){
+					throw new RuntimeException("rate missing on node: "+x+" , "+y);
+				}
+				
+				rate = Float.parseFloat(nodeParametersElement.getChild("data").getText());
+				
+				
+				for(Element behaviorRates : nodeParametersElement.getChildren("behavior")){
+					
+					if(getTextAttributeOfElement(behaviorRates, "percentage") == null){
+						throw new RuntimeException("percentages missing on node: "+x+" , "+y);
 					}
+					
 					else{
-						int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
-						int localQuantity = Integer.parseInt(getTextAttributeOfElement(behaviorState, "moverQuantity"));
-						float localRate = Float.parseFloat(getTextAttributeOfElement(behaviorState, "rate"));
-						state.put(localId, localQuantity );
-						rate.put(localId, localRate);
+						int localId = Integer.parseInt(behaviorRates.getAttributeValue("id"));
+						float localRate = Float.parseFloat(getTextAttributeOfElement(behaviorRates, "percentage"));
+						percentage.put(localId, localRate);
 					}
 				}
 			}
-			else{
-				for(Element behaviorState : nodeStatusElement.getChildren()){
-					int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
-					int localQuantity = Integer.parseInt(getTextAttributeOfElement(behaviorState, "moverQuantity"));
-					state.put(localId, localQuantity );
-				}
+			
+			for(Element behaviorState : nodeStatusElement.getChildren()){
+				int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
+				int localQuantity = Integer.parseInt(getTextAttributeOfElement(behaviorState, "moverQuantity"));
+				state.put(localId, localQuantity );
 			}
-			
-		
-			
+						
 
 			if(nType.equalsIgnoreCase("normal")){
 				builder.buildRegularNode(x, y, nWidth, nHeight, radius, state);
 			}
 			if(nType.equalsIgnoreCase("exit")){
-				builder.buildExitPoint(x, y, nWidth, nHeight, radius, state, rate);
+				builder.buildExitPoint(x, y, nWidth, nHeight, radius, rate, state, percentage);
 			}
 			if(nType.equalsIgnoreCase("entry")){
-				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, state, rate);
+				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, rate, state, percentage);
 			}
 				
 			else if(!nType.equalsIgnoreCase("normal") && 

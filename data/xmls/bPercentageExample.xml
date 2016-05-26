@@ -173,19 +173,20 @@
 	<graph id="System">
 		<node id="n0">
       		<graph id="parameters">
+      			<data key="rate">0.6</data>
       			<behavior id="0">  <!--  id del behavior -->
-					<data key="rate">0.4</data>
+					<data key="percentage">0.4</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior -->
-					<data key="rate">0.6</data>
+					<data key="percentage">0.6</data>
 				</behavior>
       		</graph>
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior -->
-					<data key="moverQuantity">0</data>
+					<data key="moverQuantity">2</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior -->
-					<data key="moverQuantity">0</data>
+					<data key="moverQuantity">2</data>
 				</behavior>
 			</graph>
 		</node>
@@ -231,11 +232,12 @@
 		</node>
 		<node id="n5">
 			<graph id="parameters">
+				<data key="rate">0.9</data>
       			<behavior id="0">  <!--  id del behavior -->
-					<data key="rate">0.6</data>
+					<data key="percentage">0.6</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior -->
-					<data key="rate">0.4</data>
+					<data key="percentage">0.4</data>
 				</behavior>
       		</graph>
 			<graph id="state">
@@ -268,14 +270,21 @@
 			</graph>
 		</node>
 		<node id="n8">
+			<graph id="parameters">
+				<data key="rate">0.9</data>
+      			<behavior id="0">  <!--  id del behavior -->
+					<data key="percentage">0.6</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior -->
+					<data key="percentage">0.4</data>
+				</behavior>
+      		</graph>
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior -->
 					<data key="moverQuantity">0</data>
-					<data key="rate">0.5</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior -->
 					<data key="moverQuantity">0</data>
-					<data key="rate">0.5</data>
 				</behavior>
 			</graph>
 		</node>

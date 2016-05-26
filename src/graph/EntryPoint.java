@@ -16,10 +16,11 @@ public class EntryPoint implements Node {
 	private int width, height;
 	private int radius;
 	private HashMap<Integer,Integer> state;
-	private HashMap<Integer, Float> generationRate;
+	private HashMap<Integer, Float> generationPercentage;
+	private float entryRate;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
-	public static void validateNodeParameters(int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){
+	public static void validateNodeParameters(int x, int y, int w, int h, int r, float entryR, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationpPercentage){
 		if(x<0){
 			throw new RuntimeException("Illegal value of parameter 'x': "+x);
 		}
@@ -35,24 +36,27 @@ public class EntryPoint implements Node {
 		if(r<1){
 			throw new RuntimeException("Illegal value of parameter 'r': "+r);
 		}
+		if(entryR<0 || entryR>1){
+			throw new RuntimeException("Illegal value of parameter 'entry-rate': "+entryR);
+		}
 		for(int key : state.keySet()){
 			if(state.get(key)<0){
 				throw new RuntimeException("Illegal value of members quantity for behavior :"+key);
 			}
 		}
 		float sum = 0; 
-		for(int key : generationRate.keySet()){
-			if(state.get(key)<0){
-				throw new RuntimeException("Illegal value of generation rate for behavior :"+key);
+		for(int key : generationpPercentage.keySet()){
+			if(generationpPercentage.get(key)<0){
+				throw new RuntimeException("Illegal value of generation percentage for behavior :"+key);
 			}
-			sum += state.get(key);
+			sum += generationpPercentage.get(key);
 		}
 		if(sum != 1){
-			throw new RuntimeException("rates sum must be equal to 1, not: "+sum);
+			throw new RuntimeException("percentage sum must be equal to 1, not: "+sum);
 		}
 	}
 	
-	public EntryPoint(int id, int x, int y, int w, int h, int r, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationRate){
+	public EntryPoint(int id, int x, int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationPercentage){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
@@ -63,14 +67,19 @@ public class EntryPoint implements Node {
 		this.capacity = calculateCapacity();
 		this.radius = r;
 		this.state = state;
-		this.generationRate = generationRate;
+		this.generationPercentage = generationPercentage;
+		this.entryRate = entryRate;
 	}
 	
-	public HashMap<Integer, Float> getGenerationRate(){
-		return generationRate;
+	public float getEntryRate(){
+		return entryRate;
 	}
 	
-	public HashMap<Integer, Float> getSinkingRate(){
+	public HashMap<Integer, Float> getGenerationPercentage(){
+		return generationPercentage;
+	}
+	
+	public HashMap<Integer, Float> getSinkingPercentage(){
 		return null;
 	}
 	

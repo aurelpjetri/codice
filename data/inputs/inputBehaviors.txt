@@ -496,7 +496,7 @@ INPUTBOX
 281
 127
 import-filename
-grids/grid_x_poi_y_01.csv
+example4.csv
 1
 0
 String
