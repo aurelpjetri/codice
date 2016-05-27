@@ -14,6 +14,8 @@
 	<!-- attributi per lo stato iniziale -->
 	<key id="moverQuantity" for="node" attr.name="numberOfMovers" attr.type="int" />
 	<key id="rate" for="node" attr.name="entryOrExitRate" attr.type="float" />
+	<key id="percentage" for="node" attr.name="entryOrExitPercentage" attr.type="float" />
+	
 
 
 	<!-- attributi per il behavior -->
