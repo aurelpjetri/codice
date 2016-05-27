@@ -1,7 +1,6 @@
 import java.io.IOException;
 
 import builder.XMLParser;
-import graph.EntryPoint;
 import graph.Graph;
 import visitor.NetLogoBehaviorVisitor;
 import visitor.NetLogoGraphVisitor;

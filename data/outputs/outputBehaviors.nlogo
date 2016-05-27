@@ -51,9 +51,13 @@ beacons-own [
   intersection-radius
   interest-point?
   entry-point?
-  entry-ratios
-  exit-ratios
   exit-point?
+  
+  entry-percentages
+  exit-percentages
+  
+  entry-rate
+  exit-rate
 ]
 
 ;; Patches can be wall so they are now walkable
@@ -104,11 +108,13 @@ to go
 end
 
 to old-movers-leave
+  let temp-exit-rate 0
   ask beacons with [exit-point? = true] [
     let exit-beacon self
+    set temp-exit-rate exit-rate
     ask patches in-radius intersection-radius [
       ask movers-here [
-        if random-float 1 < exit-ratio and empty? destination-list [
+        if random-float 1 < temp-exit-rate and empty? destination-list [
           ;; generate final data and put them in a global var
           movers-data-collect exit-beacon
           movers-data-move-to-global
@@ -118,9 +124,11 @@ to old-movers-leave
 end
 
 to new-movers-enter
+  let temp-entry-rate 0
   ask beacons with [entry-point? = true] [
+    set temp-entry-rate entry-rate
     ask patches in-radius intersection-radius with [count movers-here < global-crowd-max-at-patch] [
-      if random-float 1 < entry-ratio [
+      if random-float 1 < temp-entry-rate [
         generate-new-mover
       ]
     ]
@@ -364,7 +372,7 @@ to generate-new-mover
 
 	;;------------------------------------------------------------------------------
 
-    set mover-behavior get-random-mover-behaviour [entry-ratios] of current-beacon
+    set mover-behavior get-random-mover-behaviour [entry-percentages] of current-beacon
 
 	set destination-list table:get behaviors-map mover-behavior
     set destination-list sort destination-list
@@ -642,35 +650,6 @@ NIL
 NIL
 1
 
-SLIDER
-52
-417
-224
-450
-entry-ratio
-entry-ratio
-0
-0.1
-0.061
-0.001
-1
-NIL
-HORIZONTAL
-
-SLIDER
-55
-462
-227
-495
-exit-ratio
-exit-ratio
-0
-0.1
-0.087
-0.001
-1
-NIL
-HORIZONTAL
 
 SLIDER
 65

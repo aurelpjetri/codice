@@ -41,9 +41,11 @@ beacons-own [
   entry-point?
   exit-point?
     
-  entry-ratios
-  exit-ratios
+  entry-percentages
+  exit-percentages
   
+  entry-rate
+  exit-rate
 ]
 
 ;; Patches can be wall so they are now walkable
@@ -220,22 +222,22 @@ to make-beacon-normal
   set entry-point? false
   set exit-point? false
   set interest-point? false
-  set entry-ratios []
-  set exit-ratios []
+  set entry-percentages []
+  set exit-percentages []
 end
 
 to make-beacon-entry
   set entry-point? true
   set exit-point? false
   set interest-point? false
-  set entry-ratios []
+  set entry-percentages []
 end
 
 to make-beacon-exit
   set entry-point? false
   set exit-point? true
   set interest-point? false
-  set exit-ratios []
+  set exit-percentages []
 end
 
 to generate-interest-points
@@ -262,8 +264,9 @@ to generate-beacons
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 3
-    set entry-ratios lput [0 0.4] entry-ratios
-    set entry-ratios lput [1 0.6] entry-ratios
+    set entry-percentages lput [0 0.4] entry-percentages
+    set entry-percentages lput [1 0.6] entry-percentages
+    set entry-rate 0.3
   ]]
   ask patch (world-offset + 0) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
@@ -294,8 +297,9 @@ to generate-beacons
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 3
-    set exit-ratios lput [0 0.6] exit-ratios
-    set exit-ratios lput [1 0.4] exit-ratios
+    set exit-percentages lput [0 0.6] exit-percentages
+    set exit-percentages lput [1 0.4] exit-percentages
+    set exit-rate 0.9
   ]]
   ask patch (world-offset + 20) (world-offset + 20) [sprout-beacons 1 [
     make-beacon-normal
@@ -314,8 +318,9 @@ to generate-beacons
     set intersection-width 5
     set intersection-height 5
     set intersection-radius 3
-    set exit-ratios lput [0 0.6] exit-ratios
-    set exit-ratios lput [1 0.4] exit-ratios
+    set exit-percentages lput [0 0.6] exit-percentages
+    set exit-percentages lput [1 0.4] exit-percentages
+    set exit-rate 0.9
   ]]
 end
 to connect-beacons

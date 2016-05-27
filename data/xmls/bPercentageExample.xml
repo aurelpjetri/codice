@@ -175,7 +175,7 @@
 	<graph id="System">
 		<node id="n0">
       		<graph id="parameters">
-      			<data key="rate">0.6</data>
+      			<data key="rate">0.3</data>
       			<behavior id="0">  <!--  id del behavior -->
 					<data key="percentage">0.4</data>
 				</behavior>

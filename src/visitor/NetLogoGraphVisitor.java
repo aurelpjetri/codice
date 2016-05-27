@@ -115,8 +115,9 @@ public class NetLogoGraphVisitor implements Visitor{
 	        outputStream.println("    set intersection-height "+n.getHeight());
 	        outputStream.println("    set intersection-radius "+n.getRadius());
 	        for(int behaviorID : n.getGenerationPercentage().keySet()){
-	        	outputStream.println("    set entry-ratios lput ["+behaviorID+" "+n.getGenerationPercentage().get(behaviorID)+"] entry-ratios");
+	        	outputStream.println("    set entry-percentages lput ["+behaviorID+" "+n.getGenerationPercentage().get(behaviorID)+"] entry-percentages");
 	        }
+	        outputStream.println("    set entry-rate "+n.getEntryRate());
 	        outputStream.println("  ]]");
 		}else if (outputStream == null){
 			throw  new RuntimeException("unable to perform streaming");
@@ -132,8 +133,9 @@ public class NetLogoGraphVisitor implements Visitor{
 	        outputStream.println("    set intersection-height "+n.getHeight());
 	        outputStream.println("    set intersection-radius "+n.getRadius());
 	        for(int behaviorID : n.getSinkingPercentage().keySet()){
-	        	outputStream.println("    set exit-ratios lput ["+behaviorID+" "+n.getSinkingPercentage().get(behaviorID)+"] exit-ratios");
+	        	outputStream.println("    set exit-percentages lput ["+behaviorID+" "+n.getSinkingPercentage().get(behaviorID)+"] exit-percentages");
 	        }
+	        outputStream.println("    set exit-rate "+n.getExitRate());
 	        outputStream.println("  ]]");
 		}
 		else if(outputStream == null){

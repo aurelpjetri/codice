@@ -41,9 +41,11 @@ beacons-own [
   entry-point?
   exit-point?
     
-  entry-ratios
-  exit-ratios
+  entry-percentages
+  exit-percentages
   
+  entry-rate
+  exit-rate
 ]
 
 ;; Patches can be wall so they are now walkable
@@ -220,22 +222,22 @@ to make-beacon-normal
   set entry-point? false
   set exit-point? false
   set interest-point? false
-  set entry-ratios []
-  set exit-ratios []
+  set entry-percentages []
+  set exit-percentages []
 end
 
 to make-beacon-entry
   set entry-point? true
   set exit-point? false
   set interest-point? false
-  set entry-ratios []
+  set entry-percentages []
 end
 
 to make-beacon-exit
   set entry-point? false
   set exit-point? true
   set interest-point? false
-  set exit-ratios []
+  set exit-percentages []
 end
 
 to generate-interest-points
