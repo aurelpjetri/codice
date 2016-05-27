@@ -12,7 +12,7 @@ public class Main {
 			XMLParser parser = new XMLParser();
 			NetLogoBehaviorVisitor behaviorVisitor = new NetLogoBehaviorVisitor();
 			NetLogoGraphVisitor graphVisitor = new NetLogoGraphVisitor();
-			Graph graph = parser.parseDocumentForGraph("data/xmls/bPercentageExample.xml");	
+			Graph graph = parser.parseDocumentForGraph("data/xmls/example.xml");	
 			graph.accept(graphVisitor);
 			graph.accept(behaviorVisitor);
 		}

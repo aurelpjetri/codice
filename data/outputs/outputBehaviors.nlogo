@@ -451,52 +451,28 @@ to default-configuration
 
 
   set behaviors-map table:make
-  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
-  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
+  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(0) (0)] ]
+  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)] ]
  
   set-world-initial-state
 end
  
 to set-world-initial-state 
   ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 0]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 2 [
-      set mover-behavior 0
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 0]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 2 [
+    ask one-of patches in-radius intersection-radius [sprout-movers 3 [
       set mover-behavior 1
       standard-mover-settings]]]
   ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+    ask one-of patches in-radius intersection-radius [sprout-movers 2 [
       set mover-behavior 0
       standard-mover-settings]]]
   ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+    ask one-of patches in-radius intersection-radius [sprout-movers 3 [
       set mover-behavior 1
       standard-mover-settings]]]
   ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
+    ask one-of patches in-radius intersection-radius [sprout-movers 4 [
       set mover-behavior 0
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
-      set mover-behavior 1
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 30]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
-      set mover-behavior 0
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 30]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
-      set mover-behavior 1
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[20 20]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
-      set mover-behavior 0
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[20 20]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 10 [
-      set mover-behavior 1
       standard-mover-settings]]]
 end
 

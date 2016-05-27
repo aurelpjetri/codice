@@ -58,7 +58,7 @@ public class XMLParser implements Parser{
 		
 	}
 	 
-	public void parseTree(Element root, NetLogoGraphBuilder builder){
+	public void parseTree(Element root, NetLogoGraphBuilder builder) throws RuntimeException{
 		
 		
 		Element graph = getElementWithAttributeValue(root.getChildren(), "id", "Graph");
@@ -73,7 +73,7 @@ public class XMLParser implements Parser{
 	} 
 	
 	//parses both nodes and initial state ('System') of the graph
-	public void parseNodes(Element root, Element graph, NetLogoGraphBuilder buider){
+	public void parseNodes(Element root, Element graph, NetLogoGraphBuilder builder) throws RuntimeException{
 
 		  List<Element> nodes = graph.getChildren("node");
 
@@ -98,7 +98,7 @@ public class XMLParser implements Parser{
 		    
 		    Element nodeSystemElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id"));
 		    
-		    Element nodeStatusElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "state");
+		    Element nodeStateElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "state");
 		    
 		    Element nodeParametersElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "parameters");
 
@@ -120,32 +120,38 @@ public class XMLParser implements Parser{
 		    float rate = 0;
 		    
 		    
+		    //validateBehaviorParametersAndState(nodeParametersElement, nodeStateElement);
+		    
+		    
 		    //DOVREI FARE UN CONTROLLO SUL ID DEL BEHAVIOR 
 		    //PER VEDERE SE CORRISPONDE A UN BEHAVIOR ESISTENTE
 		    if(!nType.equalsIgnoreCase("normal")){
-		      
-		      if(nodeParametersElement.getChild("data") == null){
-		        throw new RuntimeException("rate missing on node: "+x+" , "+y);
-		      }
-		      
-		      rate = Float.parseFloat(nodeParametersElement.getChild("data").getText());
-		      
-		      
-		      for(Element behaviorRates : nodeParametersElement.getChildren("behavior")){
-		        
-		        if(getTextAttributeOfElement(behaviorRates, "percentage") == null){
-		          throw new RuntimeException("percentages missing on node: "+x+" , "+y);
-		        }
-		        
-		        else{
-		          int localId = Integer.parseInt(behaviorRates.getAttributeValue("id"));
-		          float localRate = Float.parseFloat(getTextAttributeOfElement(behaviorRates, "percentage"));
-		          percentage.put(localId, localRate);
-		        }
-		      }
+		    	
+		    	//if exit or entry point must have parameters
+		    	if(nodeParametersElement == null){
+		    		throw new RuntimeException("parameters missing on "+nType+" node: "+x+" , "+y);
+		    	}
+
+		    	//must have entry or exit rate
+		    	if(nodeParametersElement.getChild("data") == null){
+		    		throw new RuntimeException("rate missing on "+nType+" node: "+x+" , "+y);
+		    	}     
+
+		    	for(Element behaviorRates : nodeParametersElement.getChildren("behavior")){
+
+		    		if(getTextAttributeOfElement(behaviorRates, "percentage") == null){
+		    			throw new RuntimeException("percentages missing on "+nType+" node: "+x+" , "+y);
+		    		}
+
+		    		else{
+		    			int localId = Integer.parseInt(behaviorRates.getAttributeValue("id"));
+		    			float localRate = Float.parseFloat(getTextAttributeOfElement(behaviorRates, "percentage"));
+		    			percentage.put(localId, localRate);
+		    		}
+		    	}
 		    }
 		    
-		    for(Element behaviorState : nodeStatusElement.getChildren()){
+		    for(Element behaviorState : nodeStateElement.getChildren()){
 		      int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
 		      int localQuantity = Integer.parseInt(getTextAttributeOfElement(behaviorState, "moverQuantity"));
 		      state.put(localId, localQuantity );
@@ -174,7 +180,7 @@ public class XMLParser implements Parser{
 		  
 		}
 	
-	public void parseEdges(Element graph, NetLogoGraphBuilder builder){
+	public void parseEdges(Element graph, NetLogoGraphBuilder builder) throws RuntimeException{
 
 		  List<Element> edges = graph.getChildren("edge");
 		  
@@ -216,7 +222,7 @@ public class XMLParser implements Parser{
 		  }
 		}
 
-	public void parseBehaviors(Element root, Element graph, NetLogoGraphBuilder builder){
+	public void parseBehaviors(Element root, Element graph, NetLogoGraphBuilder builder) throws RuntimeException{
 
 		  List<Element> behaviors = getElementWithAttributeValue(root.getChildren(), "id", "Behaviors").getChildren("node");
 
@@ -280,6 +286,10 @@ public class XMLParser implements Parser{
 			}
 		}
 		return null;
+	}
+	
+	public void validateBehaviorParametersAndState(Element nodeParametersElement, Element nodeStateElement){
+		
 	}
 	
 }

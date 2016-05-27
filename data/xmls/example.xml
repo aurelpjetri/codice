@@ -9,19 +9,21 @@
 	<key id="nWidth" for="node" attr.name="nodeWidth" attr.type="int" />
 	<key id="nHeight" for="node" attr.name="nodeHeight" attr.type="int" />
 	<key id="nRadius" for="node" attr.name="nodeRadius" attr.type="int" />
-	
-	
+
+
 	<!-- attributi per lo stato iniziale -->
 	<key id="moverQuantity" for="node" attr.name="numberOfMovers" attr.type="int" />
 	<key id="rate" for="node" attr.name="entryOrExitRate" attr.type="float" />
-		
+	<key id="percentage" for="node" attr.name="entryOrExitPercentage" attr.type="float" />
 	
+
+
 	<!-- attributi per il behavior -->
 	<key id="bType" for="node" attr.name="behaviorType" attr.type="int" />
 	<key id="optionality" for="node" attr.name="nodeOptionalityFlag" attr.type="booelan">
 		<default>false</default>
 	</key>
-	
+
 	<!-- attributi per gli archi -->
 	<key id="eType" for="edge" attr.name="type" attr.type="string" />
 	<key id="weight" for="edge" attr.name="weight" attr.type="double" />
@@ -34,7 +36,7 @@
 			<data key="ny">0</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<node id="n1">
 			<data key="nType">entry</data>
@@ -42,14 +44,14 @@
 			<data key="ny">10</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<node id="n2">
 			<data key="nx">10</data>
 			<data key="ny">10</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<node id="n3">
 			<data key="nType">exit</data>
@@ -57,7 +59,7 @@
 			<data key="ny">0</data>
 			<data key="nWidth">5</data>
 			<data key="nHeight">5</data>
-			<data key="nRadius">5</data>
+			<data key="nRadius">3</data>
 		</node>
 		<edge id="e0" source="n0" target="n1">
 			<data key="weight">3</data>
@@ -72,7 +74,6 @@
 			<data key="eWidth">3</data>
 		</edge>
 		<edge id="e3" source="n0" target="n3">
-			<data key="eType">directed</data>
 			<data key="weight">3</data>
 			<data key="eWidth">3</data>
 		</edge>
@@ -82,7 +83,7 @@
 		<node id="b0">
 			<data key="bType">visit</data>
 			<graph id="0">
-				<node id="n1"/>
+				<node id="n0"/>
 				<node id="n2">
 					<data key="optionality">true</data>
 				</node>
@@ -100,7 +101,7 @@
 		<node id="n0">
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
-					<data key="moverQuantity">2</data>
+					<data key="moverQuantity">0</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior --> 
 					<data key="moverQuantity">3</data>
@@ -108,14 +109,21 @@
 			</graph>
 		</node>
 		<node id="n1">
+			<graph id="parameters">
+      			<data key="rate">0.1</data>
+      			<behavior id="0">  <!--  id del behavior -->
+					<data key="percentage">0.4</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior -->
+					<data key="percentage">0.6</data>
+				</behavior>
+      		</graph>
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
 					<data key="moverQuantity">2</data>
-					<data key="rate">0.3</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior --> 
 					<data key="moverQuantity">3</data>
-					<data key="rate">0.7</data>
 				</behavior>
 			</graph>
 		</node>
@@ -125,19 +133,26 @@
 					<data key="moverQuantity">4</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior --> 
-					<data key="moverQuantity">5</data>
+					<data key="moverQuantity">0</data>
 				</behavior>
 			</graph>
 		</node>
 		<node id="n3">
+			<graph id="parameters">
+				<data key="rate">0.9</data>
+      			<behavior id="0">  <!--  id del behavior -->
+					<data key="percentage">0.6</data>
+				</behavior>
+				<behavior id="1">  <!--  id del behavior -->
+					<data key="percentage">0.4</data>
+				</behavior>
+      		</graph>
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 
-					<data key="moverQuantity">2</data>
-					<data key="rate">0.2</data>
+					<data key="moverQuantity">0</data>
 				</behavior>
 				<behavior id="1">  <!--  id del behavior --> 
-					<data key="moverQuantity">3</data>
-					<data key="rate">0.8</data>
+					<data key="moverQuantity">0</data>
 				</behavior>
 			</graph>
 		</node>	

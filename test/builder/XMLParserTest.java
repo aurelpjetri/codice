@@ -25,7 +25,7 @@ public class XMLParserTest {
 	@Before
 	public void setUp() throws JDOMException, IOException  {
 		parser = new XMLParser();
-		graph = parser.parseDocumentForGraph("data/xmls/bPercentageExample.xml");
+		graph = parser.parseDocumentForGraph("data/xmls/example.xml");
 		
 	}
 	

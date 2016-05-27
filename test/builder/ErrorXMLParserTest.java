@@ -27,16 +27,14 @@ public class ErrorXMLParserTest {
 		parser = new XMLParser();
 		builder = new NetLogoGraphBuilder();
 
-
 	}
 	
 	@Test
-	public void testExitRatesError() throws RuntimeException{
+	public void testExitRatesError(){
 		
 
 		String file = "test/builder/testExamples/exitRatiosError.xml";
 		
-		Graph graph = new Graph();
 
 		
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
@@ -52,13 +50,12 @@ public class ErrorXMLParserTest {
 		Element root = jdomDocument.getRootElement();
 		
 		builder.buildGraph();
-
 		
 		try{
 			parser.parseTree(root, builder);
 		}
 		catch(RuntimeException e){
-			assertEquals(true, e.getMessage().startsWith("percentages missing on node"));
+			assertEquals(true, e.getMessage().startsWith("percentages missing on"));
 		}
 		
 	}
@@ -131,10 +128,7 @@ public class ErrorXMLParserTest {
 	public void testInterestPointsOnEvacuateError(){
 
 		String file = "test/builder/testExamples/interestPointsError.xml";
-		
-		Graph graph = new Graph();
-
-		
+				
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = new Document();
 		try {
@@ -161,10 +155,7 @@ public class ErrorXMLParserTest {
 	public void testRateSumValueError(){
 
 		String file = "test/builder/testExamples/rateSumError.xml";
-		
-		Graph graphG = new Graph();
-
-		
+				
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = new Document();
 		try {
