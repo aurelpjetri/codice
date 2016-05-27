@@ -1,6 +1,7 @@
 package builder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -119,8 +120,10 @@ public class XMLParser implements Parser{
 		    
 		    float rate = 0;
 		    
+			List<Element> behaviors = getElementWithAttributeValue(root.getChildren(), "id", "Behaviors").getChildren("node");
+
 		    
-		    //validateBehaviorParametersAndState(nodeParametersElement, nodeStateElement);
+		    validateBehaviorIds(nodeParametersElement, nodeStateElement, behaviors);
 		    
 		    
 		    //DOVREI FARE UN CONTROLLO SUL ID DEL BEHAVIOR 
@@ -288,8 +291,29 @@ public class XMLParser implements Parser{
 		return null;
 	}
 	
-	public void validateBehaviorParametersAndState(Element nodeParametersElement, Element nodeStateElement){
+	public void validateBehaviorIds(Element nodeParametersElement, Element nodeStateElement, List<Element> behaviors){
 		
+		List<Integer> behaviorIds = new ArrayList<>();
+		
+		for(Element behavior : behaviors){
+			behaviorIds.add(Integer.parseInt(behavior.getAttributeValue("id")));
+		}
+		
+		List<Integer> parametersIds = new ArrayList<>();
+		
+		for(Element behaviorRates : nodeParametersElement.getChildren("behavior")){
+			parametersIds.add(Integer.parseInt(behaviorRates.getAttributeValue("id")));
+		}
+		
+		List<Integer> stateIds = new ArrayList<>();
+		
+		for(Element behaviorRates : nodeParametersElement.getChildren("behavior")){
+			stateIds.add(Integer.parseInt(behaviorRates.getAttributeValue("id")));
+		}
+		
+		if(!behaviorIds.containsAll(parametersIds) || !behaviorIds.containsAll(stateIds)){
+			throw new RuntimeException("behavior ids not corresponding");
+		}
 	}
 	
 }

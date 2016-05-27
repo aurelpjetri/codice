@@ -101,8 +101,7 @@
 		<node id="n2">
 			<graph id="parameters">
       			<data key="rate">0.1</data>
-      			<behavior id="0">  <!--  id del behavior -->
-				</behavior>
+      			
       		</graph>
 			<graph id="state">
 				<behavior id="0">  <!--  id del behavior --> 

@@ -55,6 +55,7 @@ public class ErrorXMLParserTest {
 			parser.parseTree(root, builder);
 		}
 		catch(RuntimeException e){
+			e.printStackTrace();
 			assertEquals(true, e.getMessage().startsWith("percentages missing on"));
 		}
 		
