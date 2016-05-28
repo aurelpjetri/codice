@@ -55,7 +55,6 @@ public class ErrorXMLParserTest {
 			parser.parseTree(root, builder);
 		}
 		catch(RuntimeException e){
-			e.printStackTrace();
 			assertEquals(true, e.getMessage().startsWith("percentages missing on"));
 		}
 		
@@ -153,10 +152,102 @@ public class ErrorXMLParserTest {
 		}
 	}
 	
-	public void testRateSumValueError(){
+	@Test
+	public void testBehaviorsMssing(){
+		
+		String file = "test/builder/testExamples/behaviorsMissingError.xml";
+		
+		SAXBuilder jdomBuilder = new SAXBuilder(); 
+		Document jdomDocument = new Document();
+		try {
+			jdomDocument = jdomBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Element root = jdomDocument.getRootElement();
+		
+		builder.buildGraph();
 
-		String file = "test/builder/testExamples/rateSumError.xml";
-				
+		
+		try{
+			parser.parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().startsWith("behaviors missing on node"));
+		}
+		
+	}
+	
+	@Test
+	public void testIdNotCorresponding(){
+		
+		String file = "test/builder/testExamples/idNotCorrespondingError.xml";
+		
+		SAXBuilder jdomBuilder = new SAXBuilder(); 
+		Document jdomDocument = new Document();
+		try {
+			jdomDocument = jdomBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Element root = jdomDocument.getRootElement();
+		
+		builder.buildGraph();
+
+		
+		try{
+			parser.parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().endsWith("not corresponding to any behavior"));
+		}
+		
+	}
+	
+	@Test
+	public void testErrorsCallOrder(){
+		
+		//voglio testare l'ordine in cui vengono chiamati gli errori
+		
+		//in questo caso ci sono due errori: id behavior sbagliato e percentuale mancante
+		//deve acorcersi prima che l'id è sbagliato
+		
+		String file = "test/builder/testExamples/errorsCallOrder.xml";
+		
+		SAXBuilder jdomBuilder = new SAXBuilder(); 
+		Document jdomDocument = new Document();
+		try {
+			jdomDocument = jdomBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Element root = jdomDocument.getRootElement();
+		
+		builder.buildGraph();
+
+		
+		try{
+			parser.parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().endsWith("not corresponding to any behavior"));
+		}
+		
+	}
+	
+	@Test
+	public void testPercentSumError(){
+		String file = "test/builder/testExamples/percentSumError.xml";
+		
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = new Document();
 		try {
@@ -171,104 +262,12 @@ public class ErrorXMLParserTest {
 		
 		builder.buildGraph();
 		
-		Element graph = parser.getElementWithAttributeValue(root.getChildren(), "id", "Graph");
-		
-		List<Element> nodes = graph.getChildren("node");
-		
-		List<Element> attributes = root.getChildren("key");
-		
-		Element system = parser.getElementWithAttributeValue(root.getChildren(), "id", "System");
-
-		
-		String defaultNodeType = null;
-		
-		for(Element at : attributes){
-			if(at.getAttributeValue("id").contains("nType")){
-				defaultNodeType = at.getChild("default").getText();
-			}
+		try{
+			parser.parseTree(root, builder);
 		}
-		
-		for(Element n : nodes){
-			
-			String nType = parser.getTextAttributeOfElement(n, "nType");
-			
-			if(nType == null){
-				nType = defaultNodeType;
-			}
-			
-			
-			
-			Element nodeStatusElement = parser.getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id")).getChild("graph");
-			
-			int x = Integer.parseInt(parser.getTextAttributeOfElement(n, "nx"));
-			
-			int y = Integer.parseInt(parser.getTextAttributeOfElement(n, "ny"));
-			
-			int nWidth = Integer.parseInt(parser.getTextAttributeOfElement(n, "nWidth"));
-			
-			int nHeight = Integer.parseInt(parser.getTextAttributeOfElement(n, "nHeight"));
-			
-			int radius = Integer.parseInt(parser.getTextAttributeOfElement(n, "nRadius"));
-			
-			HashMap<Integer,Integer> state = new HashMap<Integer,Integer>();
-			
-			HashMap<Integer,Float> rate = new HashMap<Integer,Float>();
-			 
-			
-			//DOVREI FARE UN CONTROLLO SUL ID DEL BEHAVIOR 
-			//PER VEDERE SE CORRISPONDE A UN BEHAVIOR ESISTENTEj
-			if(!nType.equalsIgnoreCase("normal")){
-				for(Element behaviorState : nodeStatusElement.getChildren()){
-					if(parser.getTextAttributeOfElement(behaviorState, "rate") == null){
-						throw new RuntimeException("exit rates missing on node: "+x+" , "+y);
-					}
-					else{
-						int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
-						int localQuantity = Integer.parseInt(parser.getTextAttributeOfElement(behaviorState, "moverQuantity"));
-						float localRate = Float.parseFloat(parser.getTextAttributeOfElement(behaviorState, "rate"));
-						state.put(localId, localQuantity );
-						rate.put(localId, localRate);
-					}
-				}
-			}
-			else{
-				for(Element behaviorState : nodeStatusElement.getChildren()){
-					int localId = Integer.parseInt(behaviorState.getAttributeValue("id"));
-					int localQuantity = Integer.parseInt(parser.getTextAttributeOfElement(behaviorState, "moverQuantity"));
-					state.put(localId, localQuantity );
-				}
-			}
-			
-		
-			
-//
-//			if(nType.equalsIgnoreCase("normal")){
-//				builder.buildRegularNode(x, y, nWidth, nHeight, radius, state);
-//			}
-//			if(nType.equalsIgnoreCase("exit")){
-//				builder.buildExitPoint(x, y, nWidth, nHeight, radius, state, rate);
-//			}
-//			if(nType.equalsIgnoreCase("entry")){
-//				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, state, rate);
-//			}
-//				
-//			else if(!nType.equalsIgnoreCase("normal") && 
-//					!nType.equalsIgnoreCase("exit")&&
-//					!nType.equalsIgnoreCase("normal")){
-//				throw new RuntimeException("not able to identify node type "+nType);
-//			}
-//			
-//			
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().startsWith("percentage sum must be equal to 1"));
 		}
-//
-//		
-//		try{
-//			parser.parseTree(root, builder);
-//			System.out.println(graphG.getNodeFromCoordinates(0, 0).getGenerationRate().get(0));
-//		}
-//		catch(RuntimeException e){
-//			assertEquals(true, e.getMessage().startsWith("rates sum must be equal to 1"));
-//		}
 	}
-
+	
 }

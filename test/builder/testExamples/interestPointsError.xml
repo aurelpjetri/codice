@@ -92,9 +92,6 @@
 				<behavior id="0">  <!--  id del behavior --> 
 					<data key="moverQuantity">0</data>
 				</behavior>
-				<behavior id="1">  <!--  id del behavior --> 
-					<data key="moverQuantity">0</data>
-				</behavior>
 			</graph>
 		</node>
 		<node id="n1">
