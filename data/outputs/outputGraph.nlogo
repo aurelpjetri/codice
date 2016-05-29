@@ -272,7 +272,7 @@ to generate-beacons
     set intersection-radius 3
     set entry-percentages lput [0 0.4] entry-percentages
     set entry-percentages lput [1 0.6] entry-percentages
-    set entry-rate 0.3
+    set entry-rate 0.1
   ]]
   ask patch (world-offset + 10) (world-offset + 10) [sprout-beacons 1 [
     make-beacon-normal
