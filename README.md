@@ -7,6 +7,8 @@ Evacuate e Visit sono trattate indistintamente per il momendo, per entrambi si u
 Si usa la libreria JDOM inclusa nel folder *lib*
 Aggiunte interfacce Builder e Parser 
 
+Test eseguiti sugli errori lanciati
+
 ###Graph
 Rappresenta l'informazione letta dal documento XML
 
@@ -17,7 +19,7 @@ Due visitor separati che generano due file netlogo diversi, uno per la generazio
 
 ##Data
 
-Gli inputs e gli outputs sono distinti con A per il generatore della mappa e B per *grid-multi-destination*
+Gli inputs e gli outputs sono distinti con 'Graph' per il generatore della mappa e 'Behaviors' per la parte riguardante i movers
 
 
 

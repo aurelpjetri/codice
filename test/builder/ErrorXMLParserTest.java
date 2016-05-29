@@ -4,8 +4,6 @@ package builder;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -13,8 +11,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.junit.Before;
 import org.junit.Test;
-
-import graph.Graph;
 
 
 public class ErrorXMLParserTest {
@@ -31,12 +27,9 @@ public class ErrorXMLParserTest {
 	
 	@Test
 	public void testExitRatesError(){
-		
 
 		String file = "test/builder/testExamples/exitRatiosError.xml";
-		
-
-		
+				
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = new Document();
 		try {
@@ -63,12 +56,8 @@ public class ErrorXMLParserTest {
 	@Test
 	public void testNodeTypeError(){
 
-
 		String file = "test/builder/testExamples/nodeTypeError.xml";
-		
-		Graph graph = new Graph();
 
-		
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = new Document();
 		try {
@@ -95,12 +84,8 @@ public class ErrorXMLParserTest {
 	@Test
 	public void testBehaviorTypeError(){
 
-
 		String file = "test/builder/testExamples/behaviorTypeError.xml";
-		
-		Graph graph = new Graph();
-
-		
+			
 		SAXBuilder jdomBuilder = new SAXBuilder(); 
 		Document jdomDocument = new Document();
 		try {
