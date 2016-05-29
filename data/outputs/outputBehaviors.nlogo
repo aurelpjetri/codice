@@ -446,9 +446,12 @@ to set-world-initial-state
     
     ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] local-state[
       foreach n-values ( floor (length local-parameters )/ 2) [?] [
-        ask one-of patches in-radius intersection-radius [sprout-movers (item ((? * 2) + 1) local-parameters) [
-            set mover-behavior (item (? * 2) local-parameters)
+        let local-behavior (item (? * 2) local-parameters)
+        foreach n-values (item ((? * 2) + 1) local-parameters) [?][
+          ask one-of patches in-radius intersection-radius [sprout-movers 1 [
+            set mover-behavior local-behavior
             standard-mover-settings]
+          ]
         ]
       ]
     ]
