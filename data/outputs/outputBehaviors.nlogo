@@ -86,6 +86,9 @@ globals [
   global-movers-results
   global-list-interest-points
   global-list-exit-points
+  
+  ;;list containing initial state parameters
+  initial-state
 ]
 
 ;; IMPORT AND DEFAULTS
@@ -432,6 +435,26 @@ to standard-mover-settings
     [ set color lput 100 extract-rgb color ]
 end
 
+;;creates movers for the initial state reading the initial-state global variable
+to set-world-initial-state
+  foreach initial-state [
+    let local-state []
+    set local-state lput ? local-state
+    
+    let local-parameters but-first ?
+    set local-parameters but-first local-parameters
+    
+    ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] local-state[
+      foreach n-values ( floor (length local-parameters )/ 2) [?] [
+        ask one-of patches in-radius intersection-radius [sprout-movers (item ((? * 2) + 1) local-parameters) [
+            set mover-behavior (item (? * 2) local-parameters)
+            standard-mover-settings]
+        ]
+      ]
+    ]
+  ]
+end
+
 ;; Set some defaults and globals for this model
 to default-configuration
   set-default-shape beacons "box"
@@ -449,31 +472,21 @@ to default-configuration
   set global-list-interest-points sort beacons with [interest-point? = true]
   set global-list-exit-points sort beacons with [exit-point? = true]
 
-
   set behaviors-map table:make
-  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(0) (0)] ]
-  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)] ]
+  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
+  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
+  set initial-state []
+  populate-initial-state
  
   set-world-initial-state
 end
  
-to set-world-initial-state 
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 0]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 3 [
-      set mover-behavior 1
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 2 [
-      set mover-behavior 0
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[0 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 3 [
-      set mover-behavior 1
-      standard-mover-settings]]]
-  ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] [[10 10]] [
-    ask one-of patches in-radius intersection-radius [sprout-movers 4 [
-      set mover-behavior 0
-      standard-mover-settings]]]
+to populate-initial-state 
+  set initial-state lput [0 0 0 2 1 2] initial-state
+  set initial-state lput [0 10 0 10 1 10] initial-state
+  set initial-state lput [10 10 0 10 1 10] initial-state
+  set initial-state lput [10 30 0 10 1 10] initial-state
+  set initial-state lput [20 20 0 10 1 10] initial-state
 end
 
 

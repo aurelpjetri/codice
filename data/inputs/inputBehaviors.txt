@@ -86,6 +86,9 @@ globals [
   global-movers-results
   global-list-interest-points
   global-list-exit-points
+  
+  ;;list containing initial state parameters
+  initial-state
 ]
 
 ;; IMPORT AND DEFAULTS
@@ -432,6 +435,26 @@ to standard-mover-settings
     [ set color lput 100 extract-rgb color ]
 end
 
+;;creates movers for the initial state reading the initial-state global variable
+to set-world-initial-state
+  foreach initial-state [
+    let local-state []
+    set local-state lput ? local-state
+    
+    let local-parameters but-first ?
+    set local-parameters but-first local-parameters
+    
+    ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] local-state[
+      foreach n-values ( floor (length local-parameters )/ 2) [?] [
+        ask one-of patches in-radius intersection-radius [sprout-movers (item ((? * 2) + 1) local-parameters) [
+            set mover-behavior (item (? * 2) local-parameters)
+            standard-mover-settings]
+        ]
+      ]
+    ]
+  ]
+end
+
 ;; Set some defaults and globals for this model
 to default-configuration
   set-default-shape beacons "box"
@@ -448,7 +471,6 @@ to default-configuration
   ;; List of various destinations
   set global-list-interest-points sort beacons with [interest-point? = true]
   set global-list-exit-points sort beacons with [exit-point? = true]
-
 
 ;;===start
 
