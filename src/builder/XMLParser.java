@@ -131,7 +131,8 @@ public class XMLParser implements Parser{
 					throw new RuntimeException("rate missing on "+nType+" node: "+n.getAttributeValue("id")+" ("+x+","+y+")");
 				}     
 
-				rate = Float.parseFloat(getTextAttributeOfElement(nodeParametersElement, "rate"));
+				
+				rate = Float.parseFloat(getTextAttributeOfElement(nodeParametersElement,"rate"));
 				
 				//
 				for(Element behaviorRates : nodeParametersElement.getChildren("behavior")){

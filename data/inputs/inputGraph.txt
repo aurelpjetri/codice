@@ -5,6 +5,8 @@ globals [
   global-street-distance
   global-street-width
   global-non-wall-color
+  
+  initial-state
 ]
 
 ;; Beacons are nodes in our network that comunicate
