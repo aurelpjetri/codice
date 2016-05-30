@@ -412,6 +412,7 @@ to set-world-initial-state
         let local-behavior (item (? * 2) local-parameters)
         foreach n-values (item ((? * 2) + 1) local-parameters) [?][
           ask one-of patches in-radius intersection-radius [sprout-movers 1 [
+            set current-beacon min-one-of beacons [distance myself]
             set mover-behavior local-behavior
             standard-mover-settings]
           ]
