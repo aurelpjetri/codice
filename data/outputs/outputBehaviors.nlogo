@@ -50,12 +50,12 @@ beacons-own [
   intersection-height
   intersection-radius
   interest-point?
+  entry-ratios
   entry-point?
   exit-point?
-  
+
   entry-percentages
   exit-percentages
-  
   entry-rate
   exit-rate
 ]
@@ -86,7 +86,7 @@ globals [
   global-movers-results
   global-list-interest-points
   global-list-exit-points
-  
+
   ;;list containing initial state parameters
   initial-state
 ]
@@ -99,7 +99,6 @@ to setup
   default-configuration
 end
 
-
 ;; GO PROCEDURE
 ;; ============
 
@@ -111,7 +110,7 @@ to go
 end
 
 to old-movers-leave
-  let temp-exit-rate 0
+let temp-exit-rate 0
   ask beacons with [exit-point? = true] [
     let exit-beacon self
     set temp-exit-rate exit-rate
@@ -129,7 +128,7 @@ end
 to new-movers-enter
   let temp-entry-rate 0
   ask beacons with [entry-point? = true] [
-    set temp-entry-rate entry-rate
+    set temp-entry-rate entry-ratio
     ask patches in-radius intersection-radius with [count movers-here < global-crowd-max-at-patch] [
       if random-float 1 < temp-entry-rate [
         generate-new-mover
@@ -138,13 +137,44 @@ to new-movers-enter
   ]
 end
 
+to generate-new-mover
+  sprout-movers 1 [
+    set current-beacon min-one-of beacons [distance myself]
+    set mover-behavior get-random-mover-behaviour [entry-percentages] of current-beacon
+    standard-mover-settings
+  ]
+end
+
+to standard-mover-settings
+  set previous-beacon current-beacon
+  set undesired-street false
+  set speed 0.5
+  set patience global-patience
+
+  set destination-list table:get behaviors-map mover-behavior
+  set destination-list sort destination-list
+
+  set destination-order "minDistance"
+  run table:get destination-ordering destination-order
+
+  set destination-reached false
+
+  ;; populate the initial map for the output data
+  movers-data-setup
+
+  ;; set transparency
+  set color [color] of destination-beacon
+  ifelse is-list? color
+    [ set color lput 100 sublist color 0 3 ]
+    [ set color lput 100 extract-rgb color ]
+end
 
 ;; Populate the table movers-data with some information needed for results
 to movers-data-setup
   set movers-data table:make
   table:put movers-data "enter" ticks
   table:put movers-data "total_agents" count movers
-  foreach (sort beacons with [entry-point? = false]) [
+  foreach (sentence global-list-interest-points global-list-exit-points) [
     table:put movers-data (word "agents_" ?) count (movers with [destination-beacon = ?])
     table:put movers-data (word "exit_" ?) 0
   ]
@@ -187,7 +217,48 @@ to move
     set patience random (3 + global-patience)
   ]
 end
+;; Check if I've reached the beacons and update my path,
+;; otherwise keep going towards the current-beacon
+to update-path
+  ask movers [
+    let next-beacon current-beacon
+    let current-mover self
 
+    ;; have I reached the current beacon?
+    ask current-beacon [
+      if member? [patch-here] of myself patches in-radius intersection-radius [
+        ;; set the previous beacon to the current-one, since we have reached it
+        ask myself [set previous-beacon current-beacon]
+
+        ;; Control if this beacon is in my destination list and remove it
+        check-if-involuntary-destination current-mover self
+
+        ;; calculate the full path to my destination
+        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
+        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
+
+        ;; If there are more than one beacon in the path I haven't reached my destination
+        ;; nw-path returns with the current beacon, so we take only the tail of the list
+        if not empty? but-first full-path
+          [ ask myself [set current-beacon item 1 full-path] ]
+
+        ;; if only one item is present in the weighted path
+        ;; a destination-beacon has been reached, here we check with if for
+        ;; more security
+        if self = [destination-beacon] of myself
+          [
+            ;; remove the current destination-beacon from this list
+            ask current-mover [
+              ifelse not empty? destination-list
+          [run table:get destination-ordering destination-order]
+                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
+              set color [color] of destination-beacon
+          ] ]
+      ]
+    ]
+    face current-beacon
+  ]
+end
 
 to check-if-involuntary-destination [agent tmp-beacon]
   if member? tmp-beacon [destination-list] of agent [
@@ -315,91 +386,9 @@ to-report to-csv [l]
   report reduce [(word ?1 ", " ?2)] l
 end
 
-;;=================== modificate
-
-;; Check if I've reached the beacons and update my path,
-;; otherwise keep going towards the current-beacon
-to update-path
-  ask movers [
-    let next-beacon current-beacon
-    let current-mover self
-
-    ;; have I reached the current beacon?
-    ask current-beacon [
-      if member? [patch-here] of myself patches in-radius intersection-radius [
-        ;; set the previous beacon to the current-one, since we have reached it
-        ask myself [set previous-beacon current-beacon]
-
-        ;; Control if this beacon is in my destination list and remove it
-        check-if-involuntary-destination current-mover self
-
-        ;; calculate the full path to my destination
-        nw:set-context (beacons) ((link-set streets directed-streets) with [self != [undesired-street] of current-mover])
-        let full-path nw:turtles-on-weighted-path-to [destination-beacon] of myself "weight"
-
-        ;; If there are more than one beacon in the path I haven't reached my destination
-        ;; nw-path returns with the current beacon, so we take only the tail of the list
-        if not empty? but-first full-path
-          [ ask myself [set current-beacon item 1 full-path] ]
-
-        ;; if only one item is present in the weighted path
-        ;; a destination-beacon has been reached, here we check with if for
-        ;; more security
-        if self = [destination-beacon] of myself
-          [
-            ;; remove the current destination-beacon from this list
-            ask current-mover [
-              ifelse not empty? destination-list
-			    [run table:get destination-ordering destination-order]
-                [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
-              set color [color] of destination-beacon
-          ] ]
-      ]
-    ]
-    face current-beacon
-  ]
-end
-
-to generate-new-mover
-  sprout-movers 1 [
-    set current-beacon min-one-of beacons [distance myself]
-    set previous-beacon current-beacon
-    set undesired-street false
-    set speed 0.1
-    set patience global-patience
-
-    ;; destination part uses current-node so declare it after
-    ;; destination list is saved as a list so we can do more complex
-    ;; operations on it.. agentsets are always in random order.
-    ;; By simply calling sort on an agentset, we get an ordered list
-
-	;;------------------------------------------------------------------------------
-
-    set mover-behavior get-random-mover-behaviour [entry-percentages] of current-beacon
-
-	set destination-list table:get behaviors-map mover-behavior
-    set destination-list sort destination-list
-
-	set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["orderedList" 50]] of current-beacon
-    run table:get destination-ordering destination-order
-
-    ;;set-destination-ordered-list
-	;;-------------------------------------------------------------------------------
-
-    set destination-reached false
-
-    ;; populate the initial map for the output data
-    movers-data-setup
-
-    ;; set transparency
-    set color [color] of destination-beacon
-    ifelse is-list? color
-      [ set color lput 100 sublist color 0 3 ]
-      [ set color lput 100 extract-rgb color ]
-
-  ]
-end
-
+;; ==================================================================
+;; NEEDED BY JAVANETLOGO GENERATOR
+;; ==================================================================
 
 to-report get-interest-beacons [coor-list]
   let list-of-beacons []
@@ -408,48 +397,24 @@ to-report get-interest-beacons [coor-list]
   ]
   report list-of-beacons
 end
-
-to standard-mover-settings
-  set current-beacon min-one-of beacons [distance myself]
-  set previous-beacon current-beacon
-  set speed 0.1
-  set patience global-patience
-
-  set undesired-street false
-
-  set destination-list table:get behaviors-map mover-behavior
-  set destination-list sort destination-list
-
-  set destination-order get-random-mover-behaviour [ list ["minDistance" 50]["orderedList" 50]] of current-beacon
-  run table:get destination-ordering destination-order
-
-  set destination-reached false
-
-  ;; populate the initial map for the output data
-  movers-data-setup
-
-  ;; set transparency
-  set color [color] of destination-beacon
-  ifelse is-list? color
-    [ set color lput 100 sublist color 0 3 ]
-    [ set color lput 100 extract-rgb color ]
-end
-
-;;creates movers for the initial state reading the initial-state global variable
+;;creates movers for the initial state iterating on the initial-state global variable
+;;wich has the following structure: initial-state = [[x y behavior-id #movers behavior-id #movers ...]...]
 to set-world-initial-state
   foreach initial-state [
     let local-state []
     set local-state lput ? local-state
-    
+
     let local-parameters but-first ?
     set local-parameters but-first local-parameters
-    
+
+
     ask item 0 get-interest-beacons map [list (world-offset + item 0 ?) (world-offset + item 1 ?)] local-state[
       foreach n-values ( floor (length local-parameters )/ 2) [?] [
         let local-behavior (item (? * 2) local-parameters)
         foreach n-values (item ((? * 2) + 1) local-parameters) [?][
           ask one-of patches in-radius intersection-radius [sprout-movers 1 [
             set mover-behavior local-behavior
+            show local-behavior
             standard-mover-settings]
           ]
         ]
@@ -472,36 +437,44 @@ to default-configuration
   ;; Results
   set global-movers-results table:make
   ;; List of various destinations
+
+  ;; Behaviors get populated in a map and are a list of beacons
+  set behaviors-map table:make
+  ;table:put behaviors-map 0 (list beacon 12)
+  ;table:put behaviors-map 1 (list beacon 13)
+  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
+  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
+
+  ;; Beacons that are part of behaviours should be given interest-point? true
+  ;; example:
+  foreach table:to-list behaviors-map [
+    foreach item 1 ? [ask ? [set interest-point? true]]
+  ]
   set global-list-interest-points sort beacons with [interest-point? = true]
   set global-list-exit-points sort beacons with [exit-point? = true]
 
-  set behaviors-map table:make
-  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (20)]  [(20) (20)] ]
-  table:put behaviors-map 1 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(10) (10)]  [(20) (10)] ]
   set initial-state []
   populate-initial-state
- 
   set-world-initial-state
 end
- 
-to populate-initial-state 
+
+to populate-initial-state
+  ;; Populate the initial state of movers around the world
   set initial-state lput [0 0 0 2 1 2] initial-state
   set initial-state lput [0 10 0 10 1 10] initial-state
   set initial-state lput [10 10 0 10 1 10] initial-state
   set initial-state lput [10 30 0 10 1 10] initial-state
   set initial-state lput [20 20 0 10 1 10] initial-state
 end
-
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 305
 10
-1173
-899
+725
+551
 -1
 -1
-13.0
+10.0
 1
 10
 1
@@ -512,9 +485,9 @@ GRAPHICS-WINDOW
 1
 1
 0
-65
+40
 0
-65
+50
 0
 0
 1
@@ -642,6 +615,20 @@ NIL
 NIL
 1
 
+SLIDER
+55
+462
+227
+495
+exit-ratio
+exit-ratio
+0
+0.1
+0.054
+0.001
+1
+NIL
+HORIZONTAL
 
 SLIDER
 65
@@ -654,6 +641,21 @@ global-patience
 100
 10
 1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+56
+421
+228
+454
+entry-ratio
+entry-ratio
+0
+0.100
+0.05
+0.001
 1
 NIL
 HORIZONTAL

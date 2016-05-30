@@ -34,28 +34,32 @@ public class NetLogoBehaviorVisitor implements Visitor {
 			outputStream = new PrintWriter(myFileWriter);
 
 			String l;
-			while (!((l = inputStream.readLine()).equals(";;===start"))){
+			while (!((l = inputStream.readLine()).equals("  ;;===behaviors"))){
 				outputStream.println(l);
 			}
 			
-			outputStream.println("  set behaviors-map table:make");
+			
 			for(Behavior b : g.getBehaviors()){
 				b.accept(this);
 			}
 
 			
-			outputStream.println("  set initial-state []");
-			outputStream.println("  populate-initial-state");
-			outputStream.println(" ");
-			outputStream.println("  set-world-initial-state");
-			outputStream.println("end");
-			outputStream.println(" ");
+			while (!((l = inputStream.readLine()).equals("  ;;===system"))){
+				outputStream.println(l);
+			}
 			
-			outputStream.println("to populate-initial-state ");
+//			outputStream.println("  set initial-state []");
+//			outputStream.println("  populate-initial-state");
+//			outputStream.println(" ");
+//			outputStream.println("  set-world-initial-state");
+//			outputStream.println("end");
+//			outputStream.println(" ");
+//			
+//			outputStream.println("to populate-initial-state ");
+			
 			for(Node n : g.getNodes()){
 				n.accept(this);
 			}
-			outputStream.println("end");
 			
 			while ((l = inputStream.readLine()) != null) {
 				outputStream.println(l);
