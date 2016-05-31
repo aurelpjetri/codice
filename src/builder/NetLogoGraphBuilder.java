@@ -37,9 +37,9 @@ public class NetLogoGraphBuilder implements Builder{
 		lastId += 1;
 	}
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate){
+	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate, int entryLimit){
 		EntryPoint.validateNodeParameters(x, y, w, h, r, entryRate, s,  generationRate);
-		product.addNode( new EntryPoint(lastId, x, y, w, h, r,entryRate, s, generationRate));
+		product.addNode( new EntryPoint(lastId, x, y, w, h, r, entryRate, s, generationRate, entryLimit));
 		lastId += 1;
 	}
 		

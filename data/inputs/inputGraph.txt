@@ -5,11 +5,11 @@ globals [
   global-street-distance
   global-street-width
   global-non-wall-color
-  
+
   initial-state
 ]
 
-;; Beacons are nodes in our network that comunicate
+;; Beacons are nodes in our network that communicate
 ;; the shortest path to the movers that need to
 ;; reach their destination
 breed [beacons beacon]
@@ -41,11 +41,14 @@ beacons-own [
   intersection-radius
   interest-point?
   entry-point?
+  entry-ratios
+  entry-infinity?
+  entry-limit
   exit-point?
-    
+
   entry-percentages
   exit-percentages
-  
+
   entry-rate
   exit-rate
 ]
@@ -72,12 +75,12 @@ to setup
 
   ;; After that we can generate our map
   generate-map
+  tick
 end
 
 to export
   export-world export-filename
 end
-
 
 ;; Used to set the defaults and globals
 to default-configuration
@@ -87,8 +90,6 @@ to default-configuration
   set global-street-width 3
   set global-non-wall-color 9
 end
-
-
 
 ;; HELPER TASKS
 ;; ============
@@ -219,7 +220,6 @@ to-report next-patch  ;; turtle procedure
   report patch-at 0 1
 end
 
-
 to make-beacon-normal
   set entry-point? false
   set exit-point? false
@@ -249,8 +249,6 @@ to generate-interest-points
 end
 
 ;;===start
-
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 285
@@ -266,8 +264,8 @@ GRAPHICS-WINDOW
 1
 1
 0
-1
-1
+0
+0
 1
 0
 50
@@ -319,7 +317,7 @@ INPUTBOX
 275
 154
 export-filename
-example4.csv
+grid_x_poi_y_01.csv
 1
 0
 String

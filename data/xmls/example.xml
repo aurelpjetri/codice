@@ -14,6 +14,7 @@
 	<!-- attributi per lo stato iniziale -->
 	<key id="moverQuantity" for="node" attr.name="numberOfMovers" attr.type="int" />
 	<key id="rate" for="node" attr.name="entryOrExitRate" attr.type="float" />
+	<key id="entry-limit" for="node" attr.name="entryLimit" attr.type="float" /><!-- if negative => unlimited -->
 	<key id="percentage" for="node" attr.name="entryOrExitPercentage" attr.type="float" />
 	
 
@@ -111,6 +112,7 @@
 		<node id="n1">
 			<graph id="parameters">
       			<data key="rate">0.1</data>
+      			<data key="entry-limit">-1</data>
       			<behavior id="0">  <!--  id del behavior -->
 					<data key="percentage">0.4</data>
 				</behavior>

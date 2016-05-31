@@ -18,6 +18,7 @@ public class EntryPoint implements Node {
 	private HashMap<Integer,Integer> state;
 	private HashMap<Integer, Float> generationPercentage;
 	private float entryRate;
+	private int entryLimit;
 	
 	//metodo statico usato per validare i parametri prima della costruzione del nodo
 	public static void validateNodeParameters(int x, int y, int w, int h, int r, float entryR, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationpPercentage){
@@ -56,7 +57,7 @@ public class EntryPoint implements Node {
 		}
 	}
 	
-	public EntryPoint(int id, int x, int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationPercentage){
+	public EntryPoint(int id, int x, int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> state, HashMap<Integer, Float> generationPercentage, int entryLimit){
 		reachables = new ArrayList<Node>();
 		this.id = id;
 		this.x = x;
@@ -69,6 +70,11 @@ public class EntryPoint implements Node {
 		this.state = state;
 		this.generationPercentage = generationPercentage;
 		this.entryRate = entryRate;
+		this.entryLimit = entryLimit;
+	}
+	
+	public int getEntryLimit(){
+		return entryLimit;
 	}
 	
 	public float getEntryRate(){

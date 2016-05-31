@@ -168,8 +168,16 @@ public class XMLParser implements Parser{
 			if(nType.equalsIgnoreCase("exit")){
 				builder.buildExitPoint(x, y, nWidth, nHeight, radius, rate, state, percentage);
 			}
-			if(nType.equalsIgnoreCase("entry")){
-				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, rate, state, percentage);
+			if(nType.equalsIgnoreCase("entry")){				
+				//must have entry-limit
+				if(getElementWithAttributeValue(nodeParametersElement.getChildren("data"), "key", "entry-limit") == null){
+					throw new RuntimeException("entry-limit missing on "+nType+" node: "+n.getAttributeValue("id")+" ("+x+","+y+")");
+				}     
+
+				
+				int entryLimit = Integer.parseInt(getTextAttributeOfElement(nodeParametersElement,"entry-limit"));
+				
+				builder.buildEntryPoint(x, y, nWidth, nHeight, radius, rate, state, percentage, entryLimit);
 			}
 
 			else if(!nType.equalsIgnoreCase("normal") && 

@@ -45,7 +45,7 @@ public class GraphTest {
 		rate.put(0, (float)0.3);
 		rate.put(1, (float)0.7);
 		n0 = new RegularNode(0,0,0,5,5,5,stato);
-		n1 = new EntryPoint(1,0,10,5,5,5, (float)0.6, stato, rate);
+		n1 = new EntryPoint(1,0,10,5,5,5, (float)0.6, stato, rate, 30);
 		n2 = new RegularNode(2,10,10,5,5,5, stato);
 		n3 = new ExitPoint(3,20,0,5,5,5, (float)0.9, stato, rate);
 

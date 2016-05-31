@@ -51,6 +51,8 @@ beacons-own [
   intersection-radius
   interest-point?
   entry-ratios
+  entry-infinity?
+  entry-limit
   entry-point?
   exit-point?
 
@@ -83,6 +85,10 @@ globals [
   export-filename
 
   ;; Needed for results collection
+  global-state
+  global-state-grid
+  global-state-x
+  global-state-y
   global-movers-results
   global-list-interest-points
   global-list-exit-points
@@ -103,6 +109,7 @@ end
 ;; ============
 
 to go
+  update-global-state
   if use-exits = true [ old-movers-leave ]
   if use-entries = true [ new-movers-enter ]
   move
@@ -110,7 +117,7 @@ to go
 end
 
 to old-movers-leave
-let temp-exit-rate 0
+  let temp-exit-rate 0
   ask beacons with [exit-point? = true] [
     let exit-beacon self
     set temp-exit-rate exit-rate
@@ -127,11 +134,12 @@ end
 
 to new-movers-enter
   let temp-entry-rate 0
-  ask beacons with [entry-point? = true] [
-    set temp-entry-rate entry-ratio
+  ask beacons with [entry-point? = true and (entry-infinity? = true or entry-limit > 0)] [
+    set temp-entry-rate entry-rate
     ask patches in-radius intersection-radius with [count movers-here < global-crowd-max-at-patch] [
       if random-float 1 < temp-entry-rate [
         generate-new-mover
+        ask myself [set entry-limit entry-limit - 1]
       ]
     ]
   ]
@@ -155,7 +163,9 @@ to standard-mover-settings
   set destination-list sort destination-list
 
   set destination-order "minDistance"
-  run table:get destination-ordering destination-order
+  ifelse not empty? destination-list
+    [run table:get destination-ordering destination-order]
+    [set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
 
   set destination-reached false
 
@@ -167,28 +177,6 @@ to standard-mover-settings
   ifelse is-list? color
     [ set color lput 100 sublist color 0 3 ]
     [ set color lput 100 extract-rgb color ]
-end
-
-;; Populate the table movers-data with some information needed for results
-to movers-data-setup
-  set movers-data table:make
-  table:put movers-data "enter" ticks
-  table:put movers-data "total_agents" count movers
-  foreach (sentence global-list-interest-points global-list-exit-points) [
-    table:put movers-data (word "agents_" ?) count (movers with [destination-beacon = ?])
-    table:put movers-data (word "exit_" ?) 0
-  ]
-end
-
-;; Collect the data before a mover dies, and then put them in global var
-to movers-data-collect [passing-beacon]
-  ;; Only collect the time the first time we pass a destination
-  if table:get movers-data (word "exit_" passing-beacon) = 0
-   [table:put movers-data (word "exit_" passing-beacon) ticks]
-end
-
-to movers-data-move-to-global
-  table:put global-movers-results who table:to-list movers-data
 end
 
 ;; Given a list of behaviours and their probabilities
@@ -250,7 +238,7 @@ to update-path
             ;; remove the current destination-beacon from this list
             ask current-mover [
               ifelse not empty? destination-list
-          [run table:get destination-ordering destination-order]
+                [run table:get destination-ordering destination-order]
                 [ set destination-beacon min-one-of (beacons with [exit-point? = true]) [distance myself]]
               set color [color] of destination-beacon
           ] ]
@@ -364,6 +352,45 @@ to change-poi
 end
 
 ;; ==================================================================
+;; GLOBAL STATE
+;; ==================================================================
+
+to-report get-global-state
+  report global-state
+end
+to update-global-state
+  let final-list []
+  foreach global-state-grid [
+    let grid-patches patches with [pxcor > (item 0 ?) and pxcor < (item 1 ?) and pycor > (item 2 ?) and pycor < (item 3 ?)]
+    set final-list lput (sum [count movers-here] of grid-patches) final-list
+  ]
+  set global-state final-list
+end
+
+;; Invoce at the beginning to calculate the grid coordiantes
+to setup-global-state-grid
+  set global-state-grid (get-grid-map-coordinates global-state-x global-state-y)
+end
+
+;; Returns a list of coordinates of a grid division [[x dx y dy] ...]
+to-report get-grid-map-coordinates [gx gy]
+  let final-list []
+  foreach get-grid-map-coordinates-x gx [
+    let current-x ?
+    foreach get-grid-map-coordinates-y gy [
+      set final-list lput (sentence current-x ?) final-list
+    ]
+  ]
+  report final-list
+end
+to-report get-grid-map-coordinates-x [g]
+  report n-values g [(list (? * world-width / g) ((? + 1) * world-width / g))]
+end
+to-report get-grid-map-coordinates-y [g]
+  report n-values g [(list (? * world-height / g) ((? + 1) * world-height / g))]
+end
+
+;; ==================================================================
 ;; RESULTS OUTPUT
 ;; ==================================================================
 ;; Called at the end by the BehaviourSpace
@@ -384,6 +411,32 @@ end
 
 to-report to-csv [l]
   report reduce [(word ?1 ", " ?2)] l
+end
+
+;; Populate the table movers-data with some information needed for results
+to movers-data-setup
+  set movers-data table:make
+  table:put movers-data "enter" ticks
+  table:put movers-data "total_agents" count movers
+
+  update-global-state
+  let idx 0
+  foreach get-global-state [
+    table:put movers-data (word "gs_" idx) ?
+    set idx idx + 1
+  ]
+end
+
+;; Collect the data before a mover dies, and then put them in global var
+to movers-data-collect [passing-beacon]
+  ;; Only collect the time the first time we pass a destination
+  ifelse table:has-key? movers-data (word "exit_" passing-beacon)
+    []
+    [table:put movers-data (word "exit_" passing-beacon) ticks]
+end
+
+to movers-data-move-to-global
+  table:put global-movers-results who table:to-list movers-data
 end
 
 ;; ==================================================================
@@ -435,13 +488,22 @@ to default-configuration
 
   ;; Results
   set global-movers-results table:make
+
+  ;; Results grid size for result skewness
+  set global-state-x 2
+  set global-state-y 2
+  setup-global-state-grid
+  update-global-state
   ;; List of various destinations
 
   ;; Behaviors get populated in a map and are a list of beacons
   set behaviors-map table:make
   ;table:put behaviors-map 0 (list beacon 12)
   ;table:put behaviors-map 1 (list beacon 13)
+  ;table:put behaviors-map 0 []
   ;;===behaviors
+
+  ;;===end
 
   ;; Beacons that are part of behaviours should be given interest-point? true
   ;; example:
@@ -458,14 +520,33 @@ end
 
 to populate-initial-state
   ;; Populate the initial state of movers around the world
+  ;; example: [x y behavior_id n_movers]
+  ;set initial-state lput [10 10 0 100] initial-state
+  ;set initial-state lput [20 10 0 100] initial-state
+  ;set initial-state lput [30 10 0 100] initial-state
+  ;set initial-state lput [40 10 0 100] initial-state
+  ;set initial-state lput [10 20 0 100] initial-state
+  ;set initial-state lput [20 20 0 100] initial-state
+  ;set initial-state lput [30 20 0 100] initial-state
+  ;set initial-state lput [40 20 0 100] initial-state
+  ;set initial-state lput [10 30 0 100] initial-state
+  ;set initial-state lput [20 30 0 100] initial-state
+  ;set initial-state lput [30 30 0 100] initial-state
+  ;set initial-state lput [40 30 0 100] initial-state
+  ;set initial-state lput [10 40 0 100] initial-state
+  ;set initial-state lput [20 40 0 100] initial-state
+  ;set initial-state lput [30 40 0 100] initial-state
+  ;set initial-state lput [40 40 0 100] initial-state
   ;;===system
+
+  ;;===end
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
 305
 10
-801
-527
+741
+407
 -1
 -1
 6.0
@@ -475,13 +556,13 @@ GRAPHICS-WINDOW
 1
 1
 0
-1
-1
+0
+0
 1
 0
-80
+70
 0
-80
+60
 0
 0
 1
@@ -511,7 +592,7 @@ INPUTBOX
 281
 127
 import-filename
-grids/map01.netlogo.map
+netlogo.map
 1
 0
 String

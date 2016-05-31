@@ -11,7 +11,7 @@ public interface Builder {
 	
 	public void buildExitPoint(int x , int y, int w, int h, int r, float exitRate,  HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate);
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate,  HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate);
+	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate,  HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate, int entryLimit);
 		
 	public void buildDirectedEdge (int sourceX, int sourceY, int targetX, int targetY, int width, int weight) throws RuntimeException;
 	
