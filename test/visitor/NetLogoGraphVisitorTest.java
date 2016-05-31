@@ -25,7 +25,7 @@ public class NetLogoGraphVisitorTest {
 	public void visitGraphTest() {
 		try{
 			graph = parser.parseDocumentForGraph("data/example3.xml");
-			visitor = new NetLogoGraphVisitor();
+			visitor = new NetLogoGraphVisitor("data/inputs/inputGraph.txt", "data/outputs/outputGraph.nlogo");
 			graph.accept(visitor);
 		}
 		catch(IOException e){

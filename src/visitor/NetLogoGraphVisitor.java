@@ -21,17 +21,19 @@ public class NetLogoGraphVisitor implements Visitor{
 	private BufferedReader inputStream;
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
+	private String modelGraph;
 	 
-	public NetLogoGraphVisitor() throws IOException{
+	public NetLogoGraphVisitor(String modelGraph, String outputGraph) throws IOException{
 		inputStream = null;
 		outputStream = null;
-		myFileWriter = new FileWriter("data/outputs/outputGraph.nlogo");
+		myFileWriter = new FileWriter(outputGraph);
+		this.modelGraph = modelGraph;
 	}
 	
 	public void visit(Graph g) throws IOException{
 		
         try {
-            inputStream = new BufferedReader(new FileReader("data/inputs/inputGraph.txt"));
+            inputStream = new BufferedReader(new FileReader(modelGraph));
             outputStream = new PrintWriter(myFileWriter);
 
 			String l;

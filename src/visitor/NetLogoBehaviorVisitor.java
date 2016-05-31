@@ -22,15 +22,17 @@ public class NetLogoBehaviorVisitor implements Visitor {
 
 	private PrintWriter outputStream;
 	private FileWriter myFileWriter;
+	private String modelBehavior;
 
-	public NetLogoBehaviorVisitor() throws IOException {
+	public NetLogoBehaviorVisitor(String modelBehavior, String outputBehavior) throws IOException {
 		outputStream = null;
-		myFileWriter = new FileWriter("data/outputs/outputBehaviors.nlogo");
+		myFileWriter = new FileWriter(outputBehavior);
+		this.modelBehavior = modelBehavior;
 	}
 
 	public void visit(Graph g) throws IOException{
 		try{
-			inputStream = new BufferedReader(new FileReader("data/inputs/inputBehaviors.txt"));
+			inputStream = new BufferedReader(new FileReader(modelBehavior));
 			outputStream = new PrintWriter(myFileWriter);
 
 			String l;
