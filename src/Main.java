@@ -1,6 +1,7 @@
 import java.io.IOException;
 
 import builder.XMLParser;
+import graph.EntryPoint;
 import graph.Graph;
 import visitor.NetLogoBehaviorVisitor;
 import visitor.NetLogoGraphVisitor;
@@ -12,7 +13,8 @@ public class Main {
 			XMLParser parser = new XMLParser();
 			NetLogoBehaviorVisitor behaviorVisitor = new NetLogoBehaviorVisitor();
 			NetLogoGraphVisitor graphVisitor = new NetLogoGraphVisitor();
-			Graph graph = parser.parseDocumentForGraph("data/xmls/example2.xml");	
+			Graph graph = parser.parseDocumentForGraph("data/xmls/16x16grid.xml");
+						
 			graph.accept(graphVisitor);
 			graph.accept(behaviorVisitor);
 		}

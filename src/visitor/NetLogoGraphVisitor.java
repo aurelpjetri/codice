@@ -118,6 +118,14 @@ public class NetLogoGraphVisitor implements Visitor{
 	        	outputStream.println("    set entry-percentages lput ["+behaviorID+" "+n.getGenerationPercentage().get(behaviorID)+"] entry-percentages");
 	        }
 	        outputStream.println("    set entry-rate "+n.getEntryRate());
+	        if(n.getEntryLimit() > 0){
+		        outputStream.println("    set entry-limit "+n.getEntryLimit());
+		        outputStream.println("    set entry-infinity? false");
+	        }
+	        else{
+		        outputStream.println("    set entry-limit 0");
+		        outputStream.println("    set entry-infinity? true");
+	        }
 	        outputStream.println("  ]]");
 		}else if (outputStream == null){
 			throw  new RuntimeException("unable to perform streaming");
