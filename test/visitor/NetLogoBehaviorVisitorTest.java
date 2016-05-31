@@ -24,7 +24,7 @@ public class NetLogoBehaviorVisitorTest {
 	@Test
 	public void visitGraphTest() {
 		try{
-			visitor = new NetLogoBehaviorVisitor();
+			visitor = new NetLogoBehaviorVisitor("data/inputs/inputBehaviors.txt", "data/outputs/outputBehaviors.nlogo");
 			graph.accept(visitor);
 		}
 		catch(IOException e){
@@ -33,3 +33,4 @@ public class NetLogoBehaviorVisitorTest {
 	}
 
 }
+

@@ -18,9 +18,9 @@ public class Main {
 		Map<String,String> parameters;
 		try{
 			//From CLI
-			parameters = getParametersAsMap(args);
+			//parameters = getParametersAsMap(args);
 			//Default parameter (uncomment this and comment the previous)
-			//parameters = getDefaultTestParameters();
+			parameters = getDefaultTestParameters();
 		}catch(IllegalArgumentException e){
 			System.out.println(e.getMessage() + "\n\n" + help());
 			System.exit(1);
