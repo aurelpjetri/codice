@@ -18,11 +18,11 @@ public class Main {
 		Map<String,String> parameters;
 		try{
 			//From CLI
-			//parameters = getParametersAsMap(args);
+			parameters = getParametersAsMap(args);
 			//Default parameter (uncomment this and comment the previous)
-			parameters = getDefaultTestParameters();
+			//parameters = getDefaultTestParameters();
 		}catch(IllegalArgumentException e){
-			System.out.println(e.getMessage() + "\n\n" + help());
+			System.out.println("ERROR:" + e.getMessage() + "\n\n" + help());
 			System.exit(1);
 			return;
 		}
@@ -64,7 +64,7 @@ public class Main {
 		Map<String,String> parameters = new HashMap<>(); 
 		for (String arg : args) {
 			String[] elements = arg.split("=");
-			if(elements.length != 2 || elements[0].startsWith("--")){
+			if(elements.length != 2 || !elements[0].startsWith("--")){
 				throw new IllegalArgumentException("All parameter should be in the form '--key=value'");
 			}
 			parameters.put(elements[0], elements[1]);
