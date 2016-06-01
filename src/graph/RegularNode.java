@@ -57,16 +57,6 @@ public class RegularNode implements Node {
 		return state;
 	}
 	
-	public HashMap<Integer, Float> getSinkingRate(){
-		return null;
-	}
-	
-	
-	public HashMap<Integer, Float> getGenerationRate(){
-		return null;
-	}
-	
-	
 	public List<Node> getReachableNodes(){
 		return reachables;
 	}

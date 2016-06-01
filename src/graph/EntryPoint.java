@@ -85,9 +85,6 @@ public class EntryPoint implements Node {
 		return generationPercentage;
 	}
 	
-	public HashMap<Integer, Float> getSinkingPercentage(){
-		return null;
-	}
 	
 	public HashMap<Integer,Integer> getState(){
 		return state;

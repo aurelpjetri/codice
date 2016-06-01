@@ -81,10 +81,6 @@ public class ExitPoint implements Node{
 		return sinkingPercentage;
 	}
 	
-	public HashMap<Integer, Float> getGenerationPercentage(){
-		return null;
-	}
-	
 	public HashMap<Integer, Integer> getState(){
 		return state;
 	}
@@ -103,10 +99,6 @@ public class ExitPoint implements Node{
 	
 	public int getY(){
 		return y;
-	}
-	
-	public void sinkActor(){
-		//sinks actor
 	}
 	
 	public int getCapacity(){
