@@ -31,15 +31,15 @@ public class NetLogoGraphBuilder implements Builder{
 		lastId += 1;
 	}
 	
-	public void buildExitPoint(int x , int y, int w, int h, int r, float exitRate, HashMap<Integer,Integer> s, HashMap<Integer,Float> sinkingRate){
-		ExitPoint.validateNodeParameters(x, y, w, h, r, exitRate, s, sinkingRate);
-		product.addNode( new ExitPoint(lastId, x, y, w, h, r, exitRate, s, sinkingRate));
+	public void buildExitPoint(int x , int y, int width, int height, int radius, float exitRate, HashMap<Integer,Integer> state, HashMap<Integer,Float> sinkingPercentage){
+		ExitPoint.validateNodeParameters(x, y, width, height, radius, exitRate, state, sinkingPercentage);
+		product.addNode( new ExitPoint(lastId, x, y, width, height, radius, exitRate, state, sinkingPercentage));
 		lastId += 1;
 	}
 	
-	public void buildEntryPoint(int x , int y, int w, int h, int r, float entryRate, HashMap<Integer,Integer> s, HashMap<Integer,Float> generationRate, int entryLimit){
-		EntryPoint.validateNodeParameters(x, y, w, h, r, entryRate, s,  generationRate);
-		product.addNode( new EntryPoint(lastId, x, y, w, h, r, entryRate, s, generationRate, entryLimit));
+	public void buildEntryPoint(int x , int y, int width, int height, int radius, float entryRate, HashMap<Integer,Integer> state, HashMap<Integer,Float> generationPercentage, int entryLimit){
+		EntryPoint.validateNodeParameters(x, y, width, height, radius, entryRate, state,  generationPercentage);
+		product.addNode( new EntryPoint(lastId, x, y, width, height, radius, entryRate, state, generationPercentage, entryLimit));
 		lastId += 1;
 	}
 		

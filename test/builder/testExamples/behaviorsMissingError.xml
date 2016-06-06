@@ -81,6 +81,7 @@
 		<node id="n0">
 			<graph id="parameters">
       			<data key="rate">0.1</data>
+      			<data key="entry-limit">10</data>     			
       			<behavior id="0">  <!--  id del behavior -->
 					<data key="percentage">1</data>
 				</behavior>
