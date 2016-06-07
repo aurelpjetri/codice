@@ -106,7 +106,6 @@ public class NetLogoGraphVisitor implements Visitor{
 			throw new RuntimeException("unable to perform streaming");
 		}
                         
-
 	}
 	
 	public void visit(EntryPoint n) throws IOException{
