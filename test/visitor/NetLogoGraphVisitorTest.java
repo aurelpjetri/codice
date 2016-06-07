@@ -35,7 +35,6 @@ public class NetLogoGraphVisitorTest {
 	
 			reader = new BufferedReader(new FileReader("test/visitor/testExamples/outputGraphTest.nlogo"));
 
-			boolean found = false;
 				
 			String m = reader.readLine();
 			

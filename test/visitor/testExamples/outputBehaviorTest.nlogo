@@ -498,7 +498,7 @@ to default-configuration
 
   ;; Behaviors get populated in a map and are a list of beacons
   set behaviors-map table:make
-  ;;===behaviors
+  table:put behaviors-map 0 get-interest-beacons map [ list (world-offset + item 0 ?) (world-offset + item 1 ?) ] [ [(20) (10)] ]
 
   ;;===end
 
@@ -518,7 +518,8 @@ end
 to populate-initial-state
   ;; Populate the initial state of movers around the world
   ;; example: [x y behavior_id n_movers]
-  ;;===system
+  set initial-state lput [10 10 0 100] initial-state
+  set initial-state lput [20 10 0 100] initial-state
 
   ;;===end
 end
