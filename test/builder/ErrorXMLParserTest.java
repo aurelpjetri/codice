@@ -255,4 +255,81 @@ public class ErrorXMLParserTest {
 		}
 	}
 	
+	@Test
+	public void testMissingState(){
+		String file = "test/builder/testExamples/stateMissingError.xml";
+		
+		SAXBuilder jdomBuilder = new SAXBuilder(); 
+		Document jdomDocument = new Document();
+		try {
+			jdomDocument = jdomBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Element root = jdomDocument.getRootElement();
+		
+		builder.buildGraph();
+		
+		try{
+			parser.parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().startsWith("Initial state in System section missing for the node"));
+		}
+	}
+	
+	@Test
+	public void testMissingParameters(){
+		String file = "test/builder/testExamples/parametersMissingError.xml";
+		
+		SAXBuilder jdomBuilder = new SAXBuilder(); 
+		Document jdomDocument = new Document();
+		try {
+			jdomDocument = jdomBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Element root = jdomDocument.getRootElement();
+		
+		builder.buildGraph();
+		
+		try{
+			parser.parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().startsWith("Parameters specification in System section missing for the node"));
+		}
+	}
+	
+	@Test
+	public void testMissingStateParam(){
+		String file = "test/builder/testExamples/stateParamMissingError.xml";
+		
+		SAXBuilder jdomBuilder = new SAXBuilder(); 
+		Document jdomDocument = new Document();
+		try {
+			jdomDocument = jdomBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Element root = jdomDocument.getRootElement();
+		
+		builder.buildGraph();
+		
+		try{
+			parser.parseTree(root, builder);
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().startsWith("State specification in System section missing for the node"));
+		}
+	}
 }

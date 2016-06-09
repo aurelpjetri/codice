@@ -96,14 +96,6 @@ public class XMLParser implements Parser{
 				nType = defaultNodeType;
 			}
 
-
-			Element nodeSystemElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id"));
-
-			Element nodeStateElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "state");
-
-			Element nodeParametersElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "parameters");
-
-
 			int x = Integer.parseInt(getTextAttributeOfElement(n, "nx"));
 
 			int y = Integer.parseInt(getTextAttributeOfElement(n, "ny"));
@@ -122,6 +114,24 @@ public class XMLParser implements Parser{
 
 			List<Element> behaviors = getElementWithAttributeValue(root.getChildren(), "id", "Behaviors").getChildren("node");
 
+			Element nodeSystemElement = getElementWithAttributeValue(system.getChildren(), "id", n.getAttributeValue("id"));
+
+			if(nodeSystemElement == null){
+				throw new RuntimeException("Initial state in System section missing for the node ["+n.getAttributeValue("id")+"] in ["+x+" , "+y+"]");
+			}
+			
+			Element nodeStateElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "state");
+
+			if(nodeStateElement == null){
+				throw new RuntimeException("State specification in System section missing for the node ["+n.getAttributeValue("id")+"] in ["+x+" , "+y+"]");
+			}
+			
+			Element nodeParametersElement = getElementWithAttributeValue(nodeSystemElement.getChildren(), "id", "parameters");
+			
+			if(nodeParametersElement== null && !nType.equals("normal")){
+				throw new RuntimeException("Parameters specification in System section missing for the node ["+n.getAttributeValue("id")+"] in ["+x+" , "+y+"]");
+			}
+			
 			if(!nType.equalsIgnoreCase("normal")){   	
 
 				validateBehaviorIds(nodeParametersElement, behaviors);
