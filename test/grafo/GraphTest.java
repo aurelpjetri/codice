@@ -122,5 +122,15 @@ public class GraphTest {
 		}
 	}
 	
+	@Test
+	public void testAddNode(){
+		try{
+			graph.addNode(new RegularNode(10, 0, 0, 5, 5, 3, new HashMap<Integer, Integer>()));
+		}
+		catch(RuntimeException e){
+			assertEquals(true, e.getMessage().startsWith("Node already existing"));
+		}
+		
+	}
 	
 }

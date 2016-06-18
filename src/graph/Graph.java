@@ -20,6 +20,9 @@ public class Graph {
 	}
 	
 	public void addNode(Node n){
+		if(validateNodeFromCoordinates(n.getX(), n.getY()) ){
+			throw new RuntimeException("Node already existing in: "+n.getX()+" , "+n.getY()+".");
+		}
 		nodes.add(n);
 	}
 	

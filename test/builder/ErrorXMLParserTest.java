@@ -332,4 +332,5 @@ public class ErrorXMLParserTest {
 			assertEquals(true, e.getMessage().startsWith("State specification in System section missing for the node"));
 		}
 	}
+
 }
