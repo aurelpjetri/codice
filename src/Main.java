@@ -15,28 +15,28 @@ public class Main {
 	private static final String MODEL_GRAPH_PARAM = "--modelGraph";
 
 	public static void main(String args[]){
-//		Map<String,String> parameters;
-//		try{
-//			//From CLI
-//			parameters = getParametersAsMap(args);
-//			//Default parameter (uncomment this and comment the previous)
-//			//parameters = getDefaultTestParameters();
-//		}catch(IllegalArgumentException e){
-//			System.out.println("ERROR:" + e.getMessage() + "\n\n" + help());
-//			System.exit(1);
-//			return;
-//		}
+		Map<String,String> parameters;
+		try{
+			//From CLI
+			parameters = getParametersAsMap(args);
+			//Default parameter (uncomment this and comment the previous)
+			//parameters = getDefaultTestParameters();
+		}catch(IllegalArgumentException e){
+			System.out.println("ERROR:" + e.getMessage() + "\n\n" + help());
+			System.exit(1);
+			return;
+		}
 
 		try{
 			XMLParser parser = new XMLParser();
-			Graph graph = parser.parseDocumentForGraph("/home/aurel/Scrivania/Tesi/tesi-talex/images/example.xml");
-			NetLogoGraphVisitor graphVisitor = new NetLogoGraphVisitor("data/inputs/inputGraph.txt", "/home/aurel/Scrivania/Tesi/tesi-talex/images/example-graph.nlogo");
-			NetLogoBehaviorVisitor behaviorVisitor = new NetLogoBehaviorVisitor("data/inputs/inputBehaviors.txt", "/home/aurel/Scrivania/Tesi/tesi-talex/images/example-behavior.nlogo");
+//			Graph graph = parser.parseDocumentForGraph("/home/aurel/Scrivania/Tesi/tesi-talex/images/example.xml");
+//			NetLogoGraphVisitor graphVisitor = new NetLogoGraphVisitor("data/inputs/inputGraph.txt", "/home/aurel/Scrivania/Tesi/tesi-talex/images/example-graph.nlogo");
+//			NetLogoBehaviorVisitor behaviorVisitor = new NetLogoBehaviorVisitor("data/inputs/inputBehaviors.txt", "/home/aurel/Scrivania/Tesi/tesi-talex/images/example-behavior.nlogo");
 		
 
-//			NetLogoBehaviorVisitor behaviorVisitor = new NetLogoBehaviorVisitor(parameters.get(MODEL_BEHAVIOUR_PARAM), parameters.get(OUTPUT_BEHAVIOUR_PARAM));
-//			NetLogoGraphVisitor graphVisitor = new NetLogoGraphVisitor(parameters.get(MODEL_GRAPH_PARAM), parameters.get(OUTPUT_GRAPH_PARAM));
-//			Graph graph = parser.parseDocumentForGraph(parameters.get(INPUT_GRAPH_XML_PARAM));
+			NetLogoBehaviorVisitor behaviorVisitor = new NetLogoBehaviorVisitor(parameters.get(MODEL_BEHAVIOUR_PARAM), parameters.get(OUTPUT_BEHAVIOUR_PARAM));
+			NetLogoGraphVisitor graphVisitor = new NetLogoGraphVisitor(parameters.get(MODEL_GRAPH_PARAM), parameters.get(OUTPUT_GRAPH_PARAM));
+			Graph graph = parser.parseDocumentForGraph(parameters.get(INPUT_GRAPH_XML_PARAM));
 			graph.accept(graphVisitor);
 			graph.accept(behaviorVisitor);
 		}
